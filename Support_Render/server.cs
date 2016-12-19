@@ -4,16 +4,7 @@ if(forceRequiredAddOn("Bot_Hole") == $Error::AddOn_Disabled)
 
 // Shrines require the pumpkin model.
 if(forceRequiredAddOn("Brick_Halloween") == $Error::AddOn_Disabled)
-{
 	exec("Add-Ons/Brick_Halloween/server.cs");
-	
-	// If the add-on is disabled, we'll hide the bricks from the selector.
-	brickPumpkinBaseData.uiName = "";
-	brickGraveStoneData.uiName = "";
-	brickSkullData.uiName = "";
-	brickCoffinOpenData.uiName = "";
-	brickCoffinDownOpenData.uiName = "";
-}
 
 // The DayCycle pref utilizes a script from Lugnut's Event_DayCycles. https://forum.blockland.us/index.php?topic=204001.0
 if(!isFunction(getPartOfDayCycle)) // We'll see if the function already exists first.
