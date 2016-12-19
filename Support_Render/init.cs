@@ -149,7 +149,7 @@ function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 function brickGlitchShrineData::onDeath(%a,%br) // Brick deleted
 {
 	Render_ShrineRemove(%br);
-	Parent::onRemove(%br);
+	Parent::onDeath(%br);
 }
 
 function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDeath isn't called)
@@ -247,19 +247,24 @@ function Render_ShrinePlant(%br)
 		//%chunk = mFloor( getWord(%pos,0)/15 ) @ "_" @ mFloor( getWord(%pos,1)/15 ) @ "_" @ mFloor( getWord(%pos,2)/15 ); 
 		
 		$R_Shr[$R_Shr_t++] = %br;
+		$R_Shr_G[$R_Shr_t] = %br.getGroup(); // This is an extra precaution in case a shrine mysteriously vanishes.
 		%br.shrineId = $R_Shr_t;
 	}
 }
 
 // This handles removing shrines from the list. We fill the empty spot by replacing it with the most recent shrine, then decreasing the count.
-function Render_ShrineRemove(%br)
+// If %id is specified, we will force-remove the id from the list.
+function Render_ShrineRemove(%br,%id)
 {
-	if(%br.shrineId)
+	if(!%id) // If ID isn't specified... (We don't need to use $= "" because shrine counts start at 1)
+		%id = %br.shrineId;
+	
+	if(%id)
 	{
-		%br.getGroup().rShrines--;
-		
-		$R_Shr[%br.shrineId] = $R_Shr[$R_Shr_t]; // To fill the empty slot, we'll just take the latest shrine and move it to this one.
+		$R_Shr[%id] = $R_Shr[$R_Shr_t]; // To fill our 'empty' slot, we'll just take the latest shrine and move it to this one.
 		$R_Shr_t--; // Decrease the count. The latest shrine's original slot will be filled as if it doesn't exist.
+		
+		$R_Shr_G[%id].rShrines--; // Now we'll subtract one from the brickgroup's shrine count.
 	}
 	
 	%br.isGlitchShrine = 0;

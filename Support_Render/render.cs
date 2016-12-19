@@ -202,7 +202,10 @@ function Render_Loop()
 			%r = $Pref::Server::RenderShrineRange;
 			
 			if(%br.position $= "") // Error if one is missing.
-				warn("Support_Render - Shrine " @ $R_Shr[%iB] @ " (" @ %iB @ ") does not exist!");
+			{
+				error("Support_Render - Shrine " @ $R_Shr[%iB] @ " (" @ %iB @ ") does not exist! Shrine will be force-removed.");
+				Render_ShrineRemove(%br, $R_Shr[%iB]);
+			}
 			else if(%r != -1 && %br.isRayCasting())
 			{
 				initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType); // If so, start a box search. If a Render bot is nearby, delete it immediately.
