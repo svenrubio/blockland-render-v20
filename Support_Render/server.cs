@@ -15,6 +15,8 @@ if(!isFunction(getPartOfDayCycle)) // We'll see if the function already exists f
 		exec("./modules/timeSupport.cs"); // If all else fails, execute our own copy.
 }
 
+exec("./modules/envServer.cs");
+
 exec("./ai_main.cs");
 exec("./ai_spawn.cs");
 exec("./render.cs");

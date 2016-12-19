@@ -414,7 +414,7 @@ function Render_Spawn_Loop()
 	
 	echo("RENDER: spawning");
 	
-	if($Pref::Server::RenderDayCycleSpawn && $EnvGuiServer::DayCycleEnabled) // If we're only supposed to spawn at night, we'll need to do some extra checks. (Only if the daycycle is actually enabled, of course.)
+	if($Pref::Server::RenderDayCycleSpawn && env_getDayCycleEnabled()) // If we're only supposed to spawn at night, we'll need to do some extra checks. (Only if the daycycle is actually enabled, of course.)
 	{
 		%time = getPartOfDaycycle();
 		
