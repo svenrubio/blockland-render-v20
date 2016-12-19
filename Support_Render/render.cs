@@ -608,33 +608,33 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 
 
 ////// GLITCH GUN //////
-function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
-{
-	GlitchEnergyGunEffect(%this,%obj,%slot);
-	return serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
-}
-
-function GlitchEnergyGunEffect(%this,%obj,%slot)
-{
-	%obj.setWhiteOut(1);
-	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
-	while(%p=containerSearchNext())
-	{
-		//%p.setWhiteOut(1);
-		if(%p.dataBlock $= PlayerRenderArmor)
-		{
-			Render_Spawn_GetNewDirection(%p);
-			%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
-		}
-	}
-	
-	%currSlot = %obj.currTool;
-	%obj.tool[%currSlot] = 0;
-	%obj.weaponCount--;
-	
-	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
-	serverCmdUnUseTool(%obj.client);
-}
+//function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
+//{
+//	GlitchEnergyGunEffect(%this,%obj,%slot);
+//	return serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
+//}
+//
+//function GlitchEnergyGunEffect(%this,%obj,%slot)
+//{
+//	%obj.setWhiteOut(1);
+//	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
+//	while(%p=containerSearchNext())
+//	{
+//		//%p.setWhiteOut(1);
+//		if(%p.dataBlock $= PlayerRenderArmor)
+//		{
+//			Render_Spawn_GetNewDirection(%p);
+//			%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
+//		}
+//	}
+//	
+//	%currSlot = %obj.currTool;
+//	%obj.tool[%currSlot] = 0;
+//	%obj.weaponCount--;
+//	
+//	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
+//	serverCmdUnUseTool(%obj.client);
+//}
 
 ////// PACKAGED //////
 
