@@ -12,22 +12,22 @@ function Render_AI_Control_Loop(%render)
 		%render.aiWillAttack = %render.aiStartAttacking; // AI flag; are we planning to attack? For now, this is always determined immediately.
 		%render.attackInit = 1;
 	}
-	
+
 	///// TARGET CHECK /////
 	// A few ways we could optimize this:
 	// 1.) Delay this check. We don't really need to test for targets this frequently.
 	// 2.) Use the raycast results from the whiteout damage function rather than calling containerRaycast a second time
-	
+
 	// If we don't have a target or our old one is gone...
-	//%render.target.client is a method of checking if the player is alive without creating errors if they don't exist. 
+	//%render.target.client is a method of checking if the player is alive without creating errors if they don't exist.
 	if(%render.needsNewTarget || (!isObject(%render.target.client) && !%render.target.rIsTestBot) )
 	{
 		%render.needsNewTarget = 0;
-		
+
 		for(%i = 0; %i <= %render.players-1; %i++)
 		{
 			%player = %render.player[%i];
-			
+
 			// If target is non-existent or dead (Having destructo wand counts as dead)
 			if( (!isObject(%player.client) && !%player.rIsTestBot) ||  %render.playerskip[%render.player[%i]] )
 			{
@@ -36,10 +36,10 @@ function Render_AI_Control_Loop(%render)
 				%actualPlayers--;
 				continue;
 			}
-			
+
 			// Now that we know they exist, we'll check if they're in view.
 			%rayCheck[%i] = containerRaycast(%render.getEyePoint(), %render.player[%i].getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
-			
+
 			if(%rayCheck[%i] !$= 0) // If the target is out of view, mark them as such.
 			{
 				echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
@@ -47,18 +47,18 @@ function Render_AI_Control_Loop(%render)
 				%actualPlayers--;
 				continue;
 			}
-			
+
 			// We've made it this far, the target must be valid!
 			if(!%i)
 				%targets = -1; // Start at 0
-			
+
 			%target[%targets++] = %render.player[%i]; // Count our valid targets
 		}
-		
+
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
 		{
 			echo("AI Main: no targets, despawning");
-			
+
 			Render_RequestDespawn(%render);
 			return;
 		}
@@ -68,20 +68,20 @@ function Render_AI_Control_Loop(%render)
 			%render.target = %target[%newtarget];
 		}
 	}
-	
-	
+
+
 	////// ENERGY CHECK //////
 	// Determine whether we should continue attacking.
 	// INCOMPLETE: Does not account for observe mode.
-	
-	if(%render.freezeTarget) // If we're currently freezing someone, we *probably* don't want to 
+
+	if(%render.freezeTarget) // If we're currently freezing someone, we *probably* don't want to
 		%continueChance += 4;
-	
+
 	if(%render.loopCount >= %render.loopPayNext-5000)
 		%render.doContinue = mRound( getRandom(0, 10+%continueChance)/10 );
-	
+
 	////// MOVEMENT //////
-	
+
 	if(!%render.freezeTarget && !%render.movingToPlayer) // If we're not moving to someone...
 	{
 		if(isObject(%render.target)) // We have a target in view, move to them!
@@ -89,12 +89,12 @@ function Render_AI_Control_Loop(%render)
 			// TEMPORARY: This impacts performance and will be corrected soon.
 			%render.rayDirect = containerRaycast(%render.getEyePoint(), %render.target.getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType); // We need to check if we can see the target before we try to move towards them.
 		}
-		
+
 		// INCOMPLETE: The bot cannot turn around certain corners.
 		if(%render.rayDirect $= 0) // There you are! °д°
 		{
 			echo("AI Main: Found player, switching movement");
-			
+
 			%render.movingToPlayer = 1;
 		}
 		else // Not yet...
@@ -102,12 +102,12 @@ function Render_AI_Control_Loop(%render)
 			// We can't see the target, so we'll keep following the path until we spot them.
 			%node = %render.hit[%render.currentDirection];
 			%dist = vectorDist(%render.position,%node);
-			
+
 			//if(%dist < 3)
 			//{
 			//	%node = %render.from;
 			//}
-			
+
 			if(%render.getMoveDestination() != %node)
 			{
 				%render.setMoveDestination(%node);
@@ -116,7 +116,7 @@ function Render_AI_Control_Loop(%render)
 		}
 
 	}
-	
+
 	////// OBSERVER DESPAWN //////
 	// If we aren't planning on attacking, we want to do a timed de-spawn when the player looks at us.
 	if(!%render.aiWillAttack && %render.playersViewing && !%render.aiLoopObserverDespawn)
@@ -134,43 +134,43 @@ function Render_AI_Movement_Loop(%render)
 {
 	if(!%render.movingToPlayer)
 		return;
-	
+
 	if(!%render.freezeTarget) ///// NORMAL MOVEMENT /////
 	{
 		%render.setMoveTolerance($Render::C_MoveTolerance);
-		
+
 		if(%render.getMoveObject() != %render.target && isObject(%render.target))
 		{
 			%render.setMoveObject(%render.target);
 			%render.setMoveY(1);
 		}
 		//echo("target: " @ %render.target @ "; aim: " @ %render.getAimObject());
-		
+
 		// Basic "stuck" detection. This is a very simple solution to Render spawning stuck and not being able to navigate simple obstacles.
 		// This is a very simple fix and it will likely be improved later.
 		// Ensure that: at least ($Render::C_StuckTimer)ms has passed since last stuck check; our current position is close to the position form the last stuck check; we aren't freezing a player; we aren't in the spot where we froze a player; we are allowed to move
 		if(%render.loopCount > %render.nextStuckCheck)
 		{
 			%render.nextStuckCheck = %render.loopCount+$Render::C_StuckTimer/$Render::C_LoopTimer;
-			
+
 			%dist = vectorDist(%render.lastPosition, %render.getPosition());
 			if(!%render.rIsFrozen && %dist <= 0.1 && !%render.freezeTarget && %render.stuckEnd != %render.getPosition())
 			{
 				//talk("AI Main: Bot is stuck!" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
-				
+
 				%render.stuckEnd = ""; // This value means "if we're still stuck at this position, give up." We want this blank for now.
 				%render.stuckConsecutive++;
-				
+
 				if(%render.stuckConsecutive == 2)
 					%render.setCrouching(1);
-				else 
+				else
 					%render.setCrouching(0);
-				
+
 				if(%render.stuckConsecutive >= 4)
 					%render.setMoveY(0); // Stop moving forward if we've been stuck for too long.
 				else
 					%render.setMoveY(1);
-				
+
 				if(%render.stuckConsecutive >= 8)
 					%render.stuckEnd = %render.getPosition(); // Give up if we remain stuck in the exact same spot for too long. The stuck check will resume if the bot's position changes at all.
 
@@ -180,11 +180,11 @@ function Render_AI_Movement_Loop(%render)
 					%render.setMoveX(1);
 				else
 					%render.setMoveX(-1);
-				
+
 				//%render.setJumping(1);
 				//%render.schedCrouch = %render.schedule(500,0,setCrouching,0);
 				//%render.schedJump = %render.schedule(500,0,setJumping,0);
-				
+
 				%render.lastFrozenCheckPos = %render.getPosition();
 			}
 			else
@@ -192,14 +192,14 @@ function Render_AI_Movement_Loop(%render)
 				//talk("AI Main: Not stuck;" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
 				%render.stuckConsecutive = 0;
 				%render.hAvoidObstacles = 0;
-				
+
 				%render.setMoveY(1); // Restart movement
 				%render.setMoveX(0);
 				%render.setCrouching(0);
 				%render.setJumping(0);
 			}
 		}
-		
+
 		if(%render.rIsFrozen) // If we're frozen, reset the stuck check so we don't freak out.
 			%render.lastPosition = "0 0 -9999";
 		else
@@ -211,7 +211,7 @@ function Render_AI_Movement_Loop(%render)
 		%render.clearMoveX();
 		%render.clearMoveY();
 	}
-	
+
 	if(%render.target.isJetting && !%render.freezeTarget && !%render.rIsFrozen)
 		%render.setJetting(1);
 	else if(%render.isJetting())

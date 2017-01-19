@@ -2,7 +2,7 @@
 
 $Render::C_ShrineLimit = 32;
 
-//////PREFERENCES//////
+//////# PREFERENCES
 
 //$Pref::Server::RenderMinSpawnDistance = 32; //huge open spaces/outdoors
 //$Pref::Server::RenderMinSpawnDistance = 16; //large rooms/outdoors
@@ -21,7 +21,7 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
 	RTB_registerPref("Hard mode (Allows multiple Renders at once)", "Render", "$Pref::Server::RenderAllowMultiples", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderAllowMultiples, 0, 0);
-	
+
 	//RTB_registerPref("Minimum Spawning Distance", "Render", "$Pref::Server::RenderMinSpawnDistance", "int 4 64", "GameMode_Renderman_Haunting", "4", 0, 0); //check this
 }
 else
@@ -37,7 +37,8 @@ else
 if(!$RTB::RTBR_ServerControl_Hook)
 	exec("Add-Ons/System_ReturnToBlockland/hooks/serverControl.cs");
 
-//////SOUNDS////// (To do: compress these)
+//////# SOUNDS
+// (To do: compress these)
 datablock AudioProfile(renderGrowl)
 {
    filename    = "./sound/indoorgrowl.wav";
@@ -101,7 +102,7 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
-//////PARTICLES//////
+//////# PARTICLES
 datablock ParticleData(RendermanCameraParticleA : CameraParticleA)
 {
 	animTexName[0] = "./dotB";
@@ -119,7 +120,7 @@ datablock ParticleEmitterData(RendermanCameraEmitterA : CameraEmitterA)
 	uiName = "Camera Glow Evil";
 };
 
-//////BRICKS//////
+//////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
 	brickFile = "Add-Ons/Brick_Halloween/pumpkin_ascii.blb";
@@ -130,7 +131,7 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 	indestructable = 1;
 };
 
-// Shrines //
+////// # Shrines
 
 function brickGlitchShrineData::onPlant(%a,%br) // Planted
 {
@@ -144,7 +145,7 @@ function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 	Parent::onLoadPlant(%br);
 }
 
-// Shrine Functions //
+//## Shrine Functions
 
 function brickGlitchShrineData::onDeath(%a,%br) // Brick deleted
 {
@@ -156,11 +157,61 @@ function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDea
 {
 	if(%br.isPlanted && %br.isGlitchShrine)
 		Render_ShrineRemove(%br);
-	
+
 	Parent::onRemove(%br);
 }
 
-//////FACE PROJECTILE//////
+// ## Shrine Functions B
+
+// We need to "register" the shrine by setting some variables. This is so we can easily access it later and use it to perform radius searches.
+// We also want to make sure the brickgroup stays within the shrine limit.
+// Render_Shrine[total_shrines++] = brick_id
+function Render_ShrinePlant(%br)
+{
+	%group = %br.getGroup();
+
+	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
+	{
+		%client = Brickgroup_14128.client;
+
+		if(isObject(%client))
+			%client.centerPrint("\c6You can't have more than 32 shrines!",3);
+
+		%br.setDatablock(brickPumpkinBaseData);
+	}
+	else
+	{
+		%group.rShrines++;
+
+		%br.isGlitchShrine = 1;
+
+		//%chunk = mFloor( getWord(%pos,0)/15 ) @ "_" @ mFloor( getWord(%pos,1)/15 ) @ "_" @ mFloor( getWord(%pos,2)/15 );
+
+		$R_Shr[$R_Shr_t++] = %br;
+		$R_Shr_G[$R_Shr_t] = %br.getGroup(); // This is an extra precaution in case a shrine mysteriously vanishes.
+		%br.shrineId = $R_Shr_t;
+	}
+}
+
+// This handles removing shrines from the list. We fill the empty spot by replacing it with the most recent shrine, then decreasing the count.
+// If %id is specified, we will force-remove the id from the list.
+function Render_ShrineRemove(%br,%id)
+{
+	if(!%id) // If ID isn't specified... (We don't need to use $= "" because shrine counts start at 1)
+		%id = %br.shrineId;
+
+	if(%id)
+	{
+		$R_Shr[%id] = $R_Shr[$R_Shr_t]; // To fill our 'empty' slot, we'll just take the latest shrine and move it to this one.
+		$R_Shr_t--; // Decrease the count. The latest shrine's original slot will be filled as if it doesn't exist.
+
+		$R_Shr_G[%id].rShrines--; // Now we'll subtract one from the brickgroup's shrine count.
+	}
+
+	%br.isGlitchShrine = 0;
+}
+
+//////# FACE PROJECTILE
 //datablock ParticleData(RenderAttackParticle)
 //{
 //	dragCoefficient      = 5.0;
@@ -197,9 +248,9 @@ function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDea
 //	overrideAdvance = false;
 //	lifeTimeMS = 100;
 //	particles = "RenderAttackParticle";
-//	
+//
 //	doFalloff = true; //if we do fall off with this emitter it ends up flickering, for most emitters you want this TRUE
-//	
+//
 //	emitterNode = GenericEmitterNode;        //used when placed on a brick
 //	pointEmitterNode = TenthEmitterNode; //used when placed on a 1x1 brick
 //};
@@ -214,68 +265,18 @@ function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDea
 //datablock ProjectileData(RenderAttackProjectile)
 //{
 //	explosion           = "";
-//	
+//
 //	armingDelay         = 0;
 //	lifetime            = 10;
 //	explodeOnDeath		= false;
 //};
 
-// Shrine Functions B //
-
-// We need to "register" the shrine by setting some variables. This is so we can easily access it later and use it to perform radius searches.
-// We also want to make sure the brickgroup stays within the shrine limit.
-// Render_Shrine[total_shrines++] = brick_id
-function Render_ShrinePlant(%br)
-{
-	%group = %br.getGroup();
-	
-	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
-	{
-		%client = Brickgroup_14128.client;
-		
-		if(isObject(%client))
-			%client.centerPrint("\c6You can't have more than 32 shrines!",3);
-		
-		%br.setDatablock(brickPumpkinBaseData);
-	}
-	else
-	{
-		%group.rShrines++;
-		
-		%br.isGlitchShrine = 1;
-		
-		//%chunk = mFloor( getWord(%pos,0)/15 ) @ "_" @ mFloor( getWord(%pos,1)/15 ) @ "_" @ mFloor( getWord(%pos,2)/15 ); 
-		
-		$R_Shr[$R_Shr_t++] = %br;
-		$R_Shr_G[$R_Shr_t] = %br.getGroup(); // This is an extra precaution in case a shrine mysteriously vanishes.
-		%br.shrineId = $R_Shr_t;
-	}
-}
-
-// This handles removing shrines from the list. We fill the empty spot by replacing it with the most recent shrine, then decreasing the count.
-// If %id is specified, we will force-remove the id from the list.
-function Render_ShrineRemove(%br,%id)
-{
-	if(!%id) // If ID isn't specified... (We don't need to use $= "" because shrine counts start at 1)
-		%id = %br.shrineId;
-	
-	if(%id)
-	{
-		$R_Shr[%id] = $R_Shr[$R_Shr_t]; // To fill our 'empty' slot, we'll just take the latest shrine and move it to this one.
-		$R_Shr_t--; // Decrease the count. The latest shrine's original slot will be filled as if it doesn't exist.
-		
-		$R_Shr_G[%id].rShrines--; // Now we'll subtract one from the brickgroup's shrine count.
-	}
-	
-	%br.isGlitchShrine = 0;
-}
-
-//////PLAYERTYPE//////
+//////# PLAYERTYPE
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 {
 	isInvincible = 1;
 	magicWandImmunity = 1;
-	
+
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;
 	//maxSideSpeed = 60;
@@ -285,28 +286,28 @@ function PlayerRenderArmor::onRemove(%a, %render)
 {
 	if(%render.freezeTarget)
 		Render_UnfreezePlayer(%render.freezeTarget);
-	
+
 	Parent::onRemove(%a, %render);
 }
 
-//////FUNCTIONS//////
+//////# FUNCTIONS
 // Death vehicle from Item_Skis was used as a reference for this
 datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
 {
 	airControl = 0;
-	
+
 	canRide = 0;
-	
+
 	cameraMaxDist = 20;
 	cameraVerticalOffset = 15;
-	
+
 	drag = 2;
-	
+
 	isInvincible = 1;
-	
+
 	jumpForce = 0;
 	runForce = 0;
-	
+
 	uiName = "";
 };
 
@@ -318,12 +319,12 @@ function RenderDeathArmor::onAdd(%datablock,%obj)
 function RenderDeathArmor::onRemove(%this, %obj)
 {
 	%player = %obj.getMountedObject(0);
-	
+
 	if(isObject(%player))
 		%player.canDismount = 1;
 }
 
-//////ITEMS//////
+//////# ITEMS
 //datablock ItemData(GlitchEnergyGunItem)
 //{
 //	category = "Weapon";  // Mission editor category
@@ -364,7 +365,7 @@ function RenderDeathArmor::onRemove(%this, %obj)
 //	// When firing from a point offset from the eye, muzzle correction
 //	// will adjust the muzzle vector to point to the eye LOS point.
 //	// Since this weapon doesn't actually fire from the muzzle point,
-//	// we need to turn this off.  
+//	// we need to turn this off.
 //	correctMuzzleVector = true;
 //
 //	// Add the WeaponImage namespace as a parent, WeaponImage namespace
@@ -380,9 +381,9 @@ function RenderDeathArmor::onRemove(%this, %obj)
 //	//casing = gunShellDebris;
 //	//shellExitDir        = "0.0 0.0 0.0";
 //	//shellExitOffset     = "0 0 0";
-//	//shellExitVariance   = 0.0;	
+//	//shellExitVariance   = 0.0;
 //	//shellVelocity       = 0.0;
-//	
+//
 //	armReady = true;
 //
 //	doColorShift = true;
@@ -414,7 +415,7 @@ function RenderDeathArmor::onRemove(%this, %obj)
 //	stateAllowImageChange[2]    = false;
 //};
 
-//////MISC//////
+//////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
 //missionCleanup.add(RenderBotGroup);
 

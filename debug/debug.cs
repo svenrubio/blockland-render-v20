@@ -4,18 +4,18 @@ function serverCmdSpawnR(%client, %delete)
 		return;
 	
 	%rendy = Render_CreateBot("0 0 -10000",%active);
-	
+
 	%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
 	%pos = Render_Spawn_GetNewDirection(%rendy,%client.player.getEyePoint());
-	
+
 	%rendy.setTransform(%pos);
 	%client.lastSpawnedRender = %rendy;
-	
+
 	//talk(%client.name @ ": Spawned R bot " @ %rendy);
 	echo(%client.name @ ": Spawned R bot " @ %rendy);
-	
+
 	//serverPlay2D(renderAmb2);
-	
+
 	if(%delete)
 		%rendy.delete();
 }
@@ -24,11 +24,11 @@ function serverCmdMoveR(%client, %resetUsed)
 {
 	if(!%client.isSuperAdmin)
 		return;
-	
+
 	%rendy = %client.lastSpawnedRender;
-	
+
 	%rendy.setTransform(Render_Spawn_GetNewDirection(%rendy, %client.player.position, 0, %resetUsed));
-	
+
 	talk("Moved bot " @ %rendy @ " to " @ %rendy.getTransform());
 	echo("Moved bot " @ %rendy @ " to " @ %rendy.getTransform());
 }
@@ -37,23 +37,23 @@ function serverCmdSpawnVictim(%client)
 {
 	if(!%client.isSuperAdmin)
 		return;
-	
+
 	talk(%client.name @ ": Spawning a test player...");
 	echo(%client.name @ ": Spawning a test player...");
-	
-	%bot = new aiplayer(testVictim) 
+
+	%bot = new aiplayer(testVictim)
 	{
 		datablock = PlayerStandardArmor;
 	};
-	
+
 	//%pref = $Pref::Server::RenderCreateLines;
 	//$Pref::Server::RenderCreateLines = 0;
-	
+
 	%eyePoint = %client.player.getEyePoint();
-	
+
 	%hallSpawn = Render_Spawn_FindNewPositions(%eyePoint, %bot, %skipNorth, %skipSouth, %skipEast, %skipWest);
 	%pos = Render_Spawn_GetNewDirection(%bot,%eyePoint);
-	
+
 	//$Pref::Server::RenderCreateLines = %old;
 	%bot.rIsTestBot = 1;
 	%bot.setTransform(%pos);
@@ -64,7 +64,7 @@ function serverCmdCVictim(%client)
 {
 	if(!%client.isSuperAdmin || !isObject(%client.player))
 		return;
-	
+
     %player = %client.player;
     %startPoint = %player.getEyePoint();
     %eyeVector = %player.getEyeVector();
@@ -72,7 +72,7 @@ function serverCmdCVictim(%client)
     %endPoint = vectorAdd(%startPoint, %stretchVector);
     %rayResult = containerRaycast(%startPoint, %endPoint, $TypeMasks::PlayerObjectType, %player);
     %targetPlayer = getWord(%rayResult, 0);
-	
+
 	if(%client.player.controlling)
 	{
 		%client.setControlObject(%client.player);
@@ -90,10 +90,10 @@ function serverCmdClearRenderBots(%client)
 {
 	if(!%client.isSuperAdmin)
 		return;
-	
+
 	talk(%client.name @ ": Clearing bots and lines...");
 	echo(%client.name @ ": Clearing bots and lines...");
-	
+
 	RenderMiscGroup.chainDeleteAll();
 	RenderBotGroup.chainDeleteAll();
 }
@@ -121,7 +121,7 @@ function createCube( %a, %scale, %color )
 		position = %a;
 		scale = %scale;
 	};
-	
+
 	missionCleanup.add( %obj );
 	%obj.setNodeColor( "ALL", %color );
 
@@ -168,7 +168,7 @@ function Render_DoAnimation(%this)
 {
 	hideAllNodes(%this);
 	%this.hidenode("headskin");
-	
+
 	%this.setnodecolor(chest, "0 0 0 1");
 	%this.setnodecolor(headskin, "0 0 0 1");
 	%this.setnodecolor(pants, "0 0 0 1");
@@ -178,7 +178,7 @@ function Render_DoAnimation(%this)
 	%this.setnodecolor(LHand, "0 0 0 1");
 	%this.setnodecolor(RArm, "0 0 0 1");
 	%this.setnodecolor(RHand, "0 0 0 1");
-	
+
 	schedule((%sched++)*40,0,eval,%this @ ".unhidenode(LShoe);");
 	schedule((%sched)*  40,0,eval,%this @ ".unhidenode(RShoe);");
 	schedule((%sched++)*40,0,eval,%this @ ".unhidenode(pants);");
@@ -188,5 +188,5 @@ function Render_DoAnimation(%this)
 	schedule((%sched++)*40,0,eval,%this @ ".unhidenode(LArm);" );
 	schedule((%sched)*  40,0,eval,%this @ ".unhidenode(RArm);" );
 	schedule((%sched++)*40,0,eval,%this @ ".unhidenode(headskin);" );
-	
-}                                                              
+
+}
