@@ -223,8 +223,6 @@ function Render_Loop_Local(%render)
 
 	if(%render.loopCount >= %render.loopPayNext) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
-		// TEMPORARY: This is currently a randomized chance. This is planned to depend on an "energy level" for the AI to determine what to do with
-
 		if(!%render.doContinue) // If they aren't attacking at this point, we'll just de-spawn them.
 		{
 			echo("RENDER: De-spawning, out of time");
@@ -242,7 +240,6 @@ function Render_Loop_Local(%render)
 
 	// Until energy is implemented, we will use a random chance that is influenced by how long Render has already been alive.
 	// This is planned to be determined by a more sophisticated AI, considering factors like whether we're freezing a player, how many players we're pursuing, etc.
-	// TEMPORARY: This does not belong in render.cs as it is an AI function
 	if(%render.aiNeedsToPay && getRandom(1,2) == 1)
 	{
 		echo("RENDER: De-spawning (energy check failed)");
@@ -280,7 +277,7 @@ function Render_Loop_Local(%render)
 	{
 		if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.dataBlock $= "PlayerRenderArmor")
 		{
-			%target.delete(); // TEMPORARY:
+			%target.delete(); // TEMPORARY
 			continue;
 		}
 

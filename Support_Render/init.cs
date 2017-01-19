@@ -11,6 +11,7 @@ $Render::C_ShrineLimit = 32;
 
 
 $Pref::Server::RenderMinSpawnDistance = 8;
+$Pref::Server::RenderAllowMultiples = 0;
 
 if(isFunction("RTB_registerPref"))
 {
@@ -20,7 +21,7 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 6 Below_Normal 4 Normal 3 Above_Normal 2 High 1", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
-	RTB_registerPref("Hard mode (Allows multiple Renders at once)", "Render", "$Pref::Server::RenderAllowMultiples", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderAllowMultiples, 0, 0);
+	//RTB_registerPref("Hard mode (Allows multiple Renders at once)", "Render", "$Pref::Server::RenderAllowMultiples", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderAllowMultiples, 0, 0);
 
 	//RTB_registerPref("Minimum Spawning Distance", "Render", "$Pref::Server::RenderMinSpawnDistance", "int 4 64", "GameMode_Renderman_Haunting", "4", 0, 0); //check this
 }
@@ -31,7 +32,6 @@ else
 	$Pref::Server::RenderSpawnRate = 6;
 	$Pref::Server::RenderShrineRange = 20;
 	$Pref::Server::RenderDayCycleSpawn = 0;
-	$Pref::Server::RenderAllowMultiples = 0;
 }
 
 if(!$RTB::RTBR_ServerControl_Hook)

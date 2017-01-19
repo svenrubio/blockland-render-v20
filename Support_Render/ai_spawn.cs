@@ -1,20 +1,14 @@
-//test function
-//function serverCmdGetCameras(%client)
-//{
-//	if(!%client.isAdmin)
-//		return;
+// Main spawn positioning function.
+// It will find an indoor place for the bot to spawn (so the bot doesn't spawn and walk through walls)
 //
-//	initContainerRadiusSearch(%client.player.position,32,$TypeMasks::CameraObjectType);
-//	while(%target=containerSearchNext())
-//	{
-//		talk("CAMERA" SPC %target);
-//	}
-//}
-
-// Main spawn positioning function. It will find an indoor place for the bot to spawn (so the bot doesn't spawn and walk through walls)
-// How it works: Four rays are fired (north, south, east, and west) to detect walls. Each ray will "split up" when it hits something (example: when the north ray hits, two rays will be fired (to east and west) from the place where the north ray hit)
-// Returns information to the object specified on %return.
-// NOTE: For players, I strongly recommend using getEyePoint() instead of the player's regular position. (You may encounter issues if you do this inconsistently; make sure to always provide positions the same way)
+// How it works:
+// - Four rays are fired (north, south, east, and west) to detect walls.
+// - Each ray will "split up" when it hits something
+// (example: when the north ray hits, two rays will be fired (to east and west) from the place where the north ray hit)
+// - Returns information to the object specified on %return.
+//
+// NOTE: For players, I strongly recommend using getEyePoint() instead of the player's regular position.
+// (You may encounter issues if you do this inconsistently; make sure to always provide positions the same way)
 function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %skipEast, %skipWest)
 {
 	if(!%skipNorth)
@@ -44,7 +38,7 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 		if(%i == 2){%dir = "South"; %sA = "SouthToEast";%sB = "SouthToWest";%sToA="100 1 0";%sToB="-100 1 0";}
 		if(%i == 3){%dir = "East"; %sA = "EastToNorth";%sB = "EastToSouth";%sToA="-1 100 0";%sToB="-1 -100 0";}
 		if(%i == 4){%dir = "West"; %sA = "WestToNorth";%sB = "WestToSouth";%sToA="1 100 0";%sToB="1 -100 0";}
-		
+
 		if(%skip[%dir]) // If we're skipping this direction, continue.
 			continue;
 
