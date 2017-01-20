@@ -320,8 +320,7 @@ function Render_Loop_Local(%render)
 				{
 					if(%render.isAttacking)
 					{
-						%targetMount = %target.getObjectMount().dataBlock;
-						if(!%render.freezeTarget || %targetMount !$= "RenderDeathArmor")
+						if(!%render.freezeTarget && %targetMount !$= "RenderDeathArmor")
 						{
 							//talk("RENDER" SPC %render @ ": Freezing a target!");
 							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile") // If the target isn't already frozen and isn't holding a destructo wand.
@@ -336,7 +335,9 @@ function Render_Loop_Local(%render)
 						%froze = 1;
 					}
 				}
-				else if(%render.freezeTarget && (%target == %render.freezeTarget && %distance > 5 || !%render.freezeTarget.isFrozen)) // If we have a target that is too far away or gone, unfreeze them and Render.
+
+				// If we have a target that is too far away or gone, unfreeze them and Render.
+				if(%render.freezeTarget && (!%render.freezeTarget.isFrozen || %target == %render.freezeTarget && %distance > 5))
 				{
 					//talk("RENDER" SPC %render @ ": Unfroze player" SPC %target.client.name SPC %distance SPC %render.freezeTarget SPC %render.freezeTarget.isFrozen);
 					Render_UnfreezePlayer(%target,%render);
