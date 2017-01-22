@@ -3,7 +3,7 @@ $Render::C_TargetTimer = 800; // (NOT IMPLEMENTED) Time between target checks (i
 
 //to do: add bot aggression level (if the bot has done a lot of damage (excluding full kills), it will have a higher chance of not leaving. this level wears off over time)
 
-//AI control loop
+///// # AI control loop
 function Render_AI_Control_Loop(%render)
 {
 	if(!%render.attackInit)
@@ -13,10 +13,10 @@ function Render_AI_Control_Loop(%render)
 		%render.attackInit = 1;
 	}
 
-	///// TARGET CHECK /////
+	///// # TARGET CHECK
 	// A few ways we could optimize this:
-	// 1.) Delay this check. We don't really need to test for targets this frequently.
-	// 2.) Use the raycast results from the whiteout damage function rather than calling containerRaycast a second time
+	//	1.) Delay this check. We don't really need to test for targets this frequently.
+	//	2.) Use the raycast results from the whiteout damage function rather than calling containerRaycast a second time
 
 	// If we don't have a target or our old one is gone...
 	//%render.target.client is a method of checking if the player is alive without creating errors if they don't exist.
@@ -39,20 +39,28 @@ function Render_AI_Control_Loop(%render)
 
 			// Now that we know they exist, we'll check if they're in view.
 			%rayCheck[%i] = containerRaycast(%render.getEyePoint(), %render.player[%i].getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+			%render.playerRayDirect[%render.player[%i]] = %rayCheck[%i]; // Set the direct raycast
 
 			if(%rayCheck[%i] !$= 0) // If the target is out of view, mark them as such.
 			{
-				echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
-				%render.targetHidden[%i] = 1;
-				%actualPlayers--;
-				continue;
+				if(%render.player[%i].getObjectMount() != getWord(%raycheck[%i],0)) // Make sure we aren't hitting their vehicle (if we are, mark as valid)
+				{
+					echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
+					%render.targetHidden[%i] = 1;
+					%actualPlayers--;
+					continue;
+				}
 			}
 
 			// We've made it this far, the target must be valid!
 			if(!%i)
 				%targets = -1; // Start at 0
 
+			%render.playerInView[%render.player[%i]] = 1; // Mark the player as "in view"
+
 			%target[%targets++] = %render.player[%i]; // Count our valid targets
+
+			echo(%render.player[%i] SPC %render.target);
 		}
 
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
@@ -69,7 +77,6 @@ function Render_AI_Control_Loop(%render)
 		}
 	}
 
-
 	////// ENERGY CHECK //////
 	// Determine whether we should continue attacking.
 	// INCOMPLETE: Does not account for observe mode.
@@ -80,18 +87,11 @@ function Render_AI_Control_Loop(%render)
 	if(%render.loopCount >= %render.loopPayNext-5000)
 		%render.doContinue = mRound( getRandom(0, 10+%continueChance)/10 );
 
-	////// MOVEMENT //////
+	////// # MOVEMENT
 
 	if(!%render.freezeTarget && !%render.movingToPlayer) // If we're not moving to someone...
 	{
-		if(isObject(%render.target)) // We have a target in view, move to them!
-		{
-			// TEMPORARY: This impacts performance and will be corrected soon.
-			%render.rayDirect = containerRaycast(%render.getEyePoint(), %render.target.getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType); // We need to check if we can see the target before we try to move towards them.
-		}
-
-		// INCOMPLETE: The bot cannot turn around certain corners.
-		if(%render.rayDirect $= 0) // There you are! °д°
+		if(%render.playerInView[%render.target]) // There you are! °Д°
 		{
 			echo("AI Main: Found player, switching movement");
 
@@ -117,7 +117,7 @@ function Render_AI_Control_Loop(%render)
 
 	}
 
-	////// OBSERVER DESPAWN //////
+	////// # OBSERVER DESPAWN
 	// If we aren't planning on attacking, we want to do a timed de-spawn when the player looks at us.
 	if(!%render.aiWillAttack && %render.playersViewing && !%render.aiLoopObserverDespawn)
 		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(250,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
@@ -135,7 +135,8 @@ function Render_AI_Movement_Loop(%render)
 	if(!%render.movingToPlayer)
 		return;
 
-	if(!%render.freezeTarget) ///// NORMAL MOVEMENT /////
+	///// ## NORMAL MOVEMENT
+	if(!%render.freezeTarget)
 	{
 		%render.setMoveTolerance($Render::C_MoveTolerance);
 
@@ -205,7 +206,7 @@ function Render_AI_Movement_Loop(%render)
 		else
 			%render.lastPosition = %render.getPosition();
 	}
-	else ////// FREEZING A TARGET/MOVEMENT DISABLED //////
+	else ////// ## FREEZING A TARGET/MOVEMENT DISABLED
 	{
 		%render.setMoveTolerance(50); // Disable movement.
 		%render.clearMoveX();
