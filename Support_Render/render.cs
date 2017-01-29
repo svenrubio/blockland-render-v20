@@ -277,11 +277,12 @@ function Render_Loop_Local(%render)
 
 	while(%target=containerSearchNext()) // For all players in the area...
 	{
-		if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.dataBlock $= "PlayerRenderArmor")
-		{
-			%target.delete();
-			continue;
-		}
+		// Delete other Render bots nearby
+		//if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.dataBlock $= "PlayerRenderArmor")
+		//{
+		//	%target.delete();
+		//	continue;
+		//}
 
 		// MUST be an actual player or testing bot; ignore if they have destructo wand
 		if(%target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
@@ -402,16 +403,43 @@ function Render_Spawn_Loop()
 		if(getRandom(1,$Pref::Server::RenderSpawnRate/2) == 1) // Stays 50/50 if spawn rate is 1
 			serverPlay2D("RenderAmb" @ getRandom(1,2));
 
+		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
+		// By doing this, we keep the spawnrate balanced regardless of playercount and avoid an unintended bias toward groups of players.
+
+		//First, we're going to go through all the clients in the server.
 		for(%i = 0; %i < clientGroup.getCount(); %i++)
 		{
 			%client = clientGroup.getObject(%i);
 
-			if(!isObject(%client.player))
+			// If player is nonexistent or already marked, skip them.
+			if(!isObject(%client.player) || %groupGet[%client.player])
 				continue;
 
-			if(getRandom(1,$Pref::Server::RenderSpawnRate) == 1) // Note that each player has their own chance to spawn Render
+			// Otherwise, this player counts as a new group.
+			%groups++;
+
+			// For all players in the area...
+			initContainerRadiusSearch(%client.player.position,150,$TypeMasks::PlayerObjectType);
+			while(%target=containerSearchNext())
 			{
-				echo("RENDER: Chance passed for" SPC %client.name @ "; spawning");
+				if(%target.getClassName() !$= "Player") // Make sure they aren't a bot.
+					continue;
+
+				// We're going to add this player and all nearby players to a new group.
+
+				%groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
+				%groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
+
+				echo("RENDER: Adding " @ %target @ " as player #" @ %groupCount[%groups] @ " in group " @ %groups);
+			}
+
+			// Now, we choose if we want to spawn for this group.
+			if(getRandom(1,$Pref::Server::RenderSpawnRate) == 1)
+			{
+				// If yes, we'll pick a random player in the group to start with.
+				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
+
+				echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
 				%render = Render_CreateBot("0 0 -10000");
 
@@ -419,9 +447,12 @@ function Render_Spawn_Loop()
 				%pos = Render_Spawn_GetNewDirection(%render,%client.player.getEyePoint());
 
 				if(!%pos)
-					$R_Level[%client.bl_id]++; //failed to spawn
-
-				%render.setTransform(%pos);
+				{
+					warn("RENDER: Spawn failed for " @ %client);
+					%render.delete();
+				}
+				else
+					%render.setTransform(%pos);
 			}
 		}
 	}

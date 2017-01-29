@@ -60,7 +60,7 @@ function Render_AI_Control_Loop(%render)
 
 			%target[%targets++] = %render.player[%i]; // Count our valid targets
 
-			echo(%render.player[%i] SPC %render.target);
+			//echo(%render.player[%i] SPC %render.target);
 		}
 
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
