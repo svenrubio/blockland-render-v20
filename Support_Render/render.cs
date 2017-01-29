@@ -454,10 +454,13 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 
-	%p.setWhiteOut(%p.rDmg/100);
-
 	if(%p.client.staticDebug)
 		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>SND:" SPC %p.rDmg/50,1);
+
+	//if(%p.client.staticDebugImmune)
+	//	return;
+
+	%p.setWhiteOut(%p.rDmg/100);
 
 	if(%p.rDmg >= 100) // If damage is ≥ 100, rip
 	{
@@ -502,7 +505,7 @@ function Render_FreezePlayer(%p,%r)
 		%death.render = %r;
 
 		// Note: This might not work well with larger vehicles where the dismount point is far away from the actual seat.
-		
+
 		%p.dismount(); // We have to do this before we set the mount's position, otherwise it'll end up inside the vehicle.
 		%death.setTransform(%p.getTransform());
 		%death.playAudio(0,renderGrowl);
@@ -687,6 +690,15 @@ package Renderman_Haunting
 			return;
 
 		Parent::setTempColor(%player, %a, %b, %c, %d);
+	}
+
+	function minigameCanDamage(%a,%b)
+	{
+		// We have to override this so players can't shoot Render. (Applies to singleplayer/LAN only)
+		if(%b.rIsTestBot || %b.dataBlock $= "PlayerRenderArmor")
+			return 0;
+		else
+			Parent::minigameCanDamage(%a,%b);
 	}
 };
 
