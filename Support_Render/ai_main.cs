@@ -85,7 +85,7 @@ function Render_AI_Control_Loop(%render)
 		%continueChance += 4;
 
 	if(%render.loopCount >= %render.loopPayNext-5000)
-		%render.doContinue = mRound( getRandom(0, 10+%continueChance)/10 );
+		%render.doContinue = mFloatLength( getRandom(0, 10+%continueChance)/10, 0);
 
 	////// # MOVEMENT
 
