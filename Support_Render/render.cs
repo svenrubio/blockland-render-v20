@@ -10,7 +10,7 @@ $Render::C_DamageRate = 150;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
 
-// Bot appearance
+////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
@@ -35,6 +35,53 @@ function Render_ApplyAppearance(%this)
 	%this.setfacename("asciiTerror");
 }
 
+////// # Bot Creation Function
+function Render_CreateBot(%pos)
+{
+	%render = new aiplayer(Render) // Create a new AIPlayer
+	{
+		datablock = PlayerRenderArmor;
+	};
+
+	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
+	%render.setTransform(%pos);
+
+	// TEMPORARY: Should try to adjust this so Render is a *little* easier to escape. 0 makes the bot unrealistically accurate.
+	%render.setMoveSlowdown(0); // Is there something equivalent to this for look/yaw speed?
+	//%render.setMaxForwardSpeed(6); // Default: 7
+	//%render.setMaxBackwardSpeed(3); // Default: 4
+	//%render.setMaxSideSpeed(5); // Default: 5
+
+	%render.setMoveTolerance($Render::C_MoveToleranceObserve);
+
+	// Bot hole stuff
+	%render.hMelee = 1;
+	%render.name = "Render";
+
+	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
+	{
+		%render.light = new fxlight()
+		{
+			dataBlock = playerLight;
+			enable = 0;
+			iconsize = 1;
+			player = %render;
+			initialPosition = "0 0 -9999";
+		};
+		%render.light.attachToObject(%render);
+		%render.light.schedule(32,setEnable,1); // Fix for lights flickering in a different location on spawn.
+	}
+
+	%render.setTransform(%pos);
+	RenderBotGroup.add(%render);
+
+	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
+		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
+
+	return %render;
+}
+
+////// # ObjectInView
 // Jimmg's objectInView code. This has been modified to account for visible distance.
 function Player::rObjectInView(%player,%object)
 {
@@ -89,53 +136,7 @@ function Player::rObjectInView(%player,%object)
 	return 0;
 }
 
-// Bot creation function
-function Render_CreateBot(%pos)
-{
-	%render = new aiplayer(Render) // Create a new AIPlayer
-	{
-		datablock = PlayerRenderArmor;
-	};
-
-	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
-	%render.setTransform(%pos);
-
-	// TEMPORARY: Should try to adjust this so Render is a *little* easier to escape. 0 makes the bot unrealistically accurate.
-	%render.setMoveSlowdown(0); // Is there something equivalent to this for look/yaw speed?
-	//%render.setMaxForwardSpeed(6); // Default: 7
-	//%render.setMaxBackwardSpeed(3); // Default: 4
-	//%render.setMaxSideSpeed(5); // Default: 5
-
-	%render.setMoveTolerance($Render::C_MoveToleranceObserve);
-
-	// Bot hole stuff
-	%render.hMelee = 1;
-	%render.name = "Render";
-
-	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
-	{
-		%render.light = new fxlight()
-		{
-			dataBlock = playerLight;
-			enable = 0;
-			iconsize = 1;
-			player = %render;
-			initialPosition = "0 0 -9999";
-		};
-		%render.light.attachToObject(%render);
-		%render.light.schedule(32,setEnable,1); // Fix for lights flickering in a different location on spawn.
-	}
-
-	%render.setTransform(%pos);
-	RenderBotGroup.add(%render);
-
-	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
-		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
-
-	return %render;
-}
-
-// Global loop; runs every 50ms
+////// # Global loop; runs every 50ms
 // At some point, I will fix this so it isn't constantly running even with no bots present.
 function Render_Loop()
 {
@@ -156,10 +157,10 @@ function Render_Loop()
 		Render_Loop_Local(%render); // Run the local loop
 	}
 
-	/// # SHRINE CHECK
+	// ## SHRINE CHECK
 	// If you place 1,024 shrines, the game may stutter slightly--just barely enough to be noticeable, even with multiple Renders.
-	// Given the limit of 32 shrines per player, it would take the combined effort of 32 players to place this many shrines.
-	// If you multi-client, you can cause a minor annoyance for the low price of 32 Blockland keys, or $319.68!
+	// Given the limit of 32 shrines per brickgroup, it would take the combined effort of 32 unique players to place this many shrines.
+	// If you 'multi-client', you can cause a minor annoyance for the low price of 32 Blockland keys, or $319.68!
 
 	// Ways to optimize this:
 	// - Remove shrines from the list when they are disabled via pref. (Spamming disabled shrines still causes lag even if they don't do anything)
@@ -180,7 +181,8 @@ function Render_Loop()
 			}
 			else if(%r != -1 && %br.isRayCasting())
 			{
-				initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType); // If so, start a box search. If a Render bot is nearby, delete it immediately.
+				// Start a box search. If a Render bot is nearby, delete it immediately.
+				initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
 				while(%target=containerSearchNext())
 				{
 					if(%target.dataBlock $= PlayerRenderArmor)
@@ -199,14 +201,14 @@ function Render_Loop()
 		$R_shrNext = %simTime+$Render::C_ShrineCheckInterval;
 	}
 
-	/// BOT LOOP ///
+	/// ## BOT LOOP
 	if(%i)
 		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop); // If bots still exist, we continue the loop.
 	else
 		$Render::LoopBot = 0; // Otherwise, we disable it for now.
 }
 
-// Local loop. This function is called individually for each bot every 50ms.
+////// # Local loop. This function is called individually for each bot every 50ms.
 function Render_Loop_Local(%render)
 {
 	%render.isRenderman = 0;
@@ -247,7 +249,7 @@ function Render_Loop_Local(%render)
 		return;
 	}
 
-	////// # VIEW CHECK + MOVEMENT CHECK A
+	// ## VIEW CHECK + MOVEMENT CHECK A
 
 	// INCOMPLETE: This is to be corrected; we don't need to run a radius search this often.
 
@@ -277,7 +279,7 @@ function Render_Loop_Local(%render)
 	{
 		if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.dataBlock $= "PlayerRenderArmor")
 		{
-			%target.delete(); // TEMPORARY
+			%target.delete();
 			continue;
 		}
 
@@ -291,7 +293,7 @@ function Render_Loop_Local(%render)
 
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
-				////// # DAMAGE TARGET
+				////// ## DAMAGE TARGET
 				//%render.playerIsViewing[%render.players] = %isViewing; // Mark them as "viewing"
 				%render.playerViewing = %target;
 				if(%isViewing)
@@ -315,7 +317,7 @@ function Render_Loop_Local(%render)
 					}
 				}
 
-				////// FREEZE TARGET //////
+				////// ## FREEZE TARGET
 				if(%distance <= 2.8) // If the player is close enough, freeze them.
 				{
 					if(%render.isAttacking)
@@ -355,7 +357,7 @@ function Render_Loop_Local(%render)
 		}
 	}
 
-	////// # MOVEMENT CHECK B
+	////// ## MOVEMENT CHECK B
 
 	// We aren't allowed to move if we're not attacking and players are looking at us. (First five seconds counts as "not attacking")
 	if(%render.loopCount == %render.loopViewNext)
@@ -372,7 +374,7 @@ function Render_Loop_Local(%render)
 	Render_AI_Control_Loop(%render);
 }
 
-//Target picking function
+//////# Target picking function
 //This will determine the targets for the attacker and start the spawning code
 function Render_Spawn_Loop()
 {
@@ -427,6 +429,8 @@ function Render_Spawn_Loop()
 	$Render::LoopSpawner = schedule($Render::C_SpawnTimer,0,Render_Spawn_Loop);
 }
 
+// # InflictWhiteOutDamage + misc.
+
 function Render_InflictWhiteOutDamage(%p,%render,%distance)
 {
 	// This calculates how much damage we need to subtract. We're using the sim time instead of keeping a loop running.
@@ -476,7 +480,7 @@ function Render_DoMount(%death,%p)
 {
 	if(isObject(%p.client)) // Checking if the player exists returns 1 (wtf?), but checking player.client doesn't.
 	{
-		%p.dismount();
+		%p.dismount(); // Just in case, we'll do this a second time
 		%death.mountObject(%p,8);
 	}
 	else
@@ -495,15 +499,17 @@ function Render_FreezePlayer(%p,%r)
 			scale = "0.2 0.2 0.2";
 			position = "0 0 -999";
 		};
+		%death.render = %r;
 
+		// Note: This might not work well with larger vehicles where the dismount point is far away from the actual seat.
+		
+		%p.dismount(); // We have to do this before we set the mount's position, otherwise it'll end up inside the vehicle.
 		%death.setTransform(%p.getTransform());
-
 		%death.playAudio(0,renderGrowl);
-
 		MissionCleanup.add(%death);
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
-		// If you know of a better solution, please let me know.
+		// If anyone knows of a better solution, please let me know.
 		schedule(100,0,Render_DoMount,%death,%p);
 		%p.canDismount = 0;
 
