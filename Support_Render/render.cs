@@ -400,7 +400,7 @@ function Render_Spawn_Loop()
 
 	if(!%skipSpawn && $Pref::Server::RenderSpawnRate != 0)
 	{
-		if(getRandom(1,$Pref::Server::RenderSpawnRate/2) == 1) // Stays 50/50 if spawn rate is 1
+		if(getRandom(0,$Pref::Server::RenderSpawnRate*2) == 1)
 			serverPlay2D("RenderAmb" @ getRandom(1,2));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
@@ -434,7 +434,7 @@ function Render_Spawn_Loop()
 			}
 
 			// Now, we choose if we want to spawn for this group.
-			if(getRandom(1,$Pref::Server::RenderSpawnRate) == 1)
+			if(getRandom(0,$Pref::Server::RenderSpawnRate) <= 1)
 			{
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
