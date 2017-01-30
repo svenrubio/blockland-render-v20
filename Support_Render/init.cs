@@ -178,7 +178,7 @@ function Render_ShrinePlant(%br)
 
 	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
 	{
-		%client = Brickgroup_14128.client;
+		%client = %group.client;
 
 		if(isObject(%client))
 			%client.centerPrint("\c6You can't have more than 32 shrines!",3);
