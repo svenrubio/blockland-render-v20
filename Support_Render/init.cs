@@ -9,7 +9,7 @@ $Render::C_ShrineLimit = 32;
 //$Pref::Server::RenderMinSpawnDistance = 8; //medium rooms
 //$Pref::Server::RenderMinSpawnDistance = 4; //super small spaces.
 
-//Disabled
+//0; Disabled
 //1/1; High
 //3/4; Above Normal
 //2/3; Normal

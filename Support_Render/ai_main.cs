@@ -45,7 +45,7 @@ function Render_AI_Control_Loop(%render)
 			{
 				if(%render.player[%i].getObjectMount() != getWord(%raycheck[%i],0)) // Make sure we aren't hitting their vehicle (if we are, mark as valid)
 				{
-					//echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
+					///echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
 					%render.targetHidden[%i] = 1;
 					%actualPlayers--;
 					continue;
