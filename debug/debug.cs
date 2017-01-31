@@ -2,7 +2,7 @@ function serverCmdSpawnR(%client, %delete)
 {
 	if(!%client.isSuperAdmin)
 		return;
-	
+
 	%rendy = Render_CreateBot("0 0 -10000",%active);
 
 	%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
@@ -189,4 +189,10 @@ function Render_DoAnimation(%this)
 	schedule((%sched)*  40,0,eval,%this @ ".unhidenode(RArm);" );
 	schedule((%sched++)*40,0,eval,%this @ ".unhidenode(headskin);" );
 
+}
+
+function Render_DebugLoop()
+{
+	echo("Hi!" SPC $Render::LoopBot SPC $Render::LoopSpawner SPC isEventPending($Render::LoopBot) SPC isEventPending($Render::LoopSpawner));
+	$Render::LoopDebug = schedule(50,0,Render_DebugLoop);
 }

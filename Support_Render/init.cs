@@ -109,22 +109,22 @@ datablock AudioProfile(rAttackC)
 };
 
 //////# PARTICLES
-datablock ParticleData(RendermanCameraParticleA : CameraParticleA)
-{
-	animTexName[0] = "./dotB";
-	animTexName[1] = "base/data/particles/dot";
-	colors[0] = "0.266667 0.000000 0.266667 1.000000";
-	colors[1] = "0.200000 0.000000 0.200000 1.000000";
-	colors[2] = "0.000000 0.000000 0.000000 0.000000";
-	colors[3] = "1.000000 1.000000 1.000000 1.000000";
-	useInvAlpha = "1";
-};
-
-datablock ParticleEmitterData(RendermanCameraEmitterA : CameraEmitterA)
-{
-	particles = "RendermanCameraParticleA";
-	uiName = "Camera Glow Evil";
-};
+//datablock ParticleData(RendermanCameraParticleA : CameraParticleA)
+//{
+//	animTexName[0] = "./dotB";
+//	animTexName[1] = "base/data/particles/dot";
+//	colors[0] = "0.266667 0.000000 0.266667 1.000000";
+//	colors[1] = "0.200000 0.000000 0.200000 1.000000";
+//	colors[2] = "0.000000 0.000000 0.000000 0.000000";
+//	colors[3] = "1.000000 1.000000 1.000000 1.000000";
+//	useInvAlpha = "1";
+//};
+//
+//datablock ParticleEmitterData(RendermanCameraEmitterA : CameraEmitterA)
+//{
+//	particles = "RendermanCameraParticleA";
+//	uiName = "Camera Glow Evil";
+//};
 
 //////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
@@ -427,6 +427,8 @@ new simGroup(RenderBotGroup) {}; //Render bot group
 
 new simGroup(RenderMiscGroup) {}; //Render object group
 //missionCleanup.add(RenderMiscGroup);
+
+echo("CREATING SCHEDULES");
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);

@@ -653,14 +653,14 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 
 package Renderman_Haunting
 {
-	function disconnect(%a)
+	function destroyServer()
 	{
 		cancel($Render::LoopBot);
 		cancel($Render::LoopSpawner);
 
 		$Render::Loaded = 0;
 
-		Parent::disconnect(%a);
+		Parent::destroyServer();
 	}
 
 	function armor::onCollision(%this, %obj, %col, %pos, %vel) //ripped from Event_OnBotTouched. modify for render bot functions
