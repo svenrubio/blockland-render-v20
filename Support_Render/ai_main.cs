@@ -111,7 +111,6 @@ function Render_AI_Control_Loop(%render)
 			if(%render.getMoveDestination() != %node)
 			{
 				%render.setMoveDestination(%node);
-				%render.setMoveY(1);
 			}
 		}
 
@@ -140,10 +139,11 @@ function Render_AI_Movement_Loop(%render)
 	{
 		%render.setMoveTolerance($Render::C_MoveTolerance);
 
+		%moveDist = vectorDist(getWords(%render.target.position, 0, 1), getWords(%render.position, 0, 1));
 		if(%render.getMoveObject() != %render.target && isObject(%render.target))
 		{
+			%render.clearMoveY();
 			%render.setMoveObject(%render.target);
-			%render.setMoveY(1);
 		}
 		//echo("target: " @ %render.target @ "; aim: " @ %render.getAimObject());
 
@@ -170,7 +170,7 @@ function Render_AI_Movement_Loop(%render)
 				if(%render.stuckConsecutive >= 4)
 					%render.setMoveY(0); // Stop moving forward if we've been stuck for too long.
 				else
-					%render.setMoveY(1);
+					%render.clearMoveY();
 
 				if(%render.stuckConsecutive >= 8)
 					%render.stuckEnd = %render.getPosition(); // Give up if we remain stuck in the exact same spot for too long. The stuck check will resume if the bot's position changes at all.
@@ -194,8 +194,7 @@ function Render_AI_Movement_Loop(%render)
 				%render.stuckConsecutive = 0;
 				%render.hAvoidObstacles = 0;
 
-				%render.setMoveY(1); // Restart movement
-				%render.setMoveX(0);
+				%render.clearMoveX();
 				%render.setCrouching(0);
 				%render.setJumping(0);
 			}

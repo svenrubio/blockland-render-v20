@@ -176,6 +176,8 @@ function Render_ShrinePlant(%br)
 {
 	%group = %br.getGroup();
 
+	//echo("Registered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
+
 	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
 	{
 		%client = %group.client;
@@ -215,6 +217,7 @@ function Render_ShrineRemove(%br,%id)
 	}
 
 	%br.isGlitchShrine = 0;
+	//echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
 }
 
 //////# FACE PROJECTILE
@@ -427,8 +430,6 @@ new simGroup(RenderBotGroup) {}; //Render bot group
 
 new simGroup(RenderMiscGroup) {}; //Render object group
 //missionCleanup.add(RenderMiscGroup);
-
-echo("CREATING SCHEDULES");
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);

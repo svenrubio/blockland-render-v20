@@ -3,8 +3,8 @@
 //////# CONSTANTS
 $Render::C_MoveTolerance = 2;
 $Render::C_MoveToleranceObserve = 10;
-$Render::C_EnergyTimer = 40000; // Minimum: 5000
-$Render::C_SpawnTimer = 40000;
+$Render::C_EnergyTimer = 30000; // Minimum: 5000
+$Render::C_SpawnTimer = 45000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
 $Render::C_DamageRate = 150;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
