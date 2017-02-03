@@ -177,6 +177,7 @@ function Render_AI_Movement_Loop(%render)
 
 				%render.hAvoidObstacles = 1;
 				%render.hAvoidObstacle(0,0,1); // SO APPARENTLY THIS LETS RENDER OPEN DOORS AND IT SCARED THE PISS OUT OF ME. I'M BLAMING ROTONDO FOR THAT ONE.
+
 				if(getRandom(0,1)) // Very simple solution, should do for now. Render will switch between the two until he gets unstuck.
 					%render.setMoveX(1);
 				else

@@ -10,11 +10,11 @@ $Render::C_ShrineLimit = 32;
 //$Pref::Server::RenderMinSpawnDistance = 4; //super small spaces.
 
 //0; Disabled
-//1/1; High
-//3/4; Above Normal
-//2/3; Normal
-//1/2; Below Normal
-//1/6; Low
+//5/5; 100%; High
+//4/5; 80%; Above Normal
+//3/5; 60%; Normal
+//2/5; 40%; Below Normal
+//1/5; 20%; Low
 
 $Pref::Server::RenderMinSpawnDistance = 8;
 $Pref::Server::RenderAllowMultiples = 0;
@@ -24,7 +24,7 @@ if(isFunction("RTB_registerPref"))
 	$Pref::Server::RenderDifficulty = 100;
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "GameMode_Renderman_Haunting", $Pref::Server::RenderDifficulty, 0, 0);
 	RTB_registerPref("Attack Type", "Render", "$Pref::Server::RenderDamageType", "list Static 0 Health 1", "GameMode_Renderman_Haunting", $Pref::Server::RenderDamageType, 0, 0);
-	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 6 Below_Normal 4 Normal 3 Above_Normal 2 High 1", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
+	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 2 Normal 3 Above_Normal 4 High 5", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
 	//RTB_registerPref("Hard mode (Allows multiple Renders at once)", "Render", "$Pref::Server::RenderAllowMultiples", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderAllowMultiples, 0, 0);
@@ -176,7 +176,7 @@ function Render_ShrinePlant(%br)
 {
 	%group = %br.getGroup();
 
-	//echo("Registered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
+	echo("Registered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
 
 	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
 	{
@@ -217,7 +217,7 @@ function Render_ShrineRemove(%br,%id)
 	}
 
 	%br.isGlitchShrine = 0;
-	//echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
+	echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
 }
 
 //////# FACE PROJECTILE
@@ -334,6 +334,7 @@ function RenderDeathArmor::onRemove(%this, %obj)
 }
 
 //////# ITEMS
+//## Glitch Gun
 //datablock ItemData(GlitchEnergyGunItem)
 //{
 //	category = "Weapon";  // Mission editor category
@@ -423,6 +424,70 @@ function RenderDeathArmor::onRemove(%this, %obj)
 //	stateTransitionOnTimeout[2] = "Ready";
 //	stateAllowImageChange[2]    = false;
 //};
+
+//## Detector
+datablock ItemData(GlitchDetector)
+{
+	category = "Weapon";  // Mission editor category
+	className = "Weapon"; // For inventory system
+
+	shapeFile = "./models/detector.dts";
+	rotate = false;
+	mass = 1;
+	density = 0.2;
+	elasticity = 0.2;
+	friction = 0.6;
+	emap = true;
+
+	uiName = "Glitch Detector";
+	iconName = "./models/detector.png";
+	doColorShift = false;
+	colorShiftColor = "1.0 1.0 1.0 1.0";
+
+	image = GlitchDetectorImage;
+	canDrop = true;
+};
+
+datablock ShapeBaseImageData(GlitchDetectorImage)
+{
+   shapeFile = "./models/detector.dts";
+   emap = true;
+
+   mountPoint = 0;
+   offset = "0 0 0";
+   eyeoffset = "0.7 1.2 -1";
+   rotation = eulerToMatrix( "0 0 0" );
+
+   correctMuzzleVector = true;
+
+   className = "WeaponImage";
+
+   // Projectile && Ammo. Uses placeholders since the detector doesn't shoot anything.
+   item = GlitchDetector;
+   ammo = " ";
+   projectile = gunProjectile;
+   projectileType = Projectile;
+
+	casing = gunShellDebris;
+	shellExitDir        = "0.0 0.0 0.0";
+	shellExitOffset     = "0 0 0";
+	shellExitVariance   = 0.0;
+	shellVelocity       = 0.0;
+
+   //melee particles shoot from eye node for consistancy
+   melee = false;
+   //raise your arm up or not
+   armReady = true;
+
+   doColorShift = false;
+   colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
+
+  // Initial start up state
+	stateName[0]                     = "Activate";
+	stateTimeoutValue[0]             = 0.0;
+	stateTransitionOnTimeout[0]       = "Ready";
+	stateSound[0]					= weaponSwitchSound;
+};
 
 //////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group

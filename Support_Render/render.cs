@@ -3,8 +3,8 @@
 //////# CONSTANTS
 $Render::C_MoveTolerance = 2;
 $Render::C_MoveToleranceObserve = 10;
-$Render::C_EnergyTimer = 30000; // Minimum: 5000
-$Render::C_SpawnTimer = 45000;
+$Render::C_EnergyTimer = 20000; // Minimum: 5000
+$Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
 $Render::C_DamageRate = 150;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
@@ -60,7 +60,7 @@ function Render_CreateBot(%pos)
 
 	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
 	{
-		%render.light = new fxlight()
+		%render.light = new fxlight() // Try $r_light[%render]; or something?
 		{
 			dataBlock = playerLight;
 			enable = 0;
@@ -68,11 +68,13 @@ function Render_CreateBot(%pos)
 			player = %render;
 			initialPosition = "0 0 -9999";
 		};
+		echo("Created light at " @ %render.light.position);
 		%render.light.attachToObject(%render);
 		%render.light.schedule(32,setEnable,1); // Fix for lights flickering in a different location on spawn.
 	}
 
 	%render.setTransform(%pos);
+	echo("Set light to bot. Current position: " @ %render.light.position);
 	RenderBotGroup.add(%render);
 
 	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
@@ -151,7 +153,7 @@ function Render_Loop()
 	{
 		%render = renderBotGroup.getObject(%i);
 
-		if((%render.freezeTarget || %render.fxScale) && !$Pref::Server::RenderDisableScaleEffect) // Scale effect applies when we're frozen or freezing a player
+		if((%render.fxScale) && !$Pref::Server::RenderDisableScaleEffect) // Scale effect applies when we're frozen or freezing a player
 			%render.setPlayerScale(%scale); // Apply the scale effect
 
 		Render_Loop_Local(%render); // Run the local loop
@@ -400,7 +402,7 @@ function Render_Spawn_Loop()
 
 	if(!%skipSpawn && $Pref::Server::RenderSpawnRate != 0)
 	{
-		if(getRandom(0,$Pref::Server::RenderSpawnRate*2) == 1)
+		if(getRandom(1,5) <= $Pref::Server::RenderSpawnRate) // Spawnrate is x/6
 			serverPlay2D("RenderAmb" @ getRandom(1,2));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
@@ -649,9 +651,23 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 //	serverCmdUnUseTool(%obj.client);
 //}
 
+function detectorLoop(%client)
+{
+	// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
+	// Todo: Smooth the display so abrupt changes appear gradual.
+	%str = "\c0"; //Start out with red
+
+	// Change the color to yellow when we reach the bar that corresponnds with the value.
+	// The values are randomized to simulate noise.
+	for(%i = 1; %i <= 10; %i++)
+    %str = %str @ (%client.player.detector*2+getRandom(-2,2) == %i?"\c3|":"|");
+
+	%client.bottomPrint(%str); // INCOMPLETE: Define other args
+}
+
 ////// # PACKAGED
 
-package Renderman_Haunting
+package Render
 {
 	function destroyServer()
 	{
@@ -670,7 +686,10 @@ package Renderman_Haunting
 
 	function Player::emote(%player, %emote)
 	{
-		if(%player.renderDamage) // If they're taking damage from Render, disable the pain emote. (There may be a better way to do this)
+		// Hide the pain emotes if:
+		// a.) The player is taking damage from Render.
+		// b.) The player is Render.
+		if(%player.renderDamage || %player.dataBlock $= "PlayerRenderArmor")
 		{
 			%player.renderDamage = 0;
 			return;
@@ -733,5 +752,5 @@ package Renderman_Haunting
 	}
 };
 
-deactivatePackage("Renderman_Haunting");
-activatePackage("Renderman_Haunting");
+deactivatePackage("Render");
+activatePackage("Render");
