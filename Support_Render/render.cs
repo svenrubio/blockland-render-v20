@@ -3,7 +3,7 @@
 //////# CONSTANTS
 $Render::C_MoveTolerance = 2;
 $Render::C_MoveToleranceObserve = 10;
-$Render::C_EnergyTimer = 20000; // Minimum: 5000
+$Render::C_EnergyTimer = 25000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
 $Render::C_DamageRate = 150;

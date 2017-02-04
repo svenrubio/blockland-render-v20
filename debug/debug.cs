@@ -196,3 +196,9 @@ function Render_DebugLoop()
 	echo("Hi!" SPC $Render::LoopBot SPC $Render::LoopSpawner SPC isEventPending($Render::LoopBot) SPC isEventPending($Render::LoopSpawner));
 	$Render::LoopDebug = schedule(50,0,Render_DebugLoop);
 }
+
+//function testloop()
+//{
+// commandToClient(findclientbyname(lake), 'centerprint', Render_AI_GetRelativeDirection2D(findclientbyname(lake).player.position, 8840.position),1);
+// schedule(10,0,testloop);
+//}
