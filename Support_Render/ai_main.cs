@@ -109,11 +109,8 @@ function Render_AI_Control_Loop(%render)
 			//}
 
 			if(%render.getMoveDestination() != %node)
-			{
 				%render.setMoveDestination(%node);
-			}
 		}
-
 	}
 
 	////// # OBSERVER DESPAWN
@@ -202,6 +199,7 @@ function Render_AI_Movement_Loop(%render)
 				%render.hAvoidObstacles = 0;
 
 				%render.clearMoveX();
+				%render.clearMoveY();
 				%render.setCrouching(0);
 				%render.setJumping(0);
 			}

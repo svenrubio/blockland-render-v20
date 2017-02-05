@@ -307,7 +307,7 @@ function Render_Loop_Local(%render)
 				%isViewing = %target.rObjectInView(%render); // Check if they're in Render's line of sight
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
-				%detectorVal = 5/(%distance/2);
+				%detectorVal = 5/(%distance/4);
 				%target.detector = %detectorVal;
 				%target.detectorDecay = %detectorVal;
 				%target.doDetectorDecay = 1;
@@ -419,7 +419,7 @@ function Render_Spawn_Loop()
 	if(!%skipSpawn && $Pref::Server::RenderSpawnRate != 0)
 	{
 		// Play ambient sound effects
-		if(getRandom(0,$Pref::Server::RenderSpawnRate*2) <= 1) // Bleh
+		if(getRandom(1,12) <= $Pref::Server::RenderSpawnRate) // Bleh
 			serverPlay2D("RenderAmb" @ getRandom(1,2));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
@@ -454,7 +454,7 @@ function Render_Spawn_Loop()
 
 			// Now, we choose if we want to spawn for this group.
 			%random = getRandom(1,6);
-			echo("Spawn chance: " @ %random);
+			//echo("Spawn chance: " @ %random);
 			if(%random <= $Pref::Server::RenderSpawnRate)
 			{
 				// If yes, we'll pick a random player in the group to start with.
@@ -672,30 +672,40 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 
 // The detetector is controlled by setting %player.detector to a desired value from 0 to 5.
 // To lower the detector value, set %player.detectorDecay to the amount that you want to subtract. The specified value will be gradually subtracted.
-// %player.doDetectorDecay must be set to 1 each time you want to apply decay.
 function detectorLoop(%client)
 {
 		// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
-		// Todo: Smooth the display so abrupt changes appear gradual.
 		%player = %client.player;
 		%str = "\c6"; //Start out with red
 
 		// Change the color to yellow when we reach the bar that corresponnds with the value.
 		// The values are randomized to simulate noise.
 		for(%i = 1; %i <= 60; %i++)
-	    %str = %str @ ((%client.player.detector*20)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
 
-		%client.bottomPrint("<just:center>" @ %text @ "<br><font:arial black:14>" @ %str,1,1); // INCOMPLETE: Define other args
-
-		// After displaying the value, we'll cut it in half. (Only applies to values set via detectorDecay)
-		if(%player.doDetectorDecay)
+		if($Pref::Server::RenderEnableDetectorText)
 		{
-			%decay = %player.detectorDecay/10;
-			if(%decay < 0.01)
-				%decay = 0;
-			%player.detectorDecay = %player.detectorDecay-%decay;
-			%player.detector = %player.detector-%decay;
+			if(%player.detector < 0.4)
+				%text = "No glitch energy detected.";
+			else if(%player.detector < 1)
+				%text = "Slight glitch energy trace detected. Investigate.";
+			else if(%player.detector < 2)
+				%text = "Low glitch energy detected. Investigate.";
+			else if(%player.detector < 4)
+				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
+			else if(%player.detector < 5)
+				%text = "Very high glitch energy reading detected. User advised to leave area as soon as possible.";
+			else if(%player.detector < 6)
+				%text = "OFF SCALE GLITCH ACTIVITY DETECTED. EUCLID PRESCENCE CERTAIN.";
 		}
+		%client.bottomPrint("<just:center>\c6" @ %text @ "<br><font:arial black:14>" @ %str,1,1); // INCOMPLETE: Define other args
+
+		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
+		%decay = %player.detectorDecay/20;
+		if(%decay < 0.01)
+			%decay = 0;
+		%player.detectorDecay = %player.detectorDecay-%decay;
+		%player.detector = %player.detector-%decay;
 }
 
 ////// # PACKAGED
