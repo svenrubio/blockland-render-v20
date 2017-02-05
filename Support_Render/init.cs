@@ -24,7 +24,7 @@ if(isFunction("RTB_registerPref"))
 	$Pref::Server::RenderDifficulty = 100;
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "GameMode_Renderman_Haunting", $Pref::Server::RenderDifficulty, 0, 0);
 	RTB_registerPref("Attack Type", "Render", "$Pref::Server::RenderDamageType", "list Static 0 Health 1", "GameMode_Renderman_Haunting", $Pref::Server::RenderDamageType, 0, 0);
-	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 2 Normal 3 Above_Normal 4 High 5", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
+	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
 	//RTB_registerPref("Hard mode (Allows multiple Renders at once)", "Render", "$Pref::Server::RenderAllowMultiples", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderAllowMultiples, 0, 0);
