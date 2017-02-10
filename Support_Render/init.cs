@@ -142,14 +142,17 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 
 function brickGlitchShrineData::onPlant(%a,%br) // Planted
 {
-	Render_ShrinePlant(%br);
 	Parent::onPlant(%a,%br);
+	%br.shrineSched = schedule(15,0,Render_ShrinePLant,%br);
+	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
+	// (This may only be necessary for onLoadPlant)
 }
 
 function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 {
-	Render_ShrinePlant(%br);
 	Parent::onLoadPlant(%br);
+	%br.shrineSched = schedule(15,0,Render_ShrinePLant,%br);
+	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 }
 
 //## Shrine Functions
@@ -177,7 +180,7 @@ function Render_ShrinePlant(%br)
 {
 	%group = %br.getGroup();
 
-	echo("Registered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
+	echo("Registered shrine " @ %br @ " to group " @ %group @ " (total: " @ $r_shr_t @ ")");
 
 	if(%group.rShrines >= 32) // If there are too many shrines, set this one as dormant permanently.
 	{
@@ -208,6 +211,8 @@ function Render_ShrineRemove(%br,%id)
 {
 	if(!%id) // If ID isn't specified... (We don't need to use $= "" because shrine counts start at 1)
 		%id = %br.shrineId;
+
+	cancel(%br.shrineSched); // Just in case.
 
 	if(%id)
 	{
