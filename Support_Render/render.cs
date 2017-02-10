@@ -66,7 +66,6 @@ function Render_CreateBot(%pos)
 			enable = 0;
 			iconsize = 1;
 			player = %render;
-			initialPosition = "0 0 -9999";
 		};
 		echo("Created light at " @ %render.light.position);
 		%render.light.attachToObject(%render);
@@ -438,7 +437,7 @@ function Render_Spawn_Loop()
 			%groups++;
 
 			// For all players in the area...
-			initContainerRadiusSearch(%client.player.position,150,$TypeMasks::PlayerObjectType);
+			initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
 			while(%target=containerSearchNext())
 			{
 				if(%target.getClassName() !$= "Player") // Make sure they aren't a bot.
