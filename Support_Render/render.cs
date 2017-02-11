@@ -6,6 +6,7 @@ $Render::C_MoveToleranceObserve = 10;
 $Render::C_EnergyTimer = 25000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
+$Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
 $Render::C_DamageRate = 150;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
@@ -138,7 +139,6 @@ function Player::rObjectInView(%player,%object)
 }
 
 ////// # Global loop; runs every 50ms
-// At some point, I will fix this so it isn't constantly running even with no bots present.
 function Render_Loop()
 {
 	cancel($Render::LoopBot);
@@ -158,17 +158,7 @@ function Render_Loop()
 		Render_Loop_Local(%render); // Run the local loop
 	}
 
-	// ## DETECTORS
-	if(!$Pref::Server::RenderDisableDetectors)
-	{
-		for(%i = 0; %i <= clientGroup.getCount()-1; %i++)
-		{
-			%client = clientGroup.getObject(%i);
-			if(isObject(%client.player))
-				if(%client.player.getMountedImage(0) $= nameToID("GlitchDetectorImage"))
-					detectorLoop(%client);
-		}
-	}
+
 
 	// ## SHRINE CHECK
 	// If you place 1,024 shrines, the game may stutter slightly--just barely enough to be noticeable, even with multiple Renders.
@@ -179,7 +169,8 @@ function Render_Loop()
 	// - Remove shrines from the list when they are disabled via pref. (Spamming disabled shrines still causes lag even if they don't do anything)
 
 	// Check if it's time to do a shrine check first. Delaying these checks reduces the impact on performance if we have a lot of shrines/attackers present.
-	if(%simTime > $R_shrNext)
+	// Check cancels if there are no bots present.
+	if(%i && %simTime > $R_shrNext)
 	{
 		// For all shrines on the server...
 		for(%iB = 1; %iB <= $R_Shr_t; %iB++)
@@ -215,10 +206,11 @@ function Render_Loop()
 	}
 
 	/// ## BOT LOOP
+	// Only continue if there are bots present.
 	if(%i)
-		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop); // If bots still exist, we continue the loop.
+		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
 	else
-		$Render::LoopBot = 0; // Otherwise, we disable it for now.
+		$Render::LoopBot = 0;
 }
 
 ////// # Local loop. This function is called individually for each bot every 50ms.
@@ -306,10 +298,14 @@ function Render_Loop_Local(%render)
 				%isViewing = %target.rObjectInView(%render); // Check if they're in Render's line of sight
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
-				%detectorVal = 5/(%distance/4);
-				%target.detector = %detectorVal;
-				%target.detectorDecay = %detectorVal;
-				%target.doDetectorDecay = 1;
+				// Detectors
+				if(%render.isAttacking)
+				{
+					%detectorVal = 5/(%distance/4);
+					%target.detector = %detectorVal;
+					%target.detectorDecay = %detectorVal;
+					%target.startDetectorDecay = getSimTime()+$Render::C_LoopTimer+10;
+				}
 
 				////// ## DAMAGE TARGET
 				//%render.playerIsViewing[%render.players] = %isViewing; // Mark them as "viewing"
@@ -669,44 +665,6 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 //	serverCmdUnUseTool(%obj.client);
 //}
 
-// The detetector is controlled by setting %player.detector to a desired value from 0 to 5.
-// To lower the detector value, set %player.detectorDecay to the amount that you want to subtract. The specified value will be gradually subtracted.
-function detectorLoop(%client)
-{
-		// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
-		%player = %client.player;
-		%str = "\c6"; //Start out with red
-
-		// Change the color to yellow when we reach the bar that corresponnds with the value.
-		// The values are randomized to simulate noise.
-		for(%i = 1; %i <= 60; %i++)
-	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
-
-		if($Pref::Server::RenderEnableDetectorText)
-		{
-			if(%player.detector < 0.4)
-				%text = "No glitch energy detected.";
-			else if(%player.detector < 1)
-				%text = "Slight glitch energy trace detected. Investigate.";
-			else if(%player.detector < 2)
-				%text = "Low glitch energy detected. Investigate.";
-			else if(%player.detector < 4)
-				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
-			else if(%player.detector < 5)
-				%text = "Very high glitch energy reading detected. User advised to leave area as soon as possible.";
-			else if(%player.detector < 6)
-				%text = "OFF SCALE GLITCH ACTIVITY DETECTED. EUCLID PRESCENCE CERTAIN.";
-		}
-		%client.bottomPrint("<just:center>\c6" @ %text @ "<br><font:arial black:14>" @ %str,1,1); // INCOMPLETE: Define other args
-
-		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
-		%decay = %player.detectorDecay/20;
-		if(%decay < 0.01)
-			%decay = 0;
-		%player.detectorDecay = %player.detectorDecay-%decay;
-		%player.detector = %player.detector-%decay;
-}
-
 ////// # PACKAGED
 
 package Render
@@ -791,6 +749,64 @@ package Render
 			return 0;
 		else
 			Parent::minigameCanDamage(%a,%b);
+	}
+
+	// ## Glitch Detector Functions
+
+	function GlitchDetectorImage::onMount(%this,%obj,%slot)
+	{
+		if(!$Pref::Server::RenderDisableDetectors)
+			%this.detectorLoop(%obj.client);
+		Parent::onMount(%this,%obj,%slot);
+	}
+
+	// The detetector is controlled by setting %player.detector to a desired value from 0 to 5.
+	// To lower the detector value, set %player.detectorDecay to the amount that you want to subtract. The specified value will be gradually subtracted.
+	// You can control the timing by setting %player.startDetectorDecay. This specifies the simTime when decay will begin.
+	function GlitchDetectorImage::DetectorLoop(%this,%client)
+	{
+		// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
+		%player = %client.player;
+
+		// Cancel if no detector or no player
+		if(!isObject(%player) || %player.getMountedImage(0) != GlitchDetectorImage.getID())
+			return;
+
+		%str = "\c6"; //Start out with red
+
+		// Change the color to yellow when we reach the bar that corresponnds with the value.
+		// The values are randomized to simulate noise.
+		for(%i = 1; %i <= 60; %i++)
+	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+
+		if($Pref::Server::RenderEnableDetectorText)
+		{
+			if(%player.detector < 0.4)
+				%text = "No glitch energy detected.";
+			else if(%player.detector < 1)
+				%text = "Slight glitch energy trace detected. Investigate.";
+			else if(%player.detector < 2)
+				%text = "Low glitch energy detected. Investigate.";
+			else if(%player.detector < 4)
+				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
+			else if(%player.detector < 5)
+				%text = "Very high glitch energy reading detected. User advised to leave area as soon as possible.";
+			else if(%player.detector) // whoops? will fix this
+				%text = "OFF SCALE GLITCH ACTIVITY DETECTED. EUCLID PRESCENCE CERTAIN.";
+		}
+		%client.bottomPrint("<just:center>\c6" @ %text @ "<br><font:arial black:14>" @ %str,1,1); // INCOMPLETE: Define other args
+
+		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
+		if(getSimTime() >= %player.startDetectorDecay)
+		{
+			%decay = %player.detectorDecay/20;
+			if(%decay < 0.01)
+				%decay = 0;
+			%player.detectorDecay = %player.detectorDecay-%decay;
+			%player.detector = %player.detector-%decay;
+		}
+
+		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
 };
 
