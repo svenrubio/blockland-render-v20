@@ -16,7 +16,7 @@ $Render::C_ShrineLimit = 32;
 //2/5; 40%; Below Normal
 //1/5; 20%; Low
 
-$Pref::Server::RenderMinSpawnDistance = 8;
+$Pref::Server::RenderMinSpawnDistance = 2;
 $Pref::Server::RenderAllowMultiples = 0;
 if(isFunction("RTB_registerPref"))
 {
