@@ -19,6 +19,9 @@ exec("./modules/envServer.cs");
 
 exec("./ai_main.cs");
 exec("./ai_spawn.cs");
+
+exec("./brick_shrine.cs");
+
 exec("./render.cs");
 
 if(isFile("./debug.cs"))

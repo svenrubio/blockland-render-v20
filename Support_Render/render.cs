@@ -158,8 +158,6 @@ function Render_Loop()
 		Render_Loop_Local(%render); // Run the local loop
 	}
 
-
-
 	// ## SHRINE CHECK
 	// If you place 1,024 shrines, the game may stutter slightly--just barely enough to be noticeable, even with multiple Renders.
 	// Given the limit of 32 shrines per brickgroup, it would take the combined effort of 32 unique players to place this many shrines.
@@ -172,36 +170,7 @@ function Render_Loop()
 	// Check cancels if there are no bots present.
 	if(%i && %simTime > $R_shrNext)
 	{
-		// For all shrines on the server...
-		for(%iB = 1; %iB <= $R_Shr_t; %iB++)
-		{
-			%br = $R_Shr[%iB];
-			%r = $Pref::Server::RenderShrineRange;
-
-			if(%br.position $= "") // Error if one is missing.
-			{
-				error("Support_Render - Shrine " @ $R_Shr[%iB] @ " (" @ %iB @ ") does not exist! Shrine will be force-removed.");
-				Render_ShrineRemove(%br, $R_Shr[%iB]);
-			}
-			else if(%r != -1 && %br.isRayCasting())
-			{
-				// Start a box search. If a Render bot is nearby, delete it immediately.
-				initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
-				while(%target=containerSearchNext())
-				{
-					if(%target.dataBlock $= PlayerRenderArmor)
-					{
-						echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
-						%target.delete();
-
-						// Flicker to indicate that the shrine did something.
-						%br.setDatablock(brickPumpkinBaseData);
-						%br.schedule(128,setDatablock,brickGlitchShrineData);
-					}
-				}
-			}
-		}
-
+		Render_DoShrineCheck();
 		$R_shrNext = %simTime+$Render::C_ShrineCheckInterval;
 	}
 
