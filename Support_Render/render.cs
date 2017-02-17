@@ -529,7 +529,7 @@ function Render_FreezePlayer(%p,%r)
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
 		// If anyone knows of a better solution, please let me know.
-		schedule(100,0,Render_DoMount,%death,%p);
+	 	%p.rDeathSchedule = schedule(100,0,Render_DoMount,%death,%p);
 		%p.canDismount = 0;
 
 		%r.freezeTarget = %p;
@@ -540,6 +540,8 @@ function Render_UnfreezePlayer(%p,%r)
 {
 	if(isObject(%p))
 	{
+		cancel(%p.rDeathSchedule); // Cancel the 'death schedule' if there is one. This keeps us from freezing a player if Render just de-spawned.
+
 		%p.isFrozen = 0;
 		%mount = %p.getObjectMount();
 
