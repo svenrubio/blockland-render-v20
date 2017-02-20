@@ -1,11 +1,16 @@
 # Render
 Render is a mysterious entity that haunts Blockland. Over the years, this entity has become increasingly intelligent... and increasingly deadly.
 
+# What's New
+- Improved AI and movement; Render navigates your builds rather than teleporting through them.
+- New, original sound effects created specifically for the mod.
+- Removed loud "BEEEEP" sound.
+
 # Tools
 ## The Glitch Detector
 Introducing the newly-upgraded Glitch Detector 2.0! This tool will alert you to the presence of Render by measuring glitch energy. It has one weakness, however; Render can passively observe you without being detected.
 
-## The Glitch Gun
+## The Glitch Gun (Coming soon)
 This state-of-the-art device was invented during an experiment with glitch energy. Upon use, a glitch gun will repel Render, shattering the gun in the process. Not much else is known about this device or if there are other uses of the technology.
 
 # Glitch Shrines
