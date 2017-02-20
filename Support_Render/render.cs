@@ -68,13 +68,11 @@ function Render_CreateBot(%pos)
 			iconsize = 1;
 			player = %render;
 		};
-		echo("Created light at " @ %render.light.position);
 		%render.light.attachToObject(%render);
 		%render.light.schedule(32,setEnable,1); // Fix for lights flickering in a different location on spawn.
 	}
 
 	%render.setTransform(%pos);
-	echo("Set light to bot. Current position: " @ %render.light.position);
 	RenderBotGroup.add(%render);
 
 	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
@@ -201,7 +199,7 @@ function Render_Loop_Local(%render)
 	{
 		if(!%render.doContinue) // If they aren't attacking at this point, we'll just de-spawn them.
 		{
-			echo("RENDER: De-spawning, out of time");
+			//echo("RENDER: De-spawning, out of time");
 			%render.delete();
 			return;
 		}
@@ -218,7 +216,7 @@ function Render_Loop_Local(%render)
 	// This is planned to be determined by a more sophisticated AI, considering factors like whether we're freezing a player, how many players we're pursuing, etc.
 	if(%render.aiNeedsToPay && getRandom(1,2) == 1)
 	{
-		echo("RENDER: De-spawning (energy check failed)");
+		//echo("RENDER: De-spawning (energy check failed)");
 		%render.delete();
 		return;
 	}
@@ -367,7 +365,7 @@ function Render_Spawn_Loop()
 		cancel($Render::LoopSpawner);
 	}
 
-	echo("RENDER: spawning");
+	//echo("RENDER: Spawn loop");
 
 	if($Pref::Server::RenderDayCycleSpawn && env_getDayCycleEnabled()) // If we're only supposed to spawn at night, we'll need to do some extra checks. (Only if the daycycle is actually enabled, of course.)
 	{
@@ -376,9 +374,6 @@ function Render_Spawn_Loop()
 		if(%time == 0 || %time == 1) // Morning or daytime, we won't spawn at all.
 			%skipSpawn = 1;
 	}
-
-	if(%skipSpawn)
-		echo("RENDER: skipSpawn");
 
 	if(!%skipSpawn && $Pref::Server::RenderSpawnRate != 0)
 	{
@@ -413,18 +408,17 @@ function Render_Spawn_Loop()
 				%groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
 				%groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
 
-				echo("RENDER: Adding " @ %target @ " as player #" @ %groupCount[%groups] @ " in group " @ %groups);
+				//echo("RENDER: Adding " @ %target @ " as player #" @ %groupCount[%groups] @ " in group " @ %groups);
 			}
 
 			// Now, we choose if we want to spawn for this group.
 			%random = getRandom(1,6);
-			//echo("Spawn chance: " @ %random);
 			if(%random <= $Pref::Server::RenderSpawnRate)
 			{
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
 
-				echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
+				//echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
 				%render = Render_CreateBot("0 0 -10000");
 
@@ -433,7 +427,7 @@ function Render_Spawn_Loop()
 
 				if(!%pos)
 				{
-					warn("RENDER: Spawn failed for " @ %client);
+					//warn("RENDER: Spawn failed for " @ %client);
 					%render.delete();
 				}
 				else

@@ -31,7 +31,7 @@ function Render_AI_Control_Loop(%render)
 			// If target is non-existent or dead (Having destructo wand counts as dead)
 			if( (!isObject(%player.client) && !%player.rIsTestBot) ||  %render.playerskip[%render.player[%i]] )
 			{
-				echo("AI Main: Skipping target '" @ %player @ "' (missing)");
+				//echo("AI Main: Skipping target '" @ %player @ "' (missing)");
 				%render.playerskip[%render.player[%i]] = 1;
 				%actualPlayers--;
 				continue;
@@ -45,7 +45,7 @@ function Render_AI_Control_Loop(%render)
 			{
 				if(%render.player[%i].getObjectMount() != getWord(%raycheck[%i],0)) // Make sure we aren't hitting their vehicle (if we are, mark as valid)
 				{
-					///echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
+					////echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
 					%render.targetHidden[%i] = 1;
 					%actualPlayers--;
 					continue;
@@ -65,7 +65,7 @@ function Render_AI_Control_Loop(%render)
 
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
 		{
-			echo("AI Main: no targets, despawning");
+			//echo("AI Main: no targets, despawning");
 
 			Render_RequestDespawn(%render);
 			return;
@@ -93,7 +93,7 @@ function Render_AI_Control_Loop(%render)
 	{
 		if(%render.playerInView[%render.target]) // There you are! °Д°
 		{
-			echo("AI Main: Found player, switching movement");
+			//echo("AI Main: Found player, switching movement");
 
 			%render.movingToPlayer = 1;
 		}
@@ -119,7 +119,7 @@ function Render_AI_Control_Loop(%render)
 		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(250,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
 	else if(%render.aiLoopObserverDespawn !$= "" && %render.loopCount >= %render.aiLoopObserverDespawn)
 	{
-		echo("AI Main: Despawning, timed");
+		//echo("AI Main: Despawning, timed");
 		Render_RequestDespawn(%render);
 		return;
 	}
