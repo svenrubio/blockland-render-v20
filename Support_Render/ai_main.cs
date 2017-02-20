@@ -175,11 +175,6 @@ function Render_AI_Movement_Loop(%render)
 					%render.hAvoidObstacle(0,0,1); // SO APPARENTLY THIS LETS RENDER OPEN DOORS AND IT SCARED THE PISS OUT OF ME. I'M BLAMING ROTONDO FOR THAT ONE.
 				}
 
-				if(%render.stuckConsecutive >= 12)
-					%render.setMoveY(0); // Stop moving forward if we've been stuck for too long.
-				else
-					%render.clearMoveY();
-
 				if(%render.stuckConsecutive >= 16)
 					%render.stuckEnd = %render.getPosition(); // Give up if we remain stuck in the exact same spot for too long. The stuck check will resume if the bot's position changes at all.
 
