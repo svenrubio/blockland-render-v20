@@ -270,10 +270,10 @@ function Render_Loop_Local(%render)
 				// Detectors
 				if(%render.isAttacking)
 				{
-					%detectorVal = 5/(%distance/4);
+					%detectorVal = 5.15-(%distance/20); // 5.1-(distance/20); we use the value 5.25 so distance <= 3 is considered off-scale.
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
-					%target.startDetectorDecay = getSimTime()+$Render::C_LoopTimer+10;
+					%target.startDetectorDecay = getSimTime()+750; // ?????
 				}
 
 				////// ## DAMAGE TARGET
@@ -743,36 +743,43 @@ package Render
 		if(!isObject(%player) || %player.getMountedImage(0) != GlitchDetectorImage.getID())
 			return;
 
-		%str = "\c6"; //Start out with red
+		// Prevent detector from going negative. Beware: does not apply to detectorDecay
+		if(%player.detector < 0)
+			%player.detector = 0;
+
+		%str = "\c6"; // Start out with red
 
 		// Change the color to yellow when we reach the bar that corresponnds with the value.
 		// The values are randomized to simulate noise.
 		for(%i = 1; %i <= 60; %i++)
 	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
 
-		if($Pref::Server::RenderEnableDetectorText)
+		if(!$Pref::Server::RenderDisableDetectorText)
 		{
-			if(%player.detector < 0.4)
+			if(%player.detector < 1)
 				%text = "No glitch energy detected.";
-			else if(%player.detector < 1)
-				%text = "Slight glitch energy trace detected. Investigate.";
 			else if(%player.detector < 2)
+				%text = "Slight glitch energy trace detected. Investigate.";
+			else if(%player.detector < 3)
 				%text = "Low glitch energy detected. Investigate.";
 			else if(%player.detector < 4)
 				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
 			else if(%player.detector < 5)
 				%text = "Very high glitch energy reading detected. User advised to leave area as soon as possible.";
-			else if(%player.detector) // whoops? will fix this
+			else if(%player.detector)
 				%text = "OFF SCALE GLITCH ACTIVITY DETECTED. EUCLID PRESCENCE CERTAIN.";
 		}
-		%client.bottomPrint("<just:center>\c6" @ %text @ "<br><font:arial black:14>" @ %str,1,1); // INCOMPLETE: Define other args
+		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>" @ %str,1,1);
+		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
 
 		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
 		if(getSimTime() >= %player.startDetectorDecay)
 		{
 			%decay = %player.detectorDecay/20;
+
 			if(%decay < 0.01)
-				%decay = 0;
+				%decay = %player.detectorDecay; // Get rid of the rest so the value stops at zero.
+
 			%player.detectorDecay = %player.detectorDecay-%decay;
 			%player.detector = %player.detector-%decay;
 		}
