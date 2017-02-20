@@ -101,15 +101,19 @@ function Render_ShrineRemove(%br,%id)
 // Otherwise runs a global shrine check.
 function Render_DoShrineCheck(%br)
 {
+
 	// If no brick specified, apply to all bricks on server.
 	if(!%br)
 		%total = $R_Shr_t;
 	else
+	{
 		%total = 1; // If working with an individual brick, our total is, obviously, one.
+		%manual = 1; // Specify that we're manually checking a single brick.
+	}
 
 	for(%iB = 1; %iB <= %total; %iB++)
 	{
-		if(!%br) // If a brick is specified, ignore this.
+		if(!%manual) // If a brick is specified, ignore this.
 			%br = $R_Shr[%iB];
 
 		%r = $Pref::Server::RenderShrineRange;
