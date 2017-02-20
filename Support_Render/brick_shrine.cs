@@ -67,7 +67,7 @@ function Render_ShrinePlant(%br)
 		$R_Shr_G[$R_Shr_t] = %br.getGroup(); // This is an extra precaution in case a shrine mysteriously vanishes.
 		%br.shrineId = $R_Shr_t;
 
-		echo("Registered shrine " @ %br @ " to group " @ %group @ " (total: " @ $r_shr_t @ ")");
+		//echo("Registered shrine " @ %br @ " to group " @ %group @ " (total: " @ $r_shr_t @ ")");
 
 		// Do a shrine check on this brick when we place it for the first time.
 		// This fixes the shrine check threshold being noticeable when you place a shrine by an attacker.
@@ -93,7 +93,7 @@ function Render_ShrineRemove(%br,%id)
 	}
 
 	%br.isGlitchShrine = 0;
-	echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
+	//echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
 }
 
 //// # Shrine Check
@@ -127,7 +127,7 @@ function Render_DoShrineCheck(%br)
 			{
 				if(%target.dataBlock $= PlayerRenderArmor)
 				{
-					echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
+					//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
 					%target.delete();
 
 					// Flicker to indicate that the shrine did something.
