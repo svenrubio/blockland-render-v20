@@ -1,10 +1,7 @@
 # Render
 Render is a mysterious entity that haunts Blockland. Over the years, this entity has become increasingly intelligent... and increasingly deadly.
 
-# What's New
-- Improved AI and movement; Render navigates your builds rather than teleporting through them.
-- New, original sound effects created specifically for the mod.
-- Removed loud "BEEEEP" sound.
+
 
 # Tools
 ## The Glitch Detector
@@ -23,6 +20,12 @@ You can turn a shrine off by using a wrench on it and unchecking "Raycasting" in
 - Damage Type
 - Only spawn at night?
 - Shrine Range
+
+# What's New
+- Improved AI and movement; Render navigates your builds rather than teleporting through them.
+- New, original sound effects created specifically for the mod.
+- No more loud "BEEEEP" sound. You may now safely turn up your volume.
+- A new and improved detector. (See above)
 
 # Media
 Screenshots, videos, etc. will be featured here.
@@ -45,6 +48,7 @@ Feel free to post any feedback (suggestions, ideas, bugs, criticisms, etc.) belo
 - Flickering Player Light: http://blockland.us/files/Light_Flickering_Player_Light.zip
 - Flashlight: https://forum.blockland.us/index.php?topic=240727.0
 - Prepper Script: https://forum.blockland.us/index.php?topic=178185.0
+- Support_Prepper (Old): https://forum.blockland.us/index.php?topic=174563.0
 
 *[ By LakeYS - My website: http://LakeYS.github.io ]*
 
