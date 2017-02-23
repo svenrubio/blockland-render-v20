@@ -45,7 +45,7 @@ Feel free to post any feedback (suggestions, ideas, bugs, criticisms, etc.) belo
 \>\>Download Updater (Recommended)<<
 
 # See Also
-- Flickering Player Light: http://blockland.us/files/Light_Flickering_Player_Light.zip
+- Flickering Player Light (Direct download): http://blockland.us/files/Light_Flickering_Player_Light.zip
 - Flashlight: https://forum.blockland.us/index.php?topic=240727.0
 - Prepper Script: https://forum.blockland.us/index.php?topic=178185.0
 - Support_Prepper (Old): https://forum.blockland.us/index.php?topic=174563.0
