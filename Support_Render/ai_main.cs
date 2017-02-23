@@ -1,8 +1,6 @@
 $Render::C_StuckTimer = 250;
 $Render::C_TargetTimer = 800; // (NOT IMPLEMENTED) Time between target checks (in ms)
 
-//to do: add bot aggression level (if the bot has done a lot of damage (excluding full kills), it will have a higher chance of not leaving. this level wears off over time)
-
 ///// # AI control loop
 function Render_AI_Control_Loop(%render)
 {
@@ -59,8 +57,6 @@ function Render_AI_Control_Loop(%render)
 			%render.playerInView[%render.player[%i]] = 1; // Mark the player as "in view"
 
 			%target[%targets++] = %render.player[%i]; // Count our valid targets
-
-			//echo(%render.player[%i] SPC %render.target);
 		}
 
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
@@ -79,7 +75,6 @@ function Render_AI_Control_Loop(%render)
 
 	////// ENERGY CHECK //////
 	// Determine whether we should continue attacking.
-	// INCOMPLETE: Does not account for observe mode.
 
 	if(%render.freezeTarget) // If we're currently freezing someone, we *probably* don't want to
 		%continueChance += 4;
@@ -119,7 +114,6 @@ function Render_AI_Control_Loop(%render)
 		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(250,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
 	else if(%render.aiLoopObserverDespawn !$= "" && %render.loopCount >= %render.aiLoopObserverDespawn)
 	{
-		//echo("AI Main: Despawning, timed");
 		Render_RequestDespawn(%render);
 		return;
 	}
@@ -142,7 +136,6 @@ function Render_AI_Movement_Loop(%render)
 			%render.clearMoveY();
 			%render.setMoveObject(%render.target);
 		}
-		//echo("target: " @ %render.target @ "; aim: " @ %render.getAimObject());
 
 		// Basic "stuck" detection. This is a very simple solution to Render spawning stuck and not being able to navigate simple obstacles.
 		// Ensure that: at least ($Render::C_StuckTimer)ms has passed since last stuck check; our current position is close to the position form the last stuck check; we aren't freezing a player; we aren't in the spot where we froze a player; we are allowed to move
@@ -218,7 +211,7 @@ function Render_AI_Movement_Loop(%render)
 		%render.setJetting(0);
 }
 
-// This checks the player's velocity for changes in direction.
+// EXPERIMENTAL: This checks the player's velocity for changes in direction.
 // Note: Jetting causes the third value to change rapidly.
 function Render_AI_TrackPlayer(%player)
 {

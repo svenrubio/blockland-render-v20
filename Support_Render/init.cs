@@ -109,24 +109,6 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
-//////# PARTICLES
-//datablock ParticleData(RendermanCameraParticleA : CameraParticleA)
-//{
-//	animTexName[0] = "./dotB";
-//	animTexName[1] = "base/data/particles/dot";
-//	colors[0] = "0.266667 0.000000 0.266667 1.000000";
-//	colors[1] = "0.200000 0.000000 0.200000 1.000000";
-//	colors[2] = "0.000000 0.000000 0.000000 0.000000";
-//	colors[3] = "1.000000 1.000000 1.000000 1.000000";
-//	useInvAlpha = "1";
-//};
-//
-//datablock ParticleEmitterData(RendermanCameraEmitterA : CameraEmitterA)
-//{
-//	particles = "RendermanCameraParticleA";
-//	uiName = "Camera Glow Evil";
-//};
-
 //////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
@@ -137,66 +119,6 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 	iconName = "Add-Ons/Support_Render/Glitch Shrine";
 	indestructable = 1;
 };
-
-//////# FACE PROJECTILE
-//datablock ParticleData(RenderAttackParticle)
-//{
-//	dragCoefficient      = 5.0;
-//	gravityCoefficient   = 0.0;
-//	inheritedVelFactor   = 1.0;
-//	windCoefficient      = 0;
-//	constantAcceleration = 0.0;
-//	lifetimeMS           = 800;
-//	lifetimeVarianceMS   = 0;
-//	useInvAlpha          = false;
-//	textureName          = "Add-Ons/Brick_Halloween/RenderAttack";
-//	colors[0]     = "1 1 1 0";
-//	colors[1]     = "1 1 1 1";
-//	colors[2]     = "1 1 1 0";
-//	sizes[0]      = 1;
-//	sizes[1]      = 1.5;
-//	sizes[2]      = 1.3;
-//	times[0]      = 0;
-//	times[1]      = 0.5;
-//	times[2]      = 1.0;
-//};
-//
-//datablock ParticleEmitterData(RenderAttackEmitter)
-//{
-//	ejectionPeriodMS = 100;
-//	periodVarianceMS = 0;
-//	ejectionVelocity = 0.0;
-//	ejectionOffset   = 1.8;
-//	velocityVariance = 0.0;
-//	thetaMin         = 0;
-//	thetaMax         = 0;
-//	phiReferenceVel  = 0;
-//	phiVariance      = 0;
-//	overrideAdvance = false;
-//	lifeTimeMS = 100;
-//	particles = "RenderAttackParticle";
-//
-//	doFalloff = true; //if we do fall off with this emitter it ends up flickering, for most emitters you want this TRUE
-//
-//	emitterNode = GenericEmitterNode;        //used when placed on a brick
-//	pointEmitterNode = TenthEmitterNode; //used when placed on a 1x1 brick
-//};
-//
-//datablock ExplosionData(RenderAttackExplosion)
-//{
-//	lifeTimeMS = 2000;
-//	emitter[0] = RenderAttackEmitter;
-//	//soundProfile = RenderAttackSound;
-//};
-//
-//datablock ProjectileData(RenderAttackProjectile)
-//{
-//	explosion           = "";
-//
-//	armingDelay         = 0;
-//	lifetime            = 10;
-//	explodeOnDeath		= false;
-//};
 
 //////# PLAYERTYPE
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)

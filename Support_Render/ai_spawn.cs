@@ -220,28 +220,3 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 	error("Render_Spawn_GetNewDirection - Returning blank");
 	return;
 }
-
-// Experimental function
-function serverCmdRenderTeleport(%client)
-{
-	if(!%client.isSuperAdmin)
-		return;
-
-	%p = %client.player;
-
-	%from = %p.position;
-	%to = vectorAdd(%from, getRandom(-100,100) SPC getRandom(-100,100) SPC getRandom(0,25));
-
-	%ray = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
-
-	if(!%ray)
-		%result = %to;
-	else
-		%result = posFromRaycast(%ray);
-
-	%result = %result-(%p.position-%p.getEyePoint());
-
-	%p.setTransform(%result);
-
-	talk(%from @ " | " @ %to @ " | " @ %result);
-}

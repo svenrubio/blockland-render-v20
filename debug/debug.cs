@@ -202,3 +202,28 @@ function Render_DebugLoop()
 // commandToClient(findclientbyname(lake), 'centerprint', Render_AI_GetRelativeDirection2D(findclientbyname(lake).player.position, 8840.position),1);
 // schedule(10,0,testloop);
 //}
+
+// Experimental function
+function serverCmdRenderTeleport(%client)
+{
+	if(!%client.isSuperAdmin)
+		return;
+
+	%p = %client.player;
+
+	%from = %p.position;
+	%to = vectorAdd(%from, getRandom(-100,100) SPC getRandom(-100,100) SPC getRandom(0,25));
+
+	%ray = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+
+	if(!%ray)
+		%result = %to;
+	else
+		%result = posFromRaycast(%ray);
+
+	%result = %result-(%p.position-%p.getEyePoint());
+
+	%p.setTransform(%result);
+
+	talk(%from @ " | " @ %to @ " | " @ %result);
+}
