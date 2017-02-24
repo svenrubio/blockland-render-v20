@@ -13,17 +13,18 @@ The Glitch Shrine is a brick that you can place in your builds to passively repe
 You can turn a shrine off by using a wrench on it and unchecking "Raycasting" in the menu. You can also do this with events!
 
 # What's New
+This is an entirely new Renderman mod built from the ground up. Here's a brief list of what sets it apart from previous mods:
 - Improved AI and movement; Render navigates your builds rather than teleporting through them.
 - New, original sound effects created specifically for the mod.
 - No more loud "BEEEEP" sound. You may now safely turn up your volume.
 - A new and improved detector. (See above)
+- Fixed a bug with the spawn rate; you no-longer need to adjust it when more players join.
 - Updated shrine bricks.
+- Tons of misc. bugs and issues fixed.
 
 # Development
 I have plenty of plans for improvements! This mod will continue to receive updates for the foreseeable future.
-
-Developers, the add-on can be found on GitHub. Contributions are welcome. [View on GitHub]
-https://github.com/LakeYS/blockland-render
+Developers, the add-on can be found on GitHub. Contributions are welcome. [View on GitHub](https://github.com/LakeYS/blockland-render)
 
 Feel free to post any feedback (suggestions, ideas, bugs, criticisms, etc.) below!
 
