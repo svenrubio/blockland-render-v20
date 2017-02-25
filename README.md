@@ -17,6 +17,7 @@ This is an entirely new Renderman mod built from the ground up. Here's a brief l
 - Improved AI and movement; Render navigates your builds rather than teleporting through them.
 - New, original sound effects created specifically for the mod.
 - No more loud "BEEEEP" sound. You may now safely turn up your volume.
+- No more "kick players" pref.
 - A new and improved detector. (See above)
 - Fixed a bug with the spawn rate; you no-longer need to adjust it when more players join.
 - Updated shrine bricks.
