@@ -738,7 +738,10 @@ package Render
 
 		// Prevent detector from going negative. Beware: does not apply to detectorDecay
 		if(%player.detector < 0)
+		{
 			%player.detector = 0;
+			%player.detectorDecay = 0;
+		}
 
 		%str = "\c6"; // Start out with red
 
@@ -749,12 +752,12 @@ package Render
 
 		if(!$Pref::Server::RenderDisableDetectorText)
 		{
-			if(%player.detector < 1)
+			if(%player.detector < 0.2)
 				%text = "No glitch energy detected.";
 			else if(%player.detector < 2)
 				%text = "Slight glitch energy trace detected. Investigate.";
 			else if(%player.detector < 3)
-				%text = "Low glitch energy detected. Investigate.";
+				%text = "Moderate glitch energy detected. Investigate.";
 			else if(%player.detector < 4)
 				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
 			else if(%player.detector < 5)
