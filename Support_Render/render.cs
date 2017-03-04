@@ -617,8 +617,9 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		//%p.setWhiteOut(1);
 		if(%p.dataBlock $= PlayerRenderArmor)
 		{
-			Render_Spawn_GetNewDirection(%p);
-			%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
+			//Render_Spawn_GetNewDirection(%p);
+			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
+			%p.delete();
 		}
 	}
 
@@ -627,7 +628,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	%obj.weaponCount--;
 
 	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
-	serverCmdUnUseTool(%obj.client);
+	%obj.unMountImage(0);
 }
 
 // # PACKAGED
