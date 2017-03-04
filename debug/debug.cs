@@ -227,3 +227,8 @@ function serverCmdRenderTeleport(%client)
 
 	talk(%from @ " | " @ %to @ " | " @ %result);
 }
+
+function serverCmdGlitchGun(%client)
+{
+	%client.player.mountImage(GlitchEnergyGunImage,0);
+}

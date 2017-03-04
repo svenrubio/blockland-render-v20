@@ -81,12 +81,12 @@ datablock AudioProfile(renderForm)
    preload = true;
 };
 
-//datablock AudioProfile(glitchFire)
-//{
-//   filename    = "./sound/glitchFire.wav";
-//   description = AudioClose3d;
-//   preload = true;
-//};
+datablock AudioProfile(glitchFire)
+{
+   filename    = "./sound/glitchFire.wav";
+   description = AudioClose3d;
+   preload = true;
+};
 
 datablock AudioProfile(rStatic)
 {
@@ -175,95 +175,95 @@ function RenderDeathArmor::onRemove(%this, %obj)
 
 //////# ITEMS
 //## Glitch Gun
-//datablock ItemData(GlitchEnergyGunItem)
-//{
-//	category = "Weapon";  // Mission editor category
-//	className = "Weapon"; // For inventory system
-//
-//	// Basic Item Properties
-//	shapeFile = "base/data/shapes/printGun.dts";
-//	rotate = false;
-//	mass = 1;
-//	density = 0.2;
-//	elasticity = 0.2;
-//	friction = 0.6;
-//	emap = true;
-//
-//	uiName = "Glitch Gun";
-//	iconName = " ";
-//	doColorShift = true;
-//	colorShiftColor = "0.0 1.0 1.0 1.0";
-//
-//	// Dynamic properties defined by the scripts
-//	image = GlitchEnergyGunImage;
-//	canDrop = true;
-//};
+datablock ItemData(GlitchEnergyGunItem)
+{
+	category = "Weapon";  // Mission editor category
+	className = "Weapon"; // For inventory system
 
-//datablock ShapeBaseImageData(GlitchEnergyGunImage)
-//{
-//	// Basic Item properties
-//	shapeFile = "base/data/shapes/printGun.dts";
-//	emap = true;
-//
-//	// Specify mount point & offset for 3rd person, and eye offset
-//	// for first person rendering.
-//	mountPoint = 0;
-//	offset = "0 0 0";
-//	eyeoffset = "0.7 1.2 -1";
-//	rotation = eulerToMatrix( "0 0 0" );
-//
-//	// When firing from a point offset from the eye, muzzle correction
-//	// will adjust the muzzle vector to point to the eye LOS point.
-//	// Since this weapon doesn't actually fire from the muzzle point,
-//	// we need to turn this off.
-//	correctMuzzleVector = true;
-//
-//	// Add the WeaponImage namespace as a parent, WeaponImage namespace
-//	// provides some hooks into the inventory system.
-//	className = "WeaponImage";
-//
-//	// Projectile && Ammo.
-//	item = GlitchEnergyGunItem;
-//	//ammo = " ";
-//	//projectile = wrenchProjectile; // The item doesn't actually fire a projectile.
-//	//projectileType = Projectile;
-//	//
-//	//casing = gunShellDebris;
-//	//shellExitDir        = "0.0 0.0 0.0";
-//	//shellExitOffset     = "0 0 0";
-//	//shellExitVariance   = 0.0;
-//	//shellVelocity       = 0.0;
-//
-//	armReady = true;
-//
-//	doColorShift = true;
-//	colorShiftColor = GlitchEnergyGunItem.colorShiftColor; //"0.400 0.196 0 1.000";
-//
-//	//casing = " ";
-//
-//	// Images have a state system which controls how the animations
-//	// are run, which sounds are played, script callbacks, etc. This
-//	// state system is downloaded to the client so that clients can
-//	// predict state changes and animate accordingly.  The following
-//	// system supports basic ready->fire->reload transitions as
-//	// well as a no-ammo->dryfire idle state.
-//
-//	// Initial start up state
-//	stateName[0]                     = "Activate";
-//	stateTimeoutValue[0]             = 0.0;
-//	stateTransitionOnTimeout[0]       = "Ready";
-//	stateSound[0]					= weaponSwitchSound;
-//
-//	stateName[1]                    = "Ready";
-//	stateTransitionOnTriggerDown[1] = "initiate";
-//	stateAllowImageChange[1]        = true;
-//
-//	stateName[2]                = "initiate";
-//	stateScript[2]              = "onInit";
-//	stateTimeoutValue[2]        = 1;
-//	stateTransitionOnTimeout[2] = "Ready";
-//	stateAllowImageChange[2]    = false;
-//};
+	// Basic Item Properties
+	shapeFile = "base/data/shapes/printGun.dts";
+	rotate = false;
+	mass = 1;
+	density = 0.2;
+	elasticity = 0.2;
+	friction = 0.6;
+	emap = true;
+
+	uiName = "Glitch Gun";
+	iconName = " ";
+	doColorShift = true;
+	colorShiftColor = "0.0 1.0 1.0 1.0";
+
+	// Dynamic properties defined by the scripts
+	image = GlitchEnergyGunImage;
+	canDrop = true;
+};
+
+datablock ShapeBaseImageData(GlitchEnergyGunImage)
+{
+	// Basic Item properties
+	shapeFile = "base/data/shapes/printGun.dts";
+	emap = true;
+
+	// Specify mount point & offset for 3rd person, and eye offset
+	// for first person rendering.
+	mountPoint = 0;
+	offset = "0 0 0";
+	eyeoffset = "0.7 1.2 -1";
+	rotation = eulerToMatrix( "0 0 0" );
+
+	// When firing from a point offset from the eye, muzzle correction
+	// will adjust the muzzle vector to point to the eye LOS point.
+	// Since this weapon doesn't actually fire from the muzzle point,
+	// we need to turn this off.
+	correctMuzzleVector = true;
+
+	// Add the WeaponImage namespace as a parent, WeaponImage namespace
+	// provides some hooks into the inventory system.
+	className = "WeaponImage";
+
+	// Projectile && Ammo.
+	item = GlitchEnergyGunItem;
+	//ammo = " ";
+	//projectile = wrenchProjectile; // The item doesn't actually fire a projectile.
+	//projectileType = Projectile;
+	//
+	//casing = gunShellDebris;
+	//shellExitDir        = "0.0 0.0 0.0";
+	//shellExitOffset     = "0 0 0";
+	//shellExitVariance   = 0.0;
+	//shellVelocity       = 0.0;
+
+	armReady = true;
+
+	doColorShift = true;
+	colorShiftColor = GlitchEnergyGunItem.colorShiftColor; //"0.400 0.196 0 1.000";
+
+	//casing = " ";
+
+	// Images have a state system which controls how the animations
+	// are run, which sounds are played, script callbacks, etc. This
+	// state system is downloaded to the client so that clients can
+	// predict state changes and animate accordingly.  The following
+	// system supports basic ready->fire->reload transitions as
+	// well as a no-ammo->dryfire idle state.
+
+	// Initial start up state
+	stateName[0]                     = "Activate";
+	stateTimeoutValue[0]             = 0.0;
+	stateTransitionOnTimeout[0]       = "Ready";
+	stateSound[0]					= weaponSwitchSound;
+
+	stateName[1]                    = "Ready";
+	stateTransitionOnTriggerDown[1] = "initiate";
+	stateAllowImageChange[1]        = true;
+
+	stateName[2]                = "initiate";
+	stateScript[2]              = "onInit";
+	stateTimeoutValue[2]        = 1;
+	stateTransitionOnTimeout[2] = "Ready";
+	stateAllowImageChange[2]    = false;
+};
 
 //## Detector
 datablock ItemData(GlitchDetector)
