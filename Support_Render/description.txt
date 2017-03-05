@@ -1,3 +1,4 @@
 Title: Render
-Author: Lake
+Author: Lake (14128)
 A survival horror mod that introduces Render, a mysterious entity that haunts Blockland.
+Glitch Detector Model: Demian (10334) (Imported from Support_Rendermen)
