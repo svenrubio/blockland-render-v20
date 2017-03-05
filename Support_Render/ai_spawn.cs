@@ -118,45 +118,52 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 }
 
 // Here's another crucial spawning function. It picks a direction and randomizes the bot's position. Returns current position if out of directions.
-// %disableUsedMark: Don't mark directions as "used"
 // %sameDirection: Find a spot in the same direction (***NOT IMPLEMENTED***)
+// %disableUsedMark: Don't mark directions as "used"
+// %useDistanceChance: Use the direction's distance as a factor in the choice, rather than keeping it purely random.
 // This relies on the outline that the previous function gives us.
-function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUsedMark)
+function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUsedMark, %useDistanceChance)
 {
 	if(!%this.validDirections)
 		return %this.getTransform();
 
-	%choice = getRandom(1, %this.validDirections);
+	if(!%useDistanceChance)
+		%choice = getRandom(1, %this.validDirections);
+	else
+	{
+		// Get a random value between 0 and the total distance of all lines.
+		%distTotal = %this.dist["North"]+%this.dist["South"]+%this.dist["East"]+%this.dist["West"];
+		%choice = getRandom(0, %distTotal);
+	}
 
 	for(%i = 1; %i <= 4; %i++)
 	{
-		if(%i == 1){%dir = "North"; %sA = "NorthToEast";%sB = "NorthToWest"; %add = -1;}
-		if(%i == 2){%dir = "South"; %sA = "SouthToEast";%sB = "SouthToWest"; %add = 1;}
-		if(%i == 3){%dir = "East"; %sA = "EastToNorth";%sB = "EastToSouth"; %add = -1;}
-		if(%i == 4){ %dir = "West"; %sA = "WestToNorth";%sB = "WestToSouth"; %add = 1;}
+		if(%i == 1) { %dir = "North"; %sA = "NorthToEast"; %sB = "NorthToWest"; %add = -1; }
+		if(%i == 2) { %dir = "South"; %sA = "SouthToEast"; %sB = "SouthToWest"; %add = 1; }
+		if(%i == 3) { %dir = "East"; %sA = "EastToNorth"; %sB = "EastToSouth"; %add = -1; }
+		if(%i == 4) { %dir = "West"; %sA = "WestToNorth"; %sB = "WestToSouth"; %add = 1; }
 
 		%used[%dir] = %this.used[%dir];
 
 		if(!%this.valid[%dir] || %used[%dir])
 			continue;
 
+		%distCheck += %this.dist[%dir];
 		%choices++;
 
-		if(%choices == %choice) // If this is the chosen direction
+		// If this is the chosen direction... (Differs based on what %useDistanceChance is set to)
+		if((%useDistanceChance && %choice <= %distCheck) || %choices == %choice)
 		{
 			%pos1 = %this.pos1[%dir];
 			%pos2 = %this.pos2[%dir];
-			%randA = getRandom(%pos1*100,%pos2*100);
+			%randA = getRandom(%pos1*100, %pos2*100);
 			%randB = %randA/100;
 
-			//%this.lineA[%dir].setNodeColor("ALL","0 0 1 1");
-			//%this.lineB[%dir].setNodeColor("ALL","0 0 1 1");
-
 			if(%i == 1 || %i == 2)
-				%pos3 = %randB SPC getWord(%this.hit[%dir],1)+%add SPC getWord(%plpos,2);
+				%pos3 = %randB SPC getWord(%this.hit[%dir], 1)+%add SPC getWord(%plpos, 2);
 
 			if(%i == 3 || %i == 4)
-				%pos3 = getWord(%this.hit[%dir],0)+%add SPC %randB SPC getWord(%plpos,2);
+				%pos3 = getWord(%this.hit[%dir], 0)+%add SPC %randB SPC getWord(%plpos, 2);
 
 			//forward vector stuff
 			%from = %pos3;
@@ -173,7 +180,6 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			//echo("i " @ %i @ "; to " @ %to);
 
 			// We're going to do another check to randomize our position.
-
 			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
 
 			if(!%rayForward)

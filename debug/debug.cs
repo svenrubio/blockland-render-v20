@@ -1,4 +1,4 @@
-function serverCmdSpawnR(%client, %delete)
+function serverCmdSpawnR(%client, %delete, %useOldChance)
 {
 	if(!%client.isSuperAdmin)
 		return;
@@ -6,15 +6,12 @@ function serverCmdSpawnR(%client, %delete)
 	%rendy = Render_CreateBot("0 0 -10000",%active);
 
 	%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
-	%pos = Render_Spawn_GetNewDirection(%rendy,%client.player.getEyePoint());
+	%pos = Render_Spawn_GetNewDirection(%rendy, %client.player.getEyePoint(), 0, 0, !%useOldChance);
 
 	%rendy.setTransform(%pos);
 	%client.lastSpawnedRender = %rendy;
 
-	//talk(%client.name @ ": Spawned R bot " @ %rendy);
 	echo(%client.name @ ": Spawned R bot " @ %rendy);
-
-	//serverPlay2D(renderAmb2);
 
 	if(%delete)
 		%rendy.delete();
@@ -29,7 +26,6 @@ function serverCmdMoveR(%client, %resetUsed)
 
 	%rendy.setTransform(Render_Spawn_GetNewDirection(%rendy, %client.player.position, 0, %resetUsed));
 
-	talk("Moved bot " @ %rendy @ " to " @ %rendy.getTransform());
 	echo("Moved bot " @ %rendy @ " to " @ %rendy.getTransform());
 }
 
