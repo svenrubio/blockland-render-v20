@@ -280,7 +280,7 @@ datablock ItemData(GlitchDetector)
 	emap = true;
 
 	uiName = "Glitch Detector";
-	iconName = "./models/detector.png";
+	iconName = "./models/Icon_detector";
 	doColorShift = false;
 	colorShiftColor = "1.0 1.0 1.0 1.0";
 
