@@ -301,32 +301,12 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    correctMuzzleVector = true;
 
    className = "WeaponImage";
-
-   // Projectile && Ammo. Uses placeholders since the detector doesn't shoot anything.
    item = GlitchDetector;
-   ammo = " ";
-   projectile = gunProjectile;
-   projectileType = Projectile;
 
-	casing = gunShellDebris;
-	shellExitDir        = "0.0 0.0 0.0";
-	shellExitOffset     = "0 0 0";
-	shellExitVariance   = 0.0;
-	shellVelocity       = 0.0;
-
-   //melee particles shoot from eye node for consistancy
-   melee = false;
-   //raise your arm up or not
    armReady = true;
 
    doColorShift = false;
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
-
-  // Initial start up state
-	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.0;
-	stateTransitionOnTimeout[0]       = "Ready";
-	stateSound[0]					= weaponSwitchSound;
 };
 
 //////# MISC
