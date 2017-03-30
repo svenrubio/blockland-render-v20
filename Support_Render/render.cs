@@ -704,7 +704,6 @@ package Render
 		// If Render is invincible, we have to override this with 0 for singleplayer/LAN.
 		// Otherwise, we need to override this with '1' so Render takes damage.
 		// In order to inflict damage, we need to be attacking and not frozen.
-		// NOTE: NOT COMPATIBLE WITH SLAYER DUE TO PACKAGE LOAD ORDER
 
 		if(%b.rIsTestBot || %b.dataBlock $= "PlayerRenderArmor")
 			return (!$Pref::Server::RenderIsInvincible && %b.isAttacking && !%b.freezeTarget);
