@@ -278,7 +278,8 @@ function Render_Loop_Local(%render)
 
 							%target.renderDamage = 1;
 							%target.addHealth(-%renderDamage);
-						}
+						} // Damage type 2 doesn't need this.
+
 					}
 				}
 
@@ -487,6 +488,13 @@ function Render_DoMount(%death,%p)
 // Freeze player function. This creates a "death mount" and forces the player on it, allowing us to freeze them without changing their datablock.
 function Render_FreezePlayer(%p,%r)
 {
+	// If attack mode is 2, rip
+	if($Pref::Server::RenderDamageType == 2)
+	{
+		%p.kill();
+		return;
+	}
+
 	if(isObject(%p))
 	{
 		%p.isFrozen = 1;
