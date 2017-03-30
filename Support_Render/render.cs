@@ -779,6 +779,16 @@ package Render
 
 		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
+
+	// Slayer compatilility
+	// We need our package to load after Slayer's or certain things won't work right.
+	function Slayer::onAdd(%this)
+	{
+		Parent::onAdd(%this);
+
+		deactivatePackage("Render");
+		activatePackage("Render");
+	}
 };
 
 deactivatePackage("Render");
