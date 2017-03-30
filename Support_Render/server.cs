@@ -1,3 +1,5 @@
+// # Dependencies, Scripts
+
 // Some parts of the AI utilize functions from Bot_Hole.
 if(forceRequiredAddOn("Bot_Hole") == $Error::AddOn_Disabled)
 	exec("Add-Ons/Bot_Hole/server.cs");

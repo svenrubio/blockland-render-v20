@@ -7,7 +7,8 @@ $Render::C_EnergyTimer = 25000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
 $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
-$Render::C_DamageRate = 150;
+$Render::C_DamageRate = 200;
+$Render::C_DamageDecay = $Render::C_DamageRate/100;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
 
@@ -81,59 +82,42 @@ function Render_CreateBot(%pos)
 	return %render;
 }
 
-////// # ObjectInView
-// Jimmg's objectInView code. This has been modified to account for visible distance.
-function Player::rObjectInView(%player,%object)
+////// # FOV Check
+// This borrows from Bot_Hole. Optimized for Render's spooky biddings.
+function Player::rFOVCheck(%observer, %object, %checkRaycast)
 {
-		if(!isObject(%object))
-		return;
+	%posObserver = %observer.getPosition();
+	%posObject = %object.getPosition();
 
-	//The eye point is the position of the players camera
-	%eye = %player.getEyePoint();
-	//The position of the object
-	//%to = posFromTransform(%object.getTransform());
-	%to = %object.getEyePoint();
-	// if(vectorDist(%eye,%to) < %range)
-	// 	return 0;
+	%observerEye = %observer.getEyeVector();
 
-	%dist = vectorDist(%eye,%to);
+	// draw a line between us and the Object
+	%line = vectorNormalize( vectorSub( %posObject, %posObserver ) );
 
-	if(%dist > sky.visibleDistance) // NOTE: Don't use $EnvGuiServer::VisibleDistance to determine this
-		return;
+	// compare our eye to the line
+	%dot = vectorDot( %observerEye, %line );
 
-	//Cast a raycast to try and collide with the object
-	%ray = containerRaycast(%eye,%to,$TypeMasks::StaticShapeObjectType | $TypeMasks::TerrainObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::PlayerObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::InteriorObjectType,%player);
+	// return the dot product if they want it, otherwise return true or false
+	//if( %returnDot )
+	//	return %dot;
+	//else
+	//{
 
-	%col = getWord(%ray,0);
-	//announce(%col);
-	if(isObject(%col) && %col == %object)
+	// this will return 0 or 1
+	%fovCheck = %dot >= 0.7;
+
+	// This lets us check for obstructions. Optional, only applies if main check passed.
+	if(%fovCheck && %checkRaycast)
 	{
-		//The position of the collision
-		%pos = posFromRaycast(%ray);
+		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
 
-		//Super Maths C skills go B)
-		%resultant = vectorSub(%pos,%eye);
-		%normal = vectorNormalize(%resultant);
-
-		//Find the yaw from the resultant
-		%resultRadians = mAtan(getWord(%normal,1),getWord(%normal,0));
-
-		//Find the yaw from the eye vector
-		%eyeVec = %player.getEyeVector();
-		%eyeRadians = mAtan(getWord(%eyeVec,1),getWord(%eyeVec,0));
-
-		//Convert both of them to degrees for easier understanding
-		%resultDegrees = mRadToDeg(%resultRadians);
-		%eyeDegrees = mRadToDeg(%eyeRadians);
-
-		//Now the tricky part. In order for the object to be in sight, lets say that the object needs to be within 90 degrees of the players view
-		//Change 90 to something smaller if you don't like how wide the view is
-		if(%resultDegrees >= %eyeDegrees -  42 && %resultDegrees <= %eyeDegrees + 42)
-			return 1;
+		if(%ray != 0)
+			%fovCheck = 0;
 	}
-	//No object hit, or not the target object, return 0/false
-	//announce("No object hit, or not the target object, return 0/false");
-	return 0;
+
+	return %fovCheck;
+
+	//}
 }
 
 ////// # Global loop; runs every 50ms
@@ -262,7 +246,7 @@ function Render_Loop_Local(%render)
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
 			{
-				%isViewing = %target.rObjectInView(%render); // Check if they're in Render's line of sight
+				%isViewing = %target.rFOVCheck(%render, 1); // Check if they're in Render's line of sight.
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
 				// Detectors
@@ -443,14 +427,14 @@ function Render_Spawn_Loop()
 
 function Render_InflictWhiteOutDamage(%p,%render,%distance)
 {
-	// This calculates how much damage we need to subtract. We're using the sim time instead of keeping a loop running.
+	// This calculates the damage decay, aka how much we need to subtract.
+	// We're using the sim time instead of keeping a loop running.
 	// Partially scales with loop timer constant, however the damage rate is still affected by it.
 
 	// sec = time in seconds since the player last looked
-	// dif = sec/(2/C_LoopTimer)-1
-	// dif = sec/0.06-1
+	// dif = sec/(2.5/C_LoopTimer)-1
 
-	%dif = ($Sim::Time-%p.rLastDmg)/(5/$Render::C_LoopTimer)-1;
+	%dif = ($Sim::Time-%p.rLastDmg)/($Render::C_DamageDecay/$Render::C_LoopTimer)-1;
 
 	if(!%distance)
 		%distance = vectorDist(%render.position,%p.position);
@@ -709,9 +693,13 @@ package Render
 
 	function minigameCanDamage(%a,%b)
 	{
-		// We have to override this so players can't shoot Render. (Applies to singleplayer/LAN only)
+		// If Render is invincible, we have to override this with 0 for singleplayer/LAN.
+		// Otherwise, we need to override this with '1' so Render takes damage.
+		// In order to inflict damage, we need to be attacking and not frozen.
+		// NOTE: NOT COMPATIBLE WITH SLAYER DUE TO PACKAGE LOAD ORDER
+
 		if(%b.rIsTestBot || %b.dataBlock $= "PlayerRenderArmor")
-			return 0;
+			return (!$Pref::Server::RenderIsInvincible && %b.isAttacking && !%b.freezeTarget);
 		else
 			Parent::minigameCanDamage(%a,%b);
 	}
