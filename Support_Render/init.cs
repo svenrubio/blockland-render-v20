@@ -26,12 +26,13 @@ if(isFunction("RTB_registerPref"))
 {
 	$Pref::Server::RenderDifficulty = 100;
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "GameMode_Renderman_Haunting", $Pref::Server::RenderDifficulty, 0, 0);
-	RTB_registerPref("Attack Mode", "Render", "$Pref::Server::RenderDamageType", "list Static 0 Health 1 B 2", "GameMode_Renderman_Haunting", $Pref::Server::RenderDamageType, 0, 0);
+	RTB_registerPref("Attack Mode", "Render", "$Pref::Server::RenderDamageType", "list Static 0 Health 1 Tag 2", "GameMode_Renderman_Haunting", $Pref::Server::RenderDamageType, 0, 0);
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night (Day cycle)", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
+	//RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDisableAmbientSounds, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDisableLights, 0, 0);
-	RTB_registerPref("Disable Mystery Update A", "Render", "$Pref::Server::RenderIsInvincible", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderIsInvincible, 0, 0);
+	RTB_registerPref("Invincible", "Render", "$Pref::Server::RenderIsInvincible", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderIsInvincible, 0, 0);
 
 	//RTB_registerPref("Minimum Spawning Distance", "Render", "$Pref::Server::RenderMinSpawnDistance", "int 4 64", "GameMode_Renderman_Haunting", "4", 0, 0); //check this
 }
@@ -41,7 +42,6 @@ else
 	$Pref::Server::RenderDamageType = 0;
 	$Pref::Server::RenderSpawnRate = 6;
 	$Pref::Server::RenderShrineRange = 20;
-	$Pref::Server::RenderDayCycleSpawn = 0;
 }
 
 //////# SOUNDS
