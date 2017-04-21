@@ -30,7 +30,7 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "GameMode_Renderman_Haunting", $Pref::Server::RenderSpawnRate, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "GameMode_Renderman_Haunting", $Pref::Server::RenderShrineRange, 0, 0);
 	RTB_registerPref("Only spawn at night (Day cycle)", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDayCycleSpawn, 0, 0);
-	//RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDisableAmbientSounds, 0, 0);
+	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDisableAmbientSounds, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderDisableLights, 0, 0);
 	RTB_registerPref("Invincible", "Render", "$Pref::Server::RenderIsInvincible", "bool", "GameMode_Renderman_Haunting", $Pref::Server::RenderIsInvincible, 0, 0);
 

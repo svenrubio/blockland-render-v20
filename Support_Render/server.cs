@@ -29,6 +29,9 @@ exec("./render.cs");
 if(isFile("./debug.cs"))
 	exec("./debug.cs");
 
+if(isFile("./local.cs"))
+	exec("./local.cs");
+
 if(!$Render::Loaded)
 {
 	exec("./init.cs");
