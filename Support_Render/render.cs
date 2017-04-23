@@ -43,12 +43,14 @@ function Render_CreateBot(%pos)
 	%render = new aiplayer(Render) // Create a new AIPlayer
 	{
 		datablock = PlayerRenderArmor;
+		client = renderClient;
 	};
+
+	%render.isRender = 1;
 
 	if($Pref::Server::RenderDamageType == 2)
 		%render.changeDatablock(PlayerRenderTagArmor);
 
-	%render.isRender = 1;
 
 	// 300 health normally, 800 health in tag mode.
 	if($Pref::Server::RenderDamageType != 2)

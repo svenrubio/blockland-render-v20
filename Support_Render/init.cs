@@ -108,6 +108,10 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
+//////# ScriptObject
+
+new ScriptObject(renderClient){};
+
 //////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
