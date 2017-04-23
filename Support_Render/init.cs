@@ -123,7 +123,7 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 {
 	magicWandImmunity = 1;
-	maxDamage = 200;
+	maxDamage = 800;
 
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;

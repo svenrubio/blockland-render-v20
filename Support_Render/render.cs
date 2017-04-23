@@ -45,6 +45,10 @@ function Render_CreateBot(%pos)
 		datablock = PlayerRenderArmor;
 	};
 
+	// 300 health normally, 800 health in tag mode.
+	if($Pref::Server::RenderDamageType != 2)
+		%render.setHealth(300);
+
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
 	%render.setTransform(%pos);
 
