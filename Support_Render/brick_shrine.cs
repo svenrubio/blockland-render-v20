@@ -129,7 +129,7 @@ function Render_DoShrineCheck(%br)
 			initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
 			while(%target=containerSearchNext())
 			{
-				if(%target.dataBlock $= PlayerRenderArmor)
+				if(%target.isRender)
 				{
 					//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
 					%target.delete();

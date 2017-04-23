@@ -123,11 +123,16 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 {
 	magicWandImmunity = 1;
-	maxDamage = 800;
+	maxDamage = 300; // Max health
 
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;
 	//maxSideSpeed = 60;
+};
+
+datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
+{
+	maxDamage = 600;
 };
 
 function PlayerRenderArmor::onDisabled(%a, %render, %str)

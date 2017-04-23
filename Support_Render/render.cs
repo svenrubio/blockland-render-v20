@@ -45,6 +45,11 @@ function Render_CreateBot(%pos)
 		datablock = PlayerRenderArmor;
 	};
 
+	if($Pref::Server::RenderDamageType == 2)
+		%render.changeDatablock(PlayerRenderTagArmor);
+
+	%render.isRender = 1;
+
 	// 300 health normally, 800 health in tag mode.
 	if($Pref::Server::RenderDamageType != 2)
 		%render.setHealth(300);
@@ -238,7 +243,7 @@ function Render_Loop_Local(%render)
 	while(%target=containerSearchNext()) // For all players in the area...
 	{
 		// Delete other Render bots nearby
-		//if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.dataBlock $= "PlayerRenderArmor")
+		//if(!$Pref::Server::RenderAllowMultiples && %target != %render && %target.isRender)
 		//{
 		//	%target.delete();
 		//	continue;
@@ -612,7 +617,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	while(%p=containerSearchNext())
 	{
 		//%p.setWhiteOut(1);
-		if(%p.dataBlock $= PlayerRenderArmor)
+		if(%p.isRender)
 		{
 			//Render_Spawn_GetNewDirection(%p);
 			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
@@ -651,7 +656,7 @@ package Render
 		// Hide the pain emotes if:
 		// a.) The player is taking damage from Render.
 		// b.) The player is Render.
-		if(%player.renderDamage || %player.dataBlock $= "PlayerRenderArmor")
+		if(%player.renderDamage || %player.isRender)
 		{
 			%player.renderDamage = 0;
 			return;
@@ -698,7 +703,7 @@ package Render
 
 	function Player::setTempColor(%player, %a, %b, %c, %d)
 	{
-		if(%player.dataBlock $= "PlayerRenderArmor")
+		if(%player.isRender)
 			return;
 
 		Parent::setTempColor(%player, %a, %b, %c, %d);
@@ -710,7 +715,7 @@ package Render
 		// Otherwise, we need to override this with '1' so Render takes damage.
 		// In order to inflict damage, we need to be attacking and not frozen.
 
-		if(%b.rIsTestBot || %b.dataBlock $= "PlayerRenderArmor")
+		if(%b.rIsTestBot || %b.isRender)
 			return (!$Pref::Server::RenderIsInvincible && %b.isAttacking && !%b.freezeTarget);
 		else
 			Parent::minigameCanDamage(%a,%b);
