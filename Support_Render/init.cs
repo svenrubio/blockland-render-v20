@@ -44,6 +44,14 @@ else
 	$Pref::Server::RenderShrineRange = 20;
 }
 
+// Extra load check; these are the things that REALLY shouldn't run twice.
+if(!$Render::LoadedB)
+{
+	// NOTE: If including Support_Render and Slayer in a game-mode, make sure to have Slayer load first.
+	if($AddOn__GameMode_Slayer)
+		exec("./compat/slayer.cs");
+}
+
 //////# SOUNDS
 datablock AudioProfile(renderGrowl)
 {
@@ -108,10 +116,6 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
-//////# ScriptObject
-
-new ScriptObject(renderClient){};
-
 //////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
@@ -145,7 +149,28 @@ function PlayerRenderArmor::onDisabled(%a, %render, %str)
 	Parent::onDisabled(%a, %render, %str);
 }
 
+function PlayerRenderArmor::onDisabled(%a, %render, %str)
+{
+	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	Parent::onDisabled(%a, %render, %str);
+}
+
 function PlayerRenderArmor::onRemove(%a, %render)
+{
+	if(%render.freezeTarget)
+		Render_UnfreezePlayer(%render.freezeTarget);
+
+	Parent::onRemove(%a, %render);
+}
+
+// Same as above but with tag mode armor
+function PlayerRenderTagArmor::onDisabled(%a, %render, %str)
+{
+	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	Parent::onDisabled(%a, %render, %str);
+}
+
+function PlayerRenderTagArmor::onRemove(%a, %render)
 {
 	if(%render.freezeTarget)
 		Render_UnfreezePlayer(%render.freezeTarget);

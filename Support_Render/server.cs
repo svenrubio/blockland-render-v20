@@ -24,6 +24,13 @@ exec("./ai_spawn.cs");
 
 exec("./brick_shrine.cs");
 
+if(!$Render::Loaded)
+{
+	exec("./init.cs");
+	$Render::Loaded = 1;
+	$Render::LoadedB = 1;
+}
+
 exec("./render.cs");
 
 if(isFile("./debug.cs"))
@@ -31,9 +38,3 @@ if(isFile("./debug.cs"))
 
 if(isFile("./local.cs"))
 	exec("./local.cs");
-
-if(!$Render::Loaded)
-{
-	exec("./init.cs");
-	$Render::Loaded = 1;
-}

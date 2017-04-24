@@ -74,7 +74,7 @@ package renderDebugPackage
 		if(!%client.isSuperAdmin)
 			return;
 
-		%rendy = Render_CreateBot("0 0 -10000",%active);
+		%rendy = Render_CreateBot("0 0 -10000",%client);
 
 		%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
 		%pos = Render_Spawn_GetNewDirection(%rendy, %client.player.getEyePoint(), 0, 0, !%useOldChance);
@@ -207,4 +207,4 @@ package renderDebugPackage
 		%client.player.mountImage(GlitchEnergyGunImage,0);
 	}
 };
-deactivatePackage("renderdebugpackage");
+activatePackage("renderdebugpackage");
