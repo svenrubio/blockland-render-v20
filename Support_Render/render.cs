@@ -1,6 +1,6 @@
 //°Д°
 
-//////# CONSTANTS
+////// # CONSTANTS
 $Render::C_MoveTolerance = 2;
 $Render::C_MoveToleranceObserve = 10;
 $Render::C_EnergyTimer = 25000; // Minimum: 5000
@@ -38,23 +38,32 @@ function Render_ApplyAppearance(%this)
 }
 
 ////// # Bot Creation Function
-function Render_CreateBot(%pos)
+// %pos: Position to place the bot in
+// %client: 'Parent client' of the bot
+function Render_CreateBot(%pos,%client)
 {
 	%render = new aiplayer(Render) // Create a new AIPlayer
 	{
 		datablock = PlayerRenderArmor;
-		client = renderClient;
 	};
 
 	%render.isRender = 1;
 
-	if($Pref::Server::RenderDamageType == 2)
+	// ## Minigame Preferences
+	if(%client.minigame.rMode !$= "" && %client.minigame.rMode != -1)
+		%render.mode = %client.minigame.rMode;
+	else
+		%render.mode = $Pref::Server::RenderDamageType;
+
+	if(%client.minigame.rInvincible !$= "" && %client.minigame.rInvincible != -1)
+		%render.invincible = %client.minigame.rInvincible;
+	else
+		%render.invincible = $Pref::Server::RenderIsInvincible;
+
+	// ## Bot Setup
+
+	if(%render.mode == 2)
 		%render.changeDatablock(PlayerRenderTagArmor);
-
-
-	// 300 health normally, 800 health in tag mode.
-	if($Pref::Server::RenderDamageType != 2)
-		%render.setHealth(300);
 
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
 	%render.setTransform(%pos);
@@ -278,9 +287,9 @@ function Render_Loop_Local(%render)
 
 					if(%render.isAttacking)
 					{
-						if($Pref::Server::RenderDamageType == 0) // Whiteout Damage
+						if(%render.mode == 0) // Whiteout Damage
 							Render_InflictWhiteOutDamage(%target,%render,%distance);
-						else if($Pref::Server::RenderDamageType == 1) // Health damage
+						else if(%render.mode == 1) // Health damage
 						{
 							%renderDamage = %target.dataBlock.maxDamage*0.8/%distance;
 
@@ -382,7 +391,7 @@ function Render_Spawn_Loop()
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
 		// By doing this, we keep the spawnrate balanced regardless of playercount and avoid an unintended bias toward groups of players.
 
-		//First, we're going to go through all the clients in the server.
+		// First, we're going to go through all the clients in the server.
 		for(%i = 0; %i < clientGroup.getCount(); %i++)
 		{
 			%client = clientGroup.getObject(%i);
@@ -403,6 +412,8 @@ function Render_Spawn_Loop()
 
 				// We're going to add this player and all nearby players to a new group.
 
+				// TODO: Implement mini-game integration
+
 				%groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
 				%groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
 
@@ -418,7 +429,7 @@ function Render_Spawn_Loop()
 
 				//echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
-				%render = Render_CreateBot("0 0 -10000");
+				%render = Render_CreateBot("0 0 -10000",%client);
 
 				%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
 				%pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
@@ -502,7 +513,7 @@ function Render_DoMount(%death,%p)
 function Render_FreezePlayer(%p,%r)
 {
 	// If attack mode is 2, rip
-	if($Pref::Server::RenderDamageType == 2)
+	if(%r.mode == 2)
 	{
 		%p.kill();
 		return;
@@ -644,6 +655,7 @@ package Render
 		cancel($Render::LoopSpawner);
 
 		$Render::Loaded = 0;
+		$Render::LoadedB = 0;
 
 		Parent::destroyServer();
 	}
@@ -718,9 +730,9 @@ package Render
 		// In order to inflict damage, we need to be attacking and not frozen.
 
 		if(%b.rIsTestBot || %b.isRender)
-			return (!$Pref::Server::RenderIsInvincible && %b.isAttacking && !%b.freezeTarget);
+			return (!%b.invincible && %b.isAttacking && !%b.freezeTarget);
 		else
-			Parent::minigameCanDamage(%a,%b);
+			return Parent::minigameCanDamage(%a,%b);
 	}
 
 	// ## Glitch Detector Functions
@@ -789,16 +801,6 @@ package Render
 		}
 
 		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
-	}
-
-	// Slayer compatilility
-	// We need our package to load after Slayer's or certain things won't work right.
-	function Slayer::onAdd(%this)
-	{
-		Parent::onAdd(%this);
-
-		deactivatePackage("Render");
-		activatePackage("Render");
 	}
 };
 
