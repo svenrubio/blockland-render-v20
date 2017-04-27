@@ -14,22 +14,22 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 	if(!%skipNorth)
 	{
 		%toNorth = vectorAdd(%from, "0 100 0");
-		%rayNorth = containerRaycast(%from, %toNorth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%rayNorth = containerRaycast(%from, %toNorth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 	}
 	if(!%skipSouth)
 	{
 		%toSouth = vectorAdd(%from, "0 -100 0");
-		%raySouth = containerRaycast(%from, %toSouth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%raySouth = containerRaycast(%from, %toSouth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 	}
 	if(!%skipEast)
 	{
 		%toEast = vectorAdd(%from, "100 0 0");
-		%rayEast = containerRaycast(%from, %toEast, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%rayEast = containerRaycast(%from, %toEast, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 	}
 	if(!%skipWest)
 	{
 		%toWest = vectorAdd(%from, "-100 0 0");
-		%rayWest = containerRaycast(%from, %toWest, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%rayWest = containerRaycast(%from, %toWest, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 	}
 
 	for(%i = 1; %i <= 4; %i++) // For all directions; north, south, east, and west...
@@ -52,8 +52,8 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 		if(%dist[%dir] < $Pref::Server::RenderMinSpawnDistance) // If it's too close to the player (based on pref) we have to skip it.
 			continue;
 
-		%ray[%sA] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToA), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
-		%ray[%sB] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToB), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%ray[%sA] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToA), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%ray[%sB] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToB), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 
 		%hit[%sA] = posFromRaycast(%ray[%sA]);
 		%hit[%sB] = posFromRaycast(%ray[%sB]);
@@ -180,7 +180,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			//echo("i " @ %i @ "; to " @ %to);
 
 			// We're going to do another check to randomize our position.
-			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 
 			if(!%rayForward)
 				%hit = %to;

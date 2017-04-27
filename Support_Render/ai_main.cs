@@ -36,7 +36,7 @@ function Render_AI_Control_Loop(%render)
 			}
 
 			// Now that we know they exist, we'll check if they're in view.
-			%rayCheck[%i] = containerRaycast(%render.getEyePoint(), %render.player[%i].getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+			%rayCheck[%i] = containerRaycast(%render.getEyePoint(), %render.player[%i].getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 			%render.playerRayDirect[%render.player[%i]] = %rayCheck[%i]; // Set the direct raycast
 
 			if(%rayCheck[%i] !$= 0) // If the target is out of view, mark them as such.

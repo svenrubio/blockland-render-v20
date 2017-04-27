@@ -129,7 +129,7 @@ function Player::rFOVCheck(%observer, %object, %checkRaycast)
 	// This lets us check for obstructions. Optional, only applies if main check passed.
 	if(%fovCheck && %checkRaycast)
 	{
-		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType);
+		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
 
 		if(%ray != 0)
 			%fovCheck = 0;
