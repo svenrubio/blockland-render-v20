@@ -410,19 +410,27 @@ function Render_Spawn_Loop()
 				if(%target.getClassName() !$= "Player") // Make sure they aren't a bot.
 					continue;
 
-				// We're going to add this player and all nearby players to a new group.
-
-				// TODO: Implement mini-game integration
+				// Get each player's spawnrate.
+				if(%target.client.minigame.rSpawnRate $= "" || %target.client.minigame.rSpawnRate == -1)
+					%spawnrate[%target] = $Pref::Server::RenderSpawnRate;
+				else
+					%spawnrate[%target] = %target.client.minigame.rSpawnRate;
 
 				%groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
 				%groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
 
+				%spawnrateTotal[%groups] += %spawnrate[%target];
 				//echo("RENDER: Adding " @ %target @ " as player #" @ %groupCount[%groups] @ " in group " @ %groups);
 			}
 
+			// Calculate the final spawnrate for this group.
+			// Per-group spawnrate is determined by average.
+			%avgSpawnrate = %spawnrateTotal[%groups]/%groupCount[%groups];
+			//echo("RENDER: Average spawnrate is " @ %avgSpawnrate);
+
 			// Now, we choose if we want to spawn for this group.
 			%random = getRandom(1,6);
-			if(%random <= $Pref::Server::RenderSpawnRate)
+			if(%random <= %avgSpawnrate)
 			{
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;

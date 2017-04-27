@@ -12,17 +12,17 @@ new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
   guiTag = "Advanced";
 };
 
-//new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO) // TODO
-//{
-//  category = "Render";
-//  title = "Spawn Rate";
-//  defaultValue = -1;
-//  permissionLevel = $Slayer::PermissionLevel["Any"];
-//  variable = "%mini.rSpawnRate";
-//  type = "list";
-//  list_items = "-1 Use Server Preference" NL "0 Disabled" NL "2 Low" NL "3 Below Normal" NL "4 Normal" NL "5 Above Normal" NL "6 High";
-//  guiTag = "Advanced";
-//};
+new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO) // TODO
+{
+  category = "Render";
+  title = "Spawn Rate";
+  defaultValue = -1;
+  permissionLevel = $Slayer::PermissionLevel["Any"];
+  variable = "%mini.rSpawnRate";
+  type = "list";
+  list_items = "-1 Use Server Preference" NL "0 Disabled" NL "2 Low" NL "3 Below Normal" NL "4 Normal" NL "5 Above Normal" NL "6 High";
+  guiTag = "Advanced";
+};
 
 new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
 {
