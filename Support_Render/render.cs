@@ -738,7 +738,15 @@ package Render
 		// In order to inflict damage, we need to be attacking and not frozen.
 
 		if(%b.rIsTestBot || %b.isRender)
-			return (!%b.invincible && %b.isAttacking && !%b.freezeTarget);
+		{
+			%return = (!%b.invincible && %b.isAttacking && !%b.freezeTarget);
+
+			// Mark the last person that does damage to Render.
+			if(%return)
+				%b.lastDmgClient = %a;
+
+			return %return;
+		}
 		else
 			return Parent::minigameCanDamage(%a,%b);
 	}

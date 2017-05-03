@@ -146,12 +146,12 @@ datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
 function PlayerRenderArmor::onDisabled(%a, %render, %str)
 {
 	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
-	Parent::onDisabled(%a, %render, %str);
-}
+	%client = %render.lastDmgClient;
 
-function PlayerRenderArmor::onDisabled(%a, %render, %str)
-{
-	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	// If the client exists AND is in a minigame that awards points for killing Render...
+	if(isObject(%client) && %client.minigame.rPoints)
+		%client.incScore(%client.minigame.rPoints); // Give them their points
+
 	Parent::onDisabled(%a, %render, %str);
 }
 
