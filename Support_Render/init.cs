@@ -349,7 +349,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 };
 
 //////# EVENTS
-registerOutputEvent(Minigame, "setRenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", 1);
+registerOutputEvent(Minigame, "setRenderSpawnRate", "list Server Preference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 
 
 //////# MISC
