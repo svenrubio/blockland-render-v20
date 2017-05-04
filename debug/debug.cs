@@ -66,6 +66,9 @@ function createLine( %a, %b, %size, %color )
 }
 // ------ Above: Code from Port's node editor ------
 
+$Library::LastEvent::Ver = 0;
+$Library::EnvServer::Ver = 0;
+
 deactivatepackage("renderdebugpackage");
 package renderDebugPackage
 {
