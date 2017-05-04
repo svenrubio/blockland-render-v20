@@ -24,6 +24,8 @@ exec("./ai_spawn.cs");
 
 exec("./brick_shrine.cs");
 
+exec("./events.cs");
+
 if(!$Render::Loaded)
 {
 	exec("./init.cs");

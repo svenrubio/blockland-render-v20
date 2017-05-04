@@ -348,6 +348,10 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
+//////# EVENTS
+registerOutputEvent(Minigame, "setRenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", 1);
+
+
 //////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
 //missionCleanup.add(RenderBotGroup);

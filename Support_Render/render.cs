@@ -731,6 +731,12 @@ package Render
 		Parent::setTempColor(%player, %a, %b, %c, %d);
 	}
 
+	function fxDTSBrick::onActivate(%brick, %b, %client, %d, %e)
+	{
+		%client.renderLastClick = %brick; // A little hack-workaround for the events.
+		return Parent::onActivate(%brick, %b, %client, %d, %e);
+	}
+
 	function minigameCanDamage(%a,%b)
 	{
 		// If Render is invincible, we have to override this with 0 for singleplayer/LAN.
