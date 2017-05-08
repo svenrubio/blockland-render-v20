@@ -352,7 +352,6 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 
-
 //////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
 //missionCleanup.add(RenderBotGroup);

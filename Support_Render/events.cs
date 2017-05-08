@@ -18,7 +18,7 @@ function MiniGameSO::setRenderSpawnRate(%this, %rate, %client)
   %minigame.rSpawnRate = %rate;
 }
 
-function MiniGameSO::setRenderSpawnRate(%this, %rate, %client)
+function MiniGameSO::setRenderInvincibility(%this, %rate, %client)
 {
   %brick = %client.lastEventBrick;
   %minigame = %client.minigame;
