@@ -9,6 +9,14 @@ function brickGlitchShrineData::onPlant(%a,%br) // Planted
 	%br.shrineSched = schedule(15,0,Render_ShrinePlant,%br);
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 	// (This may only be necessary for onLoadPlant)
+
+   %enabled     = 1;
+   %delay       = 0;
+   %inputEvent  = "OnActivate";
+   %target      = "client";
+   %outputEvent = "ChatMessage";
+   %par1        = "<color:FFFFFF>This is a Glitch Shrine. It creates a safe zone from Render. %renderServerShrineRange";
+   %br.addEvent(%enabled, %delay, %inputEvent, %target, %outputEvent, %par1);
 }
 
 function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)

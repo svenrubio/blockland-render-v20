@@ -751,6 +751,13 @@ package Render
 			return Parent::minigameCanDamage(%a,%b);
 	}
 
+	// Chat message event
+	// TODO: Verify no VCE conflict or overflow
+	function gameConnection::ChatMessage(%client, %msg)
+	{
+		return Parent::ChatMessage(%client, strReplace(%msg, "%renderServerShrineRange", $Render::C_ShrString[$Pref::Server::RenderShrineRange]), %client, %client.player);
+	}
+
 	// ## Glitch Detector Functions
 
 	function GlitchDetectorImage::onMount(%this,%obj,%slot)

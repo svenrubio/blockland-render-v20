@@ -127,6 +127,13 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 	indestructable = 1;
 };
 
+//// ## Shrine String
+$Render::C_ShrString[-1] = "NOTE: Shrines are disabled.";
+$Render::C_ShrString[4] = "Shrine range: 16x";
+$Render::C_ShrString[12] = "Shrine range: 32x";
+$Render::C_ShrString[20] = "Shrine range: 48x";
+$Render::C_ShrString[28] = "Shrine range: 64x";
+
 //////# PLAYERTYPE
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 {
