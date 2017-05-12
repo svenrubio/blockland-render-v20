@@ -192,7 +192,7 @@ function Render_Loop_Local(%render)
 	if(!%render.loopCount)
 	{
 		%render.loopViewNext = 2;
-		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer/($Pref::Server::RenderDamageType==3?2.5:1); // 40 seconds between pay times
+		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
 	}
 
 	%render.players = 0;
