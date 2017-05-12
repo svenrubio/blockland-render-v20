@@ -192,7 +192,7 @@ function Render_Loop_Local(%render)
 	if(!%render.loopCount)
 	{
 		%render.loopViewNext = 2;
-		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer; // 40 seconds between pay times
+		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer/($Pref::Server::RenderDamageType==3?2.5:1); // 40 seconds between pay times
 	}
 
 	%render.players = 0;
@@ -227,9 +227,8 @@ function Render_Loop_Local(%render)
 
 	// ## VIEW CHECK + MOVEMENT CHECK A
 
-	// INCOMPLETE: This is to be corrected; we don't need to run a radius search this often.
-
-	if(%render.aiStartAttacking) // If the AI requests to start attacking...
+	 // If haunt mode is disabled and the AI requests to start attacking...
+	if(%render.aiStartAttacking && $Pref::Server::RenderDamageType != 3)
 	{
 		if(!%render.loopAttackStart)
 		{
