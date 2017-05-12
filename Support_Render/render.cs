@@ -228,9 +228,10 @@ function Render_Loop_Local(%render)
 	// ## VIEW CHECK + MOVEMENT CHECK A
 
 	 // If haunt mode is disabled and the AI requests to start attacking...
-	if(%render.aiStartAttacking && $Pref::Server::RenderDamageType != 3)
+	if(%render.aiStartAttacking)
 	{
-		if(!%render.loopAttackStart)
+		// Note: Existing Render bots can still attack, but new ones can't.
+		if(!%render.loopAttackStart && $Pref::Server::RenderDamageType != 3)
 		{
 			%render.fxScale = 1;
 
