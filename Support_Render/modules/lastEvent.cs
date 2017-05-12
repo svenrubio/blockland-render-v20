@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// Title:   Client - Last Event
+// Title:   Server - Last Event
 // Author:  Lake_YS
 // Version: 1
 // Updated: May 4, 2017

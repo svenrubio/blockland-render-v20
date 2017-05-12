@@ -40,6 +40,7 @@ if(!$Render::Loaded)
 	$Render::LoadedB = 1;
 }
 
+exec("./package.cs");
 exec("./render.cs");
 
 if(isFile("./local.cs"))
