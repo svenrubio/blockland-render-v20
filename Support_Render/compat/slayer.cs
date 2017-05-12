@@ -8,7 +8,7 @@ new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
   permissionLevel = $Slayer::PermissionLevel["Any"];
   variable = "%mini.rMode";
   type = "list";
-  list_items = "-1 Use Server Preference" NL "0 Static" NL "1 Health" NL "2 Tag";
+  list_items = "-1 Use Server Preference" NL "0 Static" NL "1 Health" NL "2 Tag" NL "3 Haunt";
   guiTag = "Advanced";
 };
 
