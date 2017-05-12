@@ -12,7 +12,7 @@ new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
   guiTag = "Advanced";
 };
 
-new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO) // TODO
+new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
 {
   category = "Render";
   title = "Spawn Rate";
