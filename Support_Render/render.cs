@@ -489,9 +489,9 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 
 	%p.setWhiteOut(%p.rDmg/100);
 
-	if(%p.rDmg >= 100) // If damage is ≥ 100, rip
+	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
 	{
-		%p.rDmg = 1;
+		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 		%p.setWhiteOut(1);
 		%p.client.playSound(rAttackC);
 		%p.kill();
