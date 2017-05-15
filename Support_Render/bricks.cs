@@ -1,7 +1,7 @@
-//// # Shrine Functions
+////// # Glitch Shrine
 // See init.cs for shrine datablocks and prefs
 
-//// # onPlant
+//// ## onPlant
 
 function brickGlitchShrineData::onPlant(%a,%br) // Planted
 {
@@ -26,7 +26,7 @@ function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 }
 
-// # onRemove/onDeath
+// ## onRemove/onDeath
 
 function brickGlitchShrineData::onDeath(%a,%br) // Brick deleted
 {
@@ -42,7 +42,7 @@ function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDea
 	Parent::onRemove(%br);
 }
 
-// # Plant/Remove B
+// ## Plant/Remove B
 
 // We need to "register" the shrine by setting some variables. This is so we can easily access it later and use it to perform radius searches.
 // We also want to make sure the brickgroup stays within the shrine limit.
@@ -104,7 +104,7 @@ function Render_ShrineRemove(%br,%id)
 	//echo("Unregistered shrine " @ %br @ " (total: " @ $r_shr_t @ ")");
 }
 
-//// # Shrine Check
+//// ## Shrine Check
 // %br: if specified, shrine check only applies to brick %br.
 // Otherwise runs a global shrine check.
 function Render_DoShrineCheck(%br)
@@ -150,3 +150,5 @@ function Render_DoShrineCheck(%br)
 		}
 	}
 }
+
+////// # Detector Brick

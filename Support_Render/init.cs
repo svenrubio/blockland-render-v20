@@ -127,6 +127,16 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 	indestructable = 1;
 };
 
+datablock fxDtsBrickData(brickGlitchDetectorData)
+{
+	brickFile = "base/data/bricks/flats/1x1F.blb";
+	uiName = "Glitch Detector Brick";
+	category = "Special";
+	subCategory = "Interactive";
+	iconName = "base/client/ui/brickIcons/1x1F";
+	indestructable = 1;
+};
+
 //// ## Shrine String
 $Render::C_ShrString[-1] = "NOTE: Shrines are disabled.";
 $Render::C_ShrString[4] = "Shrine range: 16x";

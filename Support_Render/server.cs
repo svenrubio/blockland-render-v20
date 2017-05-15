@@ -29,7 +29,7 @@ exec("./modules/lastEvent.cs");
 exec("./ai_main.cs");
 exec("./ai_spawn.cs");
 
-exec("./brick_shrine.cs");
+exec("./bricks.cs");
 
 exec("./events.cs");
 
