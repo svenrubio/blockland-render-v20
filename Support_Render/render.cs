@@ -523,6 +523,7 @@ function Render_FreezePlayer(%p,%r)
 	// If attack mode is 2, rip
 	if(%r.mode == 2)
 	{
+		%p.client.playSound(rAttackC);
 		%p.kill();
 		return;
 	}
