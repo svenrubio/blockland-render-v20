@@ -62,6 +62,7 @@ function Render_ShrinePlant(%br)
 			%client.centerPrint("\c6You can't have more than 32 shrines!",3);
 
 		%br.setDatablock(brickPumpkinBaseData);
+		%br.clearEvents(); // Clear the events
 	}
 	else
 	{
@@ -204,6 +205,7 @@ function Render_DetectorBrickPlant(%br)
 			%client.centerPrint("\c6You can't have more than 64 detectors!",3);
 
 		%br.setDatablock(brick1x1fData);
+		%br.clearEvents();
 	}
 	else
 	{
@@ -270,7 +272,7 @@ function Render_DoDetectorBrickCheck(%br)
 			while(%target=containerSearchNext())
 			{
 				// Detected! Fire relay on the brick.
-				if(%target.isRender)
+				if(%target.isRender && %target.isAttacking)
 					%br.fireRelay();
 			}
 		}
