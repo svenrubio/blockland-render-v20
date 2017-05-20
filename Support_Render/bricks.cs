@@ -6,7 +6,7 @@
 function brickGlitchShrineData::onPlant(%a,%br) // Planted
 {
 	Parent::onPlant(%a,%br);
-	%br.shrineSched = schedule(15,0,Render_ShrinePlant,%br);
+	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br);
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 	// (This may only be necessary for onLoadPlant)
 
@@ -22,7 +22,7 @@ function brickGlitchShrineData::onPlant(%a,%br) // Planted
 function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 {
 	Parent::onLoadPlant(%br);
-	%br.shrineSched = schedule(15,0,Render_ShrinePlant,%br);
+	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br);
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 }
 
@@ -119,17 +119,17 @@ function Render_DoShrineCheck(%br)
 		%manual = 1; // Specify that we're manually checking a single brick.
 	}
 
-	for(%iB = 1; %iB <= %total; %iB++)
+	for(%i = 1; %i <= %total; %i++)
 	{
 		if(!%manual) // If a brick is specified, ignore this.
-			%br = $R_Shr[%iB];
+			%br = $R_Shr[%i];
 
 		%r = $Pref::Server::RenderShrineRange;
 
 		if(%br.position $= "") // Error if one is missing.
 		{
-			error("Support_Render - Shrine " @ $R_Shr[%iB] @ " (" @ %iB @ ") does not exist! Shrine will be force-removed.");
-			Render_ShrineRemove(%br, $R_Shr[%iB]);
+			error("Support_Render - Shrine " @ $R_Shr[%i] @ " (" @ %i @ ") does not exist! Shrine will be force-removed.");
+			Render_ShrineRemove(%br, $R_Shr[%i]);
 		}
 		else if(%r != -1 && %br.isRayCasting())
 		{
@@ -151,4 +151,128 @@ function Render_DoShrineCheck(%br)
 	}
 }
 
+
 ////// # Detector Brick
+// This is mostly a copy of the above code.
+
+function brickGlitchDetectorData::onPlant(%a,%br) // Planted
+{
+	Parent::onPlant(%a, %br);
+	%br.detSched = schedule(15, 0, Render_DetectorBrickPlant, %br);
+
+	%br.addEvent(1, 0, "OnRelay", "self", "setColorFX", 3);
+	%br.addEvent(1, 256, "OnRelay", "self", "setColorFX", 0);
+}
+
+function brickGlitchDetectorData::onLoadPlant(%a,%br) // Planted (load)
+{
+	Parent::onLoadPlant(%br);
+	%br.detSched = schedule(15, 0, Render_DetectorBrickPlant, %br);
+	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
+}
+
+// ## onRemove/onDeath
+
+function brickGlitchDetectorData::onDeath(%a,%br) // Brick deleted
+{
+	Render_DetectorBrickRemove(%br);
+	Parent::onDeath(%br);
+}
+
+function brickGlitchDetectorData::onRemove(%a,%br) // Brick removed (in case onDeath isn't called)
+{
+	if(%br.isPlanted && %br.isGlitchDetector)
+		Render_DetectorBrickRemove(%br);
+
+	Parent::onRemove(%br);
+}
+
+// ## Plant/Remove B
+
+function Render_DetectorBrickPlant(%br)
+{
+	if(!%br.isPlanted)
+		return;
+
+	%group = %br.getGroup();
+
+	if(%group.rDetectorBricks >= 64) // If there are too many detectors, set this to a regular 1x1F.
+	{
+		%client = %group.client;
+
+		if(isObject(%client))
+			%client.centerPrint("\c6You can't have more than 64 detectors!",3);
+
+		%br.setDatablock(brick1x1fData);
+	}
+	else
+	{
+		%group.rDetectorBricks++;
+
+		%br.isGlitchDetector = 1;
+
+		$R_Det[$R_Det_t++] = %br;
+		$R_Det_G[$R_Det_t] = %br.getGroup();
+		%br.detId = $R_Det_t;
+
+		echo("Registered detector " @ %br @ " to group " @ %group @ " (total: " @ $r_det_t @ ")");
+
+		Render_DoDetectorBrickCheck(%br);
+	}
+}
+
+function Render_DetectorBrickRemove(%br,%id)
+{
+	if(!%id)
+		%id = %br.detId;
+
+	cancel(%br.detSched);
+
+	if(%id)
+	{
+		$R_Det[%id] = $R_Det[$R_Shr_t];
+		$R_Det_t--;
+
+		$R_Det_G[%id].rDetectorBricks--;
+	}
+
+	%br.isGlitchDetector = 0;
+	echo("Unregistered detector " @ %br @ " (total: " @ $r_det_t @ ")");
+}
+
+//// ## Detector Brick Check
+function Render_DoDetectorBrickCheck(%br)
+{
+	// If no brick specified, apply to all bricks on server.
+	if(!%br)
+		%total = $R_Det_t;
+	else
+	{
+		%total = 1;
+		%manual = 1;
+	}
+
+	for(%i = 1; %i <= %total; %i++)
+	{
+		if(!%manual) // If a brick is specified, ignore this.
+			%br = $R_Det[%i];
+
+		%r = 60; // Distance for "moderate" energy.
+
+		if(%br.position $= "") // Error if one is missing.
+		{
+			error("Support_Render - Detector brick " @ $R_Det[%i] @ " (" @ %i @ ") does not exist! Brick will be force-removed.");
+			Render_DetectorBrickRemove(%br, $R_Det[%i]);
+		}
+		else
+		{
+			initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
+			while(%target=containerSearchNext())
+			{
+				// Detected! Fire relay on the brick.
+				if(%target.isRender)
+					%br.fireRelay();
+			}
+		}
+	}
+}

@@ -173,6 +173,7 @@ function Render_Loop()
 	if(%i && %simTime > $R_shrNext)
 	{
 		Render_DoShrineCheck();
+		Render_DoDetectorBrickCheck();
 		$R_shrNext = %simTime+$Render::C_ShrineCheckInterval;
 	}
 
@@ -272,7 +273,7 @@ function Render_Loop_Local(%render)
 				// Detectors
 				if(%render.isAttacking)
 				{
-					%detectorVal = 5.15-(%distance/20); // 5.1-(distance/20); we use the value 5.25 so distance <= 3 is considered off-scale.
+					%detectorVal = 5.15-(%distance/20); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750; // ?????
@@ -360,7 +361,7 @@ function Render_Loop_Local(%render)
 	Render_AI_Control_Loop(%render);
 }
 
-//////# Target picking function
+////// # Target picking function
 //This will determine the targets for the attacker and start the spawning code
 function Render_Spawn_Loop()
 {
