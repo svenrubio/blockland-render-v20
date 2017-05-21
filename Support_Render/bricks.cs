@@ -22,7 +22,7 @@ function brickGlitchShrineData::onPlant(%a,%br) // Planted
 function brickGlitchShrineData::onLoadPlant(%a,%br) // Planted (load)
 {
 	Parent::onLoadPlant(%br);
-	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br);
+	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br, 1);
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 }
 
@@ -47,7 +47,7 @@ function brickGlitchShrineData::onRemove(%a,%br) // Brick removed (in case onDea
 // We need to "register" the shrine by setting some variables. This is so we can easily access it later and use it to perform radius searches.
 // We also want to make sure the brickgroup stays within the shrine limit.
 // Render_Shrine[total_shrines++] = brick_id
-function Render_ShrinePlant(%br)
+function Render_ShrinePlant(%br, %loadPlant)
 {
 	if(!%br.isPlanted)
 		return;
@@ -62,7 +62,10 @@ function Render_ShrinePlant(%br)
 			%client.centerPrint("\c6You can't have more than 32 shrines!",3);
 
 		%br.setDatablock(brickPumpkinBaseData);
-		%br.clearEvents(); // Clear the events
+
+
+		if(!%loadPlant)
+			%br.clearEvents();
 	}
 	else
 	{
@@ -135,20 +138,27 @@ function Render_DoShrineCheck(%br)
 		else if(%r != -1 && %br.isRayCasting())
 		{
 			// Start a box search. If a Render bot is nearby, delete it immediately.
-			initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
-			while(%target=containerSearchNext())
+			for(%iB = 0; %iB < RenderBotGroup.getCount(); %iB++)
 			{
-				if(%target.isRender)
-				{
-					//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
-					%target.delete();
+				%target = RenderBotGroup.getObject(%iB);
 
-					// Flicker to indicate that the shrine did something.
-					%br.setDatablock(brickPumpkinBaseData);
-					%br.schedule(128,setDatablock,brickGlitchShrineData);
-				}
+				// A seperate function on a schedule is used to reduce performance impacts.
+				schedule(0, 0, Render_DoShrineEffect, %target, %br, %r);
 			}
 		}
+	}
+}
+
+function Render_DoShrineEffect(%target, %br, %r)
+{
+	if(%target.isRender && %target.isAttacking && vectorDist(%target.position,%br.position) <= %r)
+	{
+		//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
+		%target.delete();
+
+		// Flicker to indicate that the shrine did something.
+		%br.setDatablock(brickPumpkinBaseData);
+		%br.schedule(128,setDatablock,brickGlitchShrineData);
 	}
 }
 
@@ -168,7 +178,7 @@ function brickGlitchDetectorData::onPlant(%a,%br) // Planted
 function brickGlitchDetectorData::onLoadPlant(%a,%br) // Planted (load)
 {
 	Parent::onLoadPlant(%br);
-	%br.detSched = schedule(15, 0, Render_DetectorBrickPlant, %br);
+	%br.detSched = schedule(15, 0, Render_DetectorBrickPlant, %br, 1);
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 }
 
@@ -190,22 +200,24 @@ function brickGlitchDetectorData::onRemove(%a,%br) // Brick removed (in case onD
 
 // ## Plant/Remove B
 
-function Render_DetectorBrickPlant(%br)
+function Render_DetectorBrickPlant(%br, %loadPlant)
 {
 	if(!%br.isPlanted)
 		return;
 
 	%group = %br.getGroup();
 
-	if(%group.rDetectorBricks >= 64) // If there are too many detectors, set this to a regular 1x1F.
+	if(%group.rDetectorBricks >= 48) // If there are too many detectors, set this to a regular 1x1F.
 	{
 		%client = %group.client;
 
 		if(isObject(%client))
-			%client.centerPrint("\c6You can't have more than 64 detectors!",3);
+			%client.centerPrint("\c6You can't have more than 48 detectors!",3);
 
 		%br.setDatablock(brick1x1fData);
-		%br.clearEvents();
+
+		if(!%loadPlant)
+			%br.clearEvents();
 	}
 	else
 	{
@@ -268,13 +280,19 @@ function Render_DoDetectorBrickCheck(%br)
 		}
 		else
 		{
-			initContainerBoxSearch(%br.position,%r SPC %r SPC %r,$TypeMasks::PlayerObjectType);
-			while(%target=containerSearchNext())
+			for(%iB = 0; %iB < RenderBotGroup.getCount(); %iB++)
 			{
-				// Detected! Fire relay on the brick.
-				if(%target.isRender && %target.isAttacking)
-					%br.fireRelay();
+				%target = RenderBotGroup.getObject(%iB);
+
+				schedule(0, 0, Render_DoDetectorBrickEffect, %target, %br, %r);
 			}
 		}
 	}
+}
+
+function Render_DoDetectorBrickEffect(%target, %br, %r)
+{
+	// Detected! Fire relay on the brick.
+	if(%target.isRender && %target.isAttacking && vectorDist(%target.position,%br.position) <= %r)
+		%br.fireRelay();
 }
