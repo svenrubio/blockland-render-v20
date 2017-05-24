@@ -151,7 +151,7 @@ function Render_DoShrineCheck(%br)
 
 function Render_DoShrineEffect(%target, %br, %r)
 {
-	if(%target.isRender && %target.isAttacking && vectorDist(%target.position,%br.position) <= %r)
+	if(%target.isRender && vectorDist(%target.position,%br.position) <= %r)
 	{
 		//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
 		%target.delete();
