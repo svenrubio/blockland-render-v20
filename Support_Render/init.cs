@@ -1,5 +1,4 @@
 //This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
-
 $Render::C_ShrineLimit = 32;
 
 //////# PREFERENCES
@@ -194,6 +193,9 @@ function PlayerRenderTagArmor::onRemove(%a, %render)
 
 	Parent::onRemove(%a, %render);
 }
+
+////// # DAMAGE TYPE
+AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 1);
 
 //////# FUNCTIONS
 // Death vehicle from Item_Skis was used as a reference for this

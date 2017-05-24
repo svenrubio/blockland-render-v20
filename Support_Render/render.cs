@@ -80,6 +80,9 @@ function Render_CreateBot(%pos,%client)
 	%render.hMelee = 1;
 	%render.name = "Render";
 
+	// For the damage type, we create a "fake projectile"
+	%obj.rFakeProjectile = new scriptObject(){};
+
 	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
 	{
 		%render.light = new fxlight() // Try $r_light[%render]; or something?
@@ -495,7 +498,8 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 		%p.setWhiteOut(1);
 		%p.client.playSound(rAttackC);
-		%p.kill();
+
+		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
@@ -525,7 +529,7 @@ function Render_FreezePlayer(%p,%r)
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
-		%p.kill();
+		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
 		return;
 	}
 
