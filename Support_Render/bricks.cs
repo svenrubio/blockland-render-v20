@@ -229,7 +229,7 @@ function Render_DetectorBrickPlant(%br, %loadPlant)
 		$R_Det_G[$R_Det_t] = %br.getGroup();
 		%br.detId = $R_Det_t;
 
-		echo("Registered detector " @ %br @ " to group " @ %group @ " (total: " @ $r_det_t @ ")");
+		//echo("Registered detector " @ %br @ " to group " @ %group @ " (total: " @ $r_det_t @ ")");
 
 		Render_DoDetectorBrickCheck(%br);
 	}
@@ -251,7 +251,7 @@ function Render_DetectorBrickRemove(%br,%id)
 	}
 
 	%br.isGlitchDetector = 0;
-	echo("Unregistered detector " @ %br @ " (total: " @ $r_det_t @ ")");
+	//echo("Unregistered detector " @ %br @ " (total: " @ $r_det_t @ ")");
 }
 
 //// ## Detector Brick Check

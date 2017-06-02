@@ -231,7 +231,8 @@ function Render_Loop_Local(%render)
 
 	// ## VIEW CHECK + MOVEMENT CHECK A
 
-	 // If haunt mode is disabled and the AI requests to start attacking...
+	// If haunt mode is disabled and the AI requests to start attacking...
+	// Note: The AI is also aware when haunt mode is on and will despawn accordingly.
 	if(%render.aiStartAttacking && %render.mode != 3)
 	{
 		// Note: Existing Render bots can still attack, but new ones can't.

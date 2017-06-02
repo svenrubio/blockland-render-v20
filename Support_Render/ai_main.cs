@@ -6,7 +6,8 @@ function Render_AI_Control_Loop(%render)
 {
 	if(!%render.attackInit)
 	{
-		%render.aiStartAttacking = getRandom(0,1); // The AI sends a request to start attacking.
+		// The AI sends a request to start attacking, but only if not in haunt mode.
+		%render.aiStartAttacking = %render.rMode==3?0:getRandom(0,1);
 		%render.aiWillAttack = %render.aiStartAttacking; // AI flag; are we planning to attack? For now, this is always determined immediately.
 		%render.attackInit = 1;
 	}

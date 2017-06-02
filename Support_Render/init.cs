@@ -129,7 +129,7 @@ datablock fxDtsBrickData(brickGlitchShrineData)
 datablock fxDtsBrickData(brickGlitchDetectorData)
 {
 	brickFile = "base/data/bricks/flats/1x1F.blb";
-	uiName = "Glitch Detector Brick";
+	uiName = "Glitch Detector";
 	category = "Special";
 	subCategory = "Interactive";
 	iconName = "base/client/ui/brickIcons/1x1F";
