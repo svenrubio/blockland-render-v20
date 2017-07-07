@@ -367,6 +367,88 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
+//////# DEATH BOARD
+//## Board
+datablock staticShapeData(renderDeathBoardData)
+{
+	shapeFile = "./cube.dts";
+};
+
+function Render_CreateDeathBoard()
+{
+	%obj = new staticShape()
+	{
+		datablock = renderDeathBoardData;
+		position = "0 0 -6666";
+		scale = "0.01 10 10";
+	};
+
+	missionCleanup.add( %obj );
+	%obj.setNodeColor("ALL", "0 0 0 1");
+
+	$Render::DeathBoard = %obj;
+
+	return %obj;
+}
+
+Render_CreateDeathBoard();
+
+//## Image
+// Nothing yet
+
+//////# PARTICLES
+datablock ParticleData(RenderDmgExplosionParticle)
+{
+	dragCoefficient      = 10;
+	gravityCoefficient   = 0.0;
+	inheritedVelFactor   = 0.2;
+	constantAcceleration = 0.0;
+	useInvAlpha = 1;
+
+	lifetimeMS           = 300;
+	lifetimeVarianceMS   = 290;
+
+	spinSpeed		= 0.0;
+	spinRandomMin		= -150.0;
+	spinRandomMax		= 150.0;
+	textureName          = "base/data/particles/dot";
+
+	colors[0]	= "0.0 0.0 0.0 0.5";
+	colors[1]	= "0.0 0.0 0.0 0.5";
+	colors[2]	= "0.0 0.0 0.0 0.5";
+	colors[3]	= "0.0 0.0 0.0 0.0";
+
+	sizes[0]	= 0.2;
+	sizes[1]	= 0.2;
+	sizes[2]	= 0.1;
+	sizes[3]	= 0.0;
+
+	times[0] = 0.0;
+	times[1] = 0.9;
+	times[2] = 1.0;
+	times[3] = 2;
+};
+
+datablock ParticleEmitterData(RenderDmgExplosionEmitter)
+{
+	lifeTimeMS = 50;
+
+	ejectionPeriodMS = 10;
+	periodVarianceMS = 0;
+	ejectionVelocity = 2;
+	velocityVariance = 4.0;
+	ejectionOffset   = 1.25;
+	thetaMin         = 0;
+	thetaMax         = 180;
+	phiReferenceVel  = 0;
+	phiVariance      = 360;
+	overrideAdvance  = false;
+
+	particles = "RenderDmgExplosionParticle";
+
+	uiName = "RenderDmgExplosionEmitter";
+};
+
 //////# EVENTS
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
