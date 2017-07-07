@@ -371,7 +371,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 //## Board
 datablock staticShapeData(renderDeathBoardData)
 {
-	shapeFile = "./cube.dts";
+	shapeFile = "./models/cube.dts";
 };
 
 function Render_CreateDeathBoard()
