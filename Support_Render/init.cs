@@ -368,7 +368,6 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 };
 
 //////# DEATH BOARD
-//## Board
 datablock staticShapeData(renderDeathBoardData)
 {
 	shapeFile = "./models/cube.dts";
@@ -376,27 +375,83 @@ datablock staticShapeData(renderDeathBoardData)
 
 function Render_CreateDeathBoard()
 {
-	%obj = new staticShape()
+	// Create the background
+	%obj = new staticShape(RenderBoard)
 	{
 		datablock = renderDeathBoardData;
 		position = "0 0 -6666";
 		scale = "0.01 10 10";
 	};
 
-	missionCleanup.add( %obj );
+	missionCleanup.add(%obj);
 	%obj.setNodeColor("ALL", "0 0 0 1");
 
 	$Render::DeathBoard = %obj;
 
-	return %obj;
+	// Create the emitter
+	%obj2 = new ParticleEmitterNode(RenderBoardNode)
+	{
+		datablock = GenericEmitterNode;
+		emitter = RenderBoardEmitter;
+		position = "-2 0 -6666";
+		scale = "0.05 0.05 0.05";
+	};
+	missionCleanup.add(%obj2);
 }
 
-Render_CreateDeathBoard();
 
-//## Image
-// Nothing yet
+// Note: Needs adjustment for higher FOV levels
+// CAMERA POSITION: -3 0 -6666
+
+
 
 //////# PARTICLES
+
+// # Face
+datablock ParticleData(RenderBoardParticle)
+{
+	dragCoefficient		= -32.0;
+	windCoefficient		= 0.0;
+	gravityCoefficient	= 0.0;
+	inheritedVelFactor	= 0.0;
+	constantAcceleration	= 0.0;
+	lifetimeMS		= 200;
+	lifetimeVarianceMS	= 0;
+	spinSpeed		= 10.0;
+	spinRandomMin		= -50.0;
+	spinRandomMax		= 50.0;
+	useInvAlpha		= false;
+	animateTexture		= false;
+
+	textureName		= "Add-Ons/Face_Default/asciiTerror";
+
+	colors[0]	= "1 1 1 0.2";
+	colors[1]	= "1 1 1 0.0";
+	sizes[0]	= 2.0;
+	sizes[1]	= 0.1;
+	times[0]	= 0.0;
+	times[1]	= 1.0;
+};
+
+datablock ParticleEmitterData(RenderBoardEmitter)
+{
+   ejectionPeriodMS = 2;
+   periodVarianceMS = 0;
+
+   ejectionVelocity = 0.0;
+   velocityVariance = 0.0;
+
+   ejectionOffset = 0;
+
+   thetaMin         = 0.0;
+   thetaMax         = 90.0;
+
+   particles = RenderBoardParticle;
+
+	 uiName = "RenderBoardEmitter";
+};
+
+// # Damage
 datablock ParticleData(RenderDmgExplosionParticle)
 {
 	dragCoefficient      = 10;
@@ -460,6 +515,8 @@ new simGroup(RenderBotGroup) {}; //Render bot group
 
 new simGroup(RenderMiscGroup) {}; //Render object group
 //missionCleanup.add(RenderMiscGroup);
+
+Render_CreateDeathBoard();
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);
