@@ -47,7 +47,8 @@ else
 if(!$Render::LoadedB)
 {
 	// NOTE: If including Support_Render and Slayer in a game-mode, make sure to have Slayer load first.
-	if($AddOn__GameMode_Slayer)
+	// Console errors may occur in game-modes.
+	if(isFile("Add-Ons/GameMode_Slayer/server.cs") && $AddOn__GameMode_Slayer)
 		exec("./compat/slayer.cs");
 }
 
