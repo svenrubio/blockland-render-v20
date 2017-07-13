@@ -381,7 +381,7 @@ function Render_CreateDeathBoard()
 	{
 		datablock = renderDeathBoardData;
 		position = "0 0 -6666";
-		scale = "0.01 10 10";
+		scale = "0.01 16 16";
 	};
 
 	missionCleanup.add(%obj);
@@ -402,7 +402,7 @@ function Render_CreateDeathBoard()
 
 
 // Note: Needs adjustment for higher FOV levels
-// CAMERA POSITION: -3 0 -6666
+// CAMERA POSITION: -3 0 -6666.2
 
 
 
@@ -424,7 +424,7 @@ datablock ParticleData(RenderBoardParticle)
 	useInvAlpha		= false;
 	animateTexture		= false;
 
-	textureName		= "Add-Ons/Face_Default/asciiTerror";
+	textureName		= "./render.png";
 
 	colors[0]	= "1 1 1 0.2";
 	colors[1]	= "1 1 1 0.0";
