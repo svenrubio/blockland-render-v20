@@ -369,6 +369,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 };
 
 //////# DEATH BOARD
+// TODO: Fix admins being able to hit F8 to see the board
 datablock staticShapeData(renderDeathBoardData)
 {
 	shapeFile = "./models/cube.dts";
@@ -399,12 +400,6 @@ function Render_CreateDeathBoard()
 	};
 	missionCleanup.add(%obj2);
 }
-
-
-// Note: Needs adjustment for higher FOV levels
-// CAMERA POSITION: -3 0 -6666.2
-
-
 
 //////# PARTICLES
 

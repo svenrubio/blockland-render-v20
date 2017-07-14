@@ -496,11 +496,15 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 
 	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
 	{
-		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
-		%p.setWhiteOut(1);
-		%p.client.playSound(rAttackC);
+		%client = %p.client;
 
 		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
+
+		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
+		%client.camera.setWhiteOut(1);
+		%client.playSound(rAttackC);
+
+		%client.doRenderDeath(); // TODO: Package the death function instead (for invincible players).
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
@@ -531,6 +535,7 @@ function Render_FreezePlayer(%p,%r)
 	{
 		%p.client.playSound(rAttackC);
 		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
+		%p.doRenderDeath(); // TODO: Package the death function instead (for invincible players).
 		return;
 	}
 
@@ -629,6 +634,49 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 	%r.delete();
 	//else
 	//	warn("Support_Render - Attempting to delete nonexistent bot!");
+}
+
+// # DEATH CAMERA
+// Uses code from Event_Camera_Control
+function GameConnection::doRenderDeath(%client)
+{
+   %camera = %client.camera;
+   if(!isObject(%camera))
+      return;
+
+   //aim the camera at the target brick
+   %pos = "-3 0 -6666.1";
+   %deltaX = 1;
+   %deltaY = 0;
+   %deltaZ = 0;
+   %deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
+
+   %rotZ = mAtan(%deltaX, %deltaY) * -1;
+   %rotX = mAtan(%deltaZ, %deltaXYHyp);
+
+   %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ); //this function should be called eulerToAngleAxis...
+
+   %camera.setTransform(%pos SPC %aa);
+   %camera.setFlyMode();
+   %camera.mode = "Observer";
+
+   //client controls camera
+   %client.setControlObject(%camera);
+
+   //camera controls player
+   %player = %client.player;
+   if(isObject(%player))
+   {
+      %camera.setControlObject(%player);
+   }
+   else
+   {
+      //do something to make the camera immobile?
+      //%camera.setDollyMode(%camera.getPosition(), %camera.getPosition());
+      %camera.setControlObject(%client.dummyCamera);
+
+      //6802.camera.setDollyMode(6802.camera.getPosition(), 6802.camera.getPosition());
+   }
 }
 
 // # GLITCH GUN
