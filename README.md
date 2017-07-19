@@ -12,6 +12,16 @@ The Glitch Shrine is a brick that you can place in your builds to passively repe
 
 You can turn a shrine off by using a wrench on it and unchecking "Raycasting" in the menu. You can also do this with events!
 
+# Detector Bricks
+These are special bricks that trigger **onRelay** when Render is nearby. You can use these to make automated alarm systems and other things.
+
+# Events
+You can configure Render's behavior using events! To use them, you need to create a minigame. They only work if you are the mini-game owner.
+
+- MiniGame -> setRenderInvincibility
+- MiniGame -> setRenderMode
+- MiniGame -> setRenderSpawnRate
+
 # What's New
 This is an entirely new Renderman mod built from the ground up. Here's a brief list of what sets it apart from previous mods:
 - Improved AI and movement; Render navigates your builds rather than teleporting through them.
@@ -49,3 +59,4 @@ Here are a few things that have been successfully accomplished in this project.
 - A lightweight node generator for spawning and movement that can, in many cases, detect and navigate around corners of players' builds.
 - Original sound effects and ambience created specifically for the mod.
 - A functioning set of "horror mechanics" that do not utilize jumpscares.
+- Interactive items, events (scriptable elements), configuration, and brick types that allow for more customizable gameplay.
