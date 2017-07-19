@@ -369,7 +369,6 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 };
 
 //////# DEATH BOARD
-// TODO: Fix admins being able to hit F8 to see the board
 datablock staticShapeData(renderDeathBoardData)
 {
 	shapeFile = "./models/cube.dts";
