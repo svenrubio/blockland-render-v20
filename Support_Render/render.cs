@@ -644,7 +644,6 @@ function GameConnection::doRenderDeath(%client)
    if(!isObject(%camera))
       return;
 
-   //aim the camera at the target brick
    %pos = "-3 0 -666.1";
    %deltaX = 1;
    %deltaY = 0;
@@ -654,16 +653,14 @@ function GameConnection::doRenderDeath(%client)
    %rotZ = mAtan(%deltaX, %deltaY) * -1;
    %rotX = mAtan(%deltaZ, %deltaXYHyp);
 
-   %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ); //this function should be called eulerToAngleAxis...
+   %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
 
    %camera.setTransform(%pos SPC %aa);
    %camera.setFlyMode();
    %camera.mode = "Observer";
 
-   //client controls camera
    %client.setControlObject(%camera);
 
-   //camera controls player
    %player = %client.player;
    if(isObject(%player))
    {
@@ -671,11 +668,7 @@ function GameConnection::doRenderDeath(%client)
    }
    else
    {
-      //do something to make the camera immobile?
-      //%camera.setDollyMode(%camera.getPosition(), %camera.getPosition());
       %camera.setControlObject(%client.dummyCamera);
-
-      //6802.camera.setDollyMode(6802.camera.getPosition(), 6802.camera.getPosition());
    }
 }
 

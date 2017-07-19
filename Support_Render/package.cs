@@ -169,6 +169,15 @@ package Render
 
 		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
+
+	function serverCmdDropCameraAtPlayer(%client)
+	{
+		// No orbing in death cam
+		if(%client.camera.position $= "-3 0 -666.1")
+			return;
+
+		Parent::ServerCmdDropCameraAtPlayer(%client);
+	}
 };
 
 deactivatePackage("Render");
