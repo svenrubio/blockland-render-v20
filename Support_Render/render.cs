@@ -645,7 +645,7 @@ function GameConnection::doRenderDeath(%client)
       return;
 
    //aim the camera at the target brick
-   %pos = "-3 0 -6666.1";
+   %pos = "-3 0 -666.1";
    %deltaX = 1;
    %deltaY = 0;
    %deltaZ = 0;

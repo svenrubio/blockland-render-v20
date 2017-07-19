@@ -381,7 +381,7 @@ function Render_CreateDeathBoard()
 	%obj = new staticShape(RenderBoard)
 	{
 		datablock = renderDeathBoardData;
-		position = "0 0 -6666";
+		position = "0 0 -666";
 		scale = "0.01 16 16";
 	};
 
@@ -395,7 +395,7 @@ function Render_CreateDeathBoard()
 	{
 		datablock = GenericEmitterNode;
 		emitter = RenderBoardEmitter;
-		position = "-2 0 -6666";
+		position = "-2 0 -666";
 		scale = "0.05 0.05 0.05";
 	};
 	missionCleanup.add(%obj2);
