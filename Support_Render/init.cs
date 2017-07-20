@@ -499,6 +499,66 @@ datablock ParticleEmitterData(RenderDmgExplosionEmitter)
 	uiName = "RenderDmgExplosionEmitter";
 };
 
+datablock ExplosionData(RenderDmgExplosion)
+{
+   //explosionShape = "";
+   lifeTimeMS = 500;
+
+   emitter[0] = RenderDmgExplosionEmitter;
+
+   faceViewer     = true;
+   explosionScale = "1 1 1";
+
+   shakeCamera = true;
+   camShakeFreq = "1 1 1";
+   camShakeAmp = "0.25 0.25 0.25";
+   camShakeDuration = 0.1;
+   camShakeRadius = 10;
+
+   // Dynamic light
+   lightStartRadius = 0;
+   lightEndRadius = 0;
+   lightStartColor = "0 0 0";
+   lightEndColor = "0 0 0";
+
+	 uiName = "RenderDmgExplosion";
+};
+
+datablock ProjectileData(RenderDmgProjectile)
+{
+   projectileShapeName = "base/data/shapes/empty.dts";
+   directDamage        = 0;
+   directDamageType    = $DamageType::Default;
+   radiusDamageType    = $DamageType::Default;
+
+   brickExplosionImpact = false;          //destroy a brick if we hit it directly?
+
+   impactImpulse	     = 000;
+   verticalImpulse	  = 100;
+   explosion           = RenderDmgExplosion;
+   bloodExplosion        = RenderDmgExplosion;
+   //particleEmitter       = horseRayTrailEmitter;
+   explodeOnPlayerImpact = true;
+   explodeOnDeath        = true;
+
+   muzzleVelocity      = 90;
+   velInheritFactor    = 1;
+
+   armingDelay         = 3000;
+   lifetime            = 3000;
+   fadeDelay           = 3500;
+   bounceElasticity    = 0.99;
+   bounceFriction      = 0.20;
+   isBallistic         = true;
+   gravityMod = 0.0;
+
+   hasLight    = false;
+   lightRadius = 3.0;
+   lightColor  = "0 0 0.5";
+
+   uiName = "Render"; // TODO
+};
+
 //////# EVENTS
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);

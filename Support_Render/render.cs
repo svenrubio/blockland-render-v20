@@ -292,8 +292,8 @@ function Render_Loop_Local(%render)
 
 					if(%render.isAttacking)
 					{
-						if(%render.mode == 0) // Whiteout Damage
-							Render_InflictWhiteOutDamage(%target,%render,%distance);
+						if(%render.mode == 0) // Normal Damage
+							Render_InflictDamage(%target,%render,%distance);
 						else if(%render.mode == 1) // Health damage
 						{
 							%renderDamage = %target.dataBlock.maxDamage*0.8/%distance;
@@ -461,9 +461,9 @@ function Render_Spawn_Loop()
 	$Render::LoopSpawner = schedule($Render::C_SpawnTimer,0,Render_Spawn_Loop);
 }
 
-// # InflictWhiteOutDamage + misc.
+// # InflictDamage + misc.
 
-function Render_InflictWhiteOutDamage(%p,%render,%distance)
+function Render_InflictDamage(%p,%render,%distance)
 {
 	// This calculates the damage decay, aka how much we need to subtract.
 	// We're using the sim time instead of keeping a loop running.
@@ -492,7 +492,10 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 	//if(%p.client.staticDebugImmune)
 	//	return;
 
-	%p.setWhiteOut(%p.rDmg/100);
+	//%p.setWhiteOut(%p.rDmg/100);
+
+	for(%i = 0; %i <= %p.rDmg/10; %i++)
+		%p.spawnExplosion(RenderDmgProjectile, 1);
 
 	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
 	{
