@@ -566,12 +566,8 @@ registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreferenc
 
 //////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
-//missionCleanup.add(RenderBotGroup);
 
 new simGroup(RenderMiscGroup) {}; //Render object group
-//missionCleanup.add(RenderMiscGroup);
-
-Render_CreateDeathBoard();
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);

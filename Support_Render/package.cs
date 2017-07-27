@@ -1,6 +1,15 @@
 // # PACKAGED
 package Render
 {
+	function onMissionLoaded()
+	{
+		parent::onMissionLoaded();
+		Render_CreateDeathBoard();
+
+		missionCleanup.add(RenderBotGroup);
+		missionCleanup.add(RenderMiscGroup);
+	}
+
 	function destroyServer()
 	{
 		cancel($Render::LoopBot);
