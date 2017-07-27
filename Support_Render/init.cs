@@ -384,6 +384,7 @@ function Render_CreateDeathBoard()
 		scale = "0.01 16 16";
 	};
 
+	missionCleanup.add(%obj);
 	%obj.setNodeColor("ALL", "0 0 0 1");
 
 	$Render::DeathBoard = %obj;
@@ -396,6 +397,7 @@ function Render_CreateDeathBoard()
 		position = "-2 0 -666";
 		scale = "0.05 0.05 0.05";
 	};
+	missionCleanup.add(%obj2);
 }
 
 //////# PARTICLES
@@ -564,8 +566,10 @@ registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreferenc
 
 //////# MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
+//missionCleanup.add(RenderBotGroup);
 
 new simGroup(RenderMiscGroup) {}; //Render object group
+//missionCleanup.add(RenderMiscGroup);
 
 Render_CreateDeathBoard();
 
