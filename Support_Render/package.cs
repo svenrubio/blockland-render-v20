@@ -182,7 +182,7 @@ package Render
 	function serverCmdDropCameraAtPlayer(%client)
 	{
 		// No orbing in death cam
-		if(%client.camera.position $= "-3 0 -666.1")
+		if(%client.camera.position $= "-3 0 -666.1" || %client.camera.position $= "-3 -3 -666.1")
 			return;
 
 		Parent::ServerCmdDropCameraAtPlayer(%client);

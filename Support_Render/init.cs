@@ -116,6 +116,13 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
+datablock AudioProfile(rGlitch)
+{
+   filename    = "./sound/glitch.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 //////# BRICKS
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
@@ -381,7 +388,7 @@ function Render_CreateDeathBoard()
 	{
 		datablock = renderDeathBoardData;
 		position = "0 0 -666";
-		scale = "0.01 16 16";
+		scale = "0.05 24 16";
 	};
 
 	missionCleanup.add(%obj);

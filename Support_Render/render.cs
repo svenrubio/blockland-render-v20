@@ -665,14 +665,41 @@ function GameConnection::doRenderDeath(%client)
    %client.setControlObject(%camera);
 
    %player = %client.player;
-   if(isObject(%player))
-   {
-      %camera.setControlObject(%player);
-   }
-   else
-   {
-      %camera.setControlObject(%client.dummyCamera);
-   }
+
+	 // TODO: Remove this check, it shouldn't be necessary.
+    %camera.setControlObject(%client.dummyCamera);
+
+		%client.cameraTime = getSimTime()+2000;
+
+		%client.playSound("rGlitch");
+		deathCameraLoop(%client);
+}
+
+function deathCameraLoop(%client)
+{
+	%posA = "-3 0 -666.1"; // Blank screen with face
+	%posB = "-3 -3 -666.1"; // Blank screen
+
+	// Cancel if the camera has moved
+	if(%client.camera.position !$= %posA && %client.camera.position !$= %posB)
+		return;
+
+	if(getRandom(1,3) == 1)
+	{
+		%client.camera.setTransform(%posB);
+		%client.playSound("rGlitch");
+	}
+	else
+		%client.camera.setTransform(%posA);
+
+	// The effect lasts 5 seconds
+	if(getSimTime() > %client.cameraTime)
+	{
+		%client.camera.setTransform(%posB);
+		return;
+	}
+
+	schedule(64, 0, deathCameraLoop, %client);
 }
 
 // # GLITCH GUN
