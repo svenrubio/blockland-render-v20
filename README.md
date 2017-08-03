@@ -44,12 +44,10 @@ Feel free to post any feedback (suggestions, ideas, bugs, criticisms, etc.) belo
 [\>\>Download Updater (Recommended)<<](http://mods.greek2me.us/storage/Support_Updater.zip)
 
 # See Also
-Flickering Player Light (Direct download): http://blockland.us/files/Light_Flickering_Player_Light.zip
-Flashlight: https://forum.blockland.us/index.php?topic=240727.0
-Prepper Script: https://forum.blockland.us/index.php?topic=178185.0
-Support_Prepper (Old): https://forum.blockland.us/index.php?topic=174563.0
-
-*[ By LakeYS - http://LakeYS.github.io ]*
+- Flickering Player Light (Direct download): http://blockland.us/files/Light_Flickering_Player_Light.zip
+- Flashlight: https://forum.blockland.us/index.php?topic=240727.0
+- Prepper Script: https://forum.blockland.us/index.php?topic=178185.0
+- Support_Prepper (Old): https://forum.blockland.us/index.php?topic=174563.0
 
 # Project Goal
 The goal of this project is to create a polished survival horror experience that conforms to Blockland's non-linear gameplay style.
