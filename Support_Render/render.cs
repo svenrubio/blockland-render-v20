@@ -511,12 +511,7 @@ function Render_InflictDamage(%p,%render,%distance)
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
-	{
-		if(%p.rDmg >= 25)
-			%p.client.playSound(rAttackB);
-		else
-			%p.client.playSound(rStatic);
-	}
+		%p.client.playSound(rAttackB);
 }
 
 function Render_DoMount(%death,%p)

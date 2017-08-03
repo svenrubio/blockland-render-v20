@@ -95,13 +95,6 @@ datablock AudioProfile(glitchFire)
    preload = true;
 };
 
-datablock AudioProfile(rStatic)
-{
-   filename    = "./sound/glimpse.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
 datablock AudioProfile(rAttackB)
 {
    filename    = "./sound/attackB.wav";
