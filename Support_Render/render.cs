@@ -504,7 +504,7 @@ function Render_InflictDamage(%p,%render,%distance)
 		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
-		%client.camera.setWhiteOut(1);
+		%client.camera.setDamageFlash(0.75);
 		%client.playSound(rAttackC);
 
 		%client.doRenderDeath(); // TODO: Package the death function instead (for invincible players).
@@ -647,7 +647,7 @@ function GameConnection::doRenderDeath(%client)
    if(!isObject(%camera))
       return;
 
-   %pos = "-3 0 -666.1";
+   %pos = "-2.6 0 -666.05";
    %deltaX = 1;
    %deltaY = 0;
    %deltaZ = 0;
@@ -677,8 +677,8 @@ function GameConnection::doRenderDeath(%client)
 
 function deathCameraLoop(%client)
 {
-	%posA = "-3 0 -666.1"; // Blank screen with face
-	%posB = "-3 -3 -666.1"; // Blank screen
+	%posA = "-2.6 0 -666.05"; // Blank screen with face
+	%posB = "-2.6 -3 -666.05"; // Blank screen
 
 	// Cancel if the camera has moved
 	if(%client.camera.position !$= %posA && %client.camera.position !$= %posB)
