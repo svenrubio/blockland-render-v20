@@ -501,7 +501,7 @@ function Render_InflictDamage(%p,%render,%distance)
 	{
 		%client = %p.client;
 
-		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
+		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 		%client.camera.setWhiteOut(1);
@@ -669,7 +669,7 @@ function GameConnection::doRenderDeath(%client)
 	 // TODO: Remove this check, it shouldn't be necessary.
     %camera.setControlObject(%client.dummyCamera);
 
-		%client.cameraTime = getSimTime()+2000;
+		%client.cameraTime = getSimTime()+3200;
 
 		%client.playSound("rGlitch");
 		deathCameraLoop(%client);

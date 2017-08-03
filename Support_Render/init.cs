@@ -412,36 +412,38 @@ function Render_CreateDeathBoard()
 // # Face
 datablock ParticleData(RenderBoardParticle)
 {
-	dragCoefficient		= -32.0;
+	dragCoefficient		= 0.0;
 	windCoefficient		= 0.0;
 	gravityCoefficient	= 0.0;
 	inheritedVelFactor	= 0.0;
 	constantAcceleration	= 0.0;
 	lifetimeMS		= 200;
 	lifetimeVarianceMS	= 0;
-	spinSpeed		= 10.0;
-	spinRandomMin		= -50.0;
-	spinRandomMax		= 50.0;
-	useInvAlpha		= false;
+	spinSpeed		= 0.0;
+	spinRandomMin		= 0.0;
+	spinRandomMax		= 0.0;
+	useInvAlpha		= true;
 	animateTexture		= false;
 
 	textureName		= "./render.png";
 
-	colors[0]	= "1 1 1 0.2";
+	colors[0]	= "1 1 1 0.5";
 	colors[1]	= "1 1 1 0.0";
-	sizes[0]	= 2.0;
-	sizes[1]	= 0.1;
+
+	sizes[0]	= 1;
+	sizes[1]	= 1.5;
+
 	times[0]	= 0.0;
 	times[1]	= 1.0;
 };
 
 datablock ParticleEmitterData(RenderBoardEmitter)
 {
-   ejectionPeriodMS = 2;
+   ejectionPeriodMS = 10;
    periodVarianceMS = 0;
 
-   ejectionVelocity = 0.0;
-   velocityVariance = 0.0;
+   ejectionVelocity = 0.2;
+   velocityVariance = 0.2;
 
    ejectionOffset = 0;
 
@@ -492,8 +494,8 @@ datablock ParticleEmitterData(RenderDmgExplosionEmitter)
 
 	ejectionPeriodMS = 10;
 	periodVarianceMS = 0;
-	ejectionVelocity = 2;
-	velocityVariance = 4.0;
+	ejectionVelocity = 4;
+	velocityVariance = 4;
 	ejectionOffset   = 1.25;
 	thetaMin         = 0;
 	thetaMax         = 180;
