@@ -187,6 +187,13 @@ package Render
 
 		Parent::ServerCmdDropCameraAtPlayer(%client);
 	}
+	function Armor::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f)
+	{
+		if(%obj.dataBlock.getId() == RenderDeathArmor.getId())
+			return;
+
+		parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
+	}
 };
 
 deactivatePackage("Render");
