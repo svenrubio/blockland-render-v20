@@ -494,8 +494,7 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	//%p.setWhiteOut(%p.rDmg/100);
 
-	for(%i = 0; %i <= %p.rDmg/10; %i++)
-		%p.spawnExplosion(RenderDmgProjectile, 1);
+	%p.spawnExplosion(RenderDmgProjectile, 1);
 
 	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
 	{
@@ -664,7 +663,7 @@ function GameConnection::doRenderDeath(%client)
 	 // TODO: Remove this check, it shouldn't be necessary.
     %camera.setControlObject(%client.dummyCamera);
 
-		%client.cameraTime = getSimTime()+3200;
+		%client.cameraTime = getSimTime()+2400;
 
 		%client.playSound("rGlitch");
 		deathCameraLoop(%client);

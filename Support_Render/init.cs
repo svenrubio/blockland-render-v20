@@ -400,9 +400,11 @@ function Render_CreateDeathBoard()
 	missionCleanup.add(%obj2);
 }
 
+// TODO: Put a light behind the death board camera to fix environment affecting the particles.
+
 //////# PARTICLES
 
-// # Face
+// ## Face
 datablock ParticleData(RenderBoardParticle)
 {
 	dragCoefficient		= 0.0;
@@ -445,10 +447,10 @@ datablock ParticleEmitterData(RenderBoardEmitter)
 
    particles = RenderBoardParticle;
 
-	 uiName = "RenderBoardEmitter";
+	 //uiName = "RenderBoardEmitter";
 };
 
-// # Damage
+// ## Damage
 datablock ParticleData(RenderDmgExplosionParticle)
 {
 	dragCoefficient      = 10;
@@ -485,7 +487,7 @@ datablock ParticleEmitterData(RenderDmgExplosionEmitter)
 {
 	lifeTimeMS = 50;
 
-	ejectionPeriodMS = 10;
+	ejectionPeriodMS = 20;
 	periodVarianceMS = 0;
 	ejectionVelocity = 4;
 	velocityVariance = 4;
@@ -498,7 +500,7 @@ datablock ParticleEmitterData(RenderDmgExplosionEmitter)
 
 	particles = "RenderDmgExplosionParticle";
 
-	uiName = "RenderDmgExplosionEmitter";
+	uiName = "RExplosionEmitter";
 };
 
 datablock ExplosionData(RenderDmgExplosion)
@@ -523,7 +525,7 @@ datablock ExplosionData(RenderDmgExplosion)
    lightStartColor = "0 0 0";
    lightEndColor = "0 0 0";
 
-	 uiName = "RenderDmgExplosion";
+	 uiName = "RExplosion";
 };
 
 datablock ProjectileData(RenderDmgProjectile)
@@ -557,8 +559,6 @@ datablock ProjectileData(RenderDmgProjectile)
    hasLight    = false;
    lightRadius = 3.0;
    lightColor  = "0 0 0.5";
-
-   uiName = "Render"; // TODO
 };
 
 //////# EVENTS

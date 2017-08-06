@@ -2,6 +2,7 @@
 	<ul>
 		<li>Render's kills now have their own icon.</li>
 		<li>Added new effects for Render damage and deaths.</li>
+		<li>Mount sound no-longer plays when Render captures players.</li>
 	</ul>
 </version
 <version:1.4>
