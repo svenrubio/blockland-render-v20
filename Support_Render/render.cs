@@ -500,13 +500,12 @@ function Render_InflictDamage(%p,%render,%distance)
 	{
 		%client = %p.client;
 
+		%client.doRenderDeath = 1;
 		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 		%client.camera.setDamageFlash(0.75);
 		%client.playSound(rAttackC);
-
-		%client.doRenderDeath(); // TODO: Package the death function instead (for invincible players).
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
@@ -660,7 +659,6 @@ function GameConnection::doRenderDeath(%client)
 
    %player = %client.player;
 
-	 // TODO: Remove this check, it shouldn't be necessary.
     %camera.setControlObject(%client.dummyCamera);
 
 		%client.cameraTime = getSimTime()+2400;

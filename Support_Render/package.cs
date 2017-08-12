@@ -73,6 +73,14 @@ package Render
 	function Armor::onDisabled(%a, %p, %e)
 	{
 		Render_UnfreezePlayer(%p);
+		if(isObject(%p.client) && %p.client.doRenderDeath)
+		{
+			// Note: Invincible players are still marked as 'dead' by Render.
+			// If they later die by other means, they will see the Render death screen.
+			%p.client.doRenderDeath();
+			%p.client.doRenderDeath = 0;
+		}
+
 		Parent::onDisabled(%a, %p, %e);
 	}
 
