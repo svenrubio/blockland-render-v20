@@ -527,11 +527,12 @@ function Render_DoMount(%death,%p)
 function Render_FreezePlayer(%p,%r)
 {
 	// If attack mode is 2, rip
+	// TODO: Fix AI behavior so Render doesn't 'shuffle' when the target is invincible.
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
-		%p.damage(%obj.rFakeProjectile, %col.getposition(), 1000, $DamageType::RenderDeath);
-		%p.doRenderDeath(); // TODO: Package the death function instead (for invincible players).
+		%p.doRenderDeath = 1;
+		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 		return;
 	}
 
