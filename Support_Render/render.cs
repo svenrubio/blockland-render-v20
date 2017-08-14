@@ -531,7 +531,7 @@ function Render_FreezePlayer(%p,%r)
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
-		%p.doRenderDeath = 1;
+		%p.client.doRenderDeath = 1;
 		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 		return;
 	}

@@ -384,7 +384,16 @@ function Render_CreateDeathBoard()
 		scale = "0.05 24 16";
 	};
 
+	%light = new fxlight()
+	{
+		dataBlock = playerLight;
+		enable = 1;
+		iconsize = 1;
+		position = "-4 0 -666";
+	};
+
 	missionCleanup.add(%obj);
+	missionCleanup.add(%light);
 	%obj.setNodeColor("ALL", "0 0 0 1");
 
 	$Render::DeathBoard = %obj;
@@ -399,8 +408,6 @@ function Render_CreateDeathBoard()
 	};
 	missionCleanup.add(%obj2);
 }
-
-// TODO: Put a light behind the death board camera to fix environment affecting the particles.
 
 //////# PARTICLES
 
