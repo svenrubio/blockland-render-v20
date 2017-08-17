@@ -369,6 +369,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 };
 
 //////# DEATH BOARD
+// TODO: Fix sunflare being visible behind the death board
 datablock staticShapeData(renderDeathBoardData)
 {
 	shapeFile = "./models/cube.dts";
