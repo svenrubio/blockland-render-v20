@@ -266,7 +266,7 @@ datablock ShapeBaseImageData(GlitchEnergyGunImage)
 	// for first person rendering.
 	mountPoint = 0;
 	offset = "0 0 0";
-	eyeoffset = "0.7 1.2 -1";
+	eyeoffset = "0.7 1.2 -0.55";
 	rotation = eulerToMatrix( "0 0 0" );
 
 	// When firing from a point offset from the eye, muzzle correction
@@ -352,7 +352,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 
    mountPoint = 0;
    offset = "0 0 0";
-   eyeoffset = "0.7 1.2 -1";
+   eyeoffset = "0.7 1.2 -0.85";
    rotation = eulerToMatrix( "0 0 0" );
 
    correctMuzzleVector = true;
