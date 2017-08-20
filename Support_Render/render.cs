@@ -486,15 +486,15 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 
-	if(%p.client.staticDebug)
-		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>SND:" SPC %p.rDmg/50,1);
-
-	//if(%p.client.staticDebugImmune)
-	//	return;
+	//if(%p.client.staticDebug)
+	//	centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif);
 
 	//%p.setWhiteOut(%p.rDmg/100);
 
-	%p.spawnExplosion(RenderDmgProjectile, 1);
+	%p.spawnExplosion(RenderDmg1Projectile, 1);
+
+	if(%p.client.staticDebugImmune)
+		return;
 
 	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
 	{

@@ -234,6 +234,7 @@ function RenderDeathArmor::onRemove(%this, %obj)
 
 //////# ITEMS
 //## Glitch Gun
+// TODO: Add glitch gun effects
 datablock ItemData(GlitchEnergyGunItem)
 {
 	category = "Weapon";  // Mission editor category
@@ -459,7 +460,9 @@ datablock ParticleEmitterData(RenderBoardEmitter)
 };
 
 // ## Damage
-datablock ParticleData(RenderDmgExplosionParticle)
+
+// ### Level 1
+datablock ParticleData(RenderDmgExplosion1Particle)
 {
 	dragCoefficient      = 10;
 	gravityCoefficient   = 0.0;
@@ -491,7 +494,7 @@ datablock ParticleData(RenderDmgExplosionParticle)
 	times[3] = 2;
 };
 
-datablock ParticleEmitterData(RenderDmgExplosionEmitter)
+datablock ParticleEmitterData(RenderDmgExplosion1Emitter)
 {
 	lifeTimeMS = 50;
 
@@ -506,17 +509,17 @@ datablock ParticleEmitterData(RenderDmgExplosionEmitter)
 	phiVariance      = 360;
 	overrideAdvance  = false;
 
-	particles = "RenderDmgExplosionParticle";
+	particles = "RenderDmgExplosion1Particle";
 
-	uiName = "RExplosionEmitter";
+	uiName = "RExplosion1Emitter";
 };
 
-datablock ExplosionData(RenderDmgExplosion)
+datablock ExplosionData(RenderDmg1Explosion)
 {
    //explosionShape = "";
    lifeTimeMS = 500;
 
-   emitter[0] = RenderDmgExplosionEmitter;
+   emitter[0] = RenderDmgExplosion1Emitter;
 
    faceViewer     = true;
    explosionScale = "1 1 1";
@@ -533,10 +536,10 @@ datablock ExplosionData(RenderDmgExplosion)
    lightStartColor = "0 0 0";
    lightEndColor = "0 0 0";
 
-	 uiName = "RExplosion";
+	 uiName = "RExplosion1";
 };
 
-datablock ProjectileData(RenderDmgProjectile)
+datablock ProjectileData(RenderDmg1Projectile)
 {
    projectileShapeName = "base/data/shapes/empty.dts";
    directDamage        = 0;
@@ -547,9 +550,8 @@ datablock ProjectileData(RenderDmgProjectile)
 
    impactImpulse	     = 000;
    verticalImpulse	  = 100;
-   explosion           = RenderDmgExplosion;
-   bloodExplosion        = RenderDmgExplosion;
-   //particleEmitter       = horseRayTrailEmitter;
+   explosion           = RenderDmg1Explosion;
+   bloodExplosion        = RenderDmg1Explosion;
    explodeOnPlayerImpact = true;
    explodeOnDeath        = true;
 
