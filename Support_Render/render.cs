@@ -486,8 +486,9 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 
-	//if(%p.client.staticDebug)
-	//	centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif);
+	// TODO: Implement staged particle damage (mCeil(0.03*%p.rDmg) for three stages)
+	if(%p.client.staticDebug)
+		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC mCeil(0.03*%p.rDmg));
 
 	//%p.setWhiteOut(%p.rDmg/100);
 
@@ -501,6 +502,7 @@ function Render_InflictDamage(%p,%render,%distance)
 		%client = %p.client;
 
 		%client.doRenderDeath = 1;
+		// TODO: Fix game showing "mid-air'd" messages
 		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
