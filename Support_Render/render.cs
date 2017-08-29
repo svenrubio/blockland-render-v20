@@ -80,9 +80,6 @@ function Render_CreateBot(%pos,%client)
 	%render.hMelee = 1;
 	%render.name = "Render";
 
-	// For the damage type, we create a "fake projectile"
-	%obj.rFakeProjectile = new scriptObject(){};
-
 	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
 	{
 		%render.light = new fxlight() // Try $r_light[%render]; or something?
@@ -503,7 +500,7 @@ function Render_InflictDamage(%p,%render,%distance)
 
 		%client.doRenderDeath = 1;
 		// TODO: Fix game showing "mid-air'd" messages
-		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
+		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 		%client.camera.setDamageFlash(0.75);
@@ -528,13 +525,15 @@ function Render_DoMount(%death,%p)
 // Freeze player function. This creates a "death mount" and forces the player on it, allowing us to freeze them without changing their datablock.
 function Render_FreezePlayer(%p,%r)
 {
-	// If attack mode is 2, rip
 	// TODO: Fix AI behavior so Render doesn't 'shuffle' when the target is invincible.
+
+	// If attack mode is 2, rip
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
 		%p.client.doRenderDeath = 1;
-		%p.damage(%obj.rFakeProjectile, %p.getposition(), 1000, $DamageType::RenderDeath);
+		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
+		// TODO: Add a delay for tag mode deaths
 		return;
 	}
 

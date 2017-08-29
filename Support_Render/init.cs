@@ -194,7 +194,7 @@ function PlayerRenderTagArmor::onRemove(%a, %render)
 }
 
 ////// # DAMAGE TYPE
-AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 1);
+AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 0);
 
 //////# FUNCTIONS
 // Death vehicle from Item_Skis was used as a reference for this
