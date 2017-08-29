@@ -298,10 +298,12 @@ function Render_Loop_Local(%render)
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
 								%render.targetKilled = 1;
 
+							// Incdicate that this is Render damage so the package can disable the particles.
 							%target.renderDamage = 1;
-							%target.addHealth(-%renderDamage);
-						} // Damage type 2 doesn't need this.
 
+							// TODO: Show Render face on death
+							%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
+						} // Damage type 2 doesn't need this.
 					}
 				}
 
