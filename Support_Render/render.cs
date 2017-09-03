@@ -491,6 +491,42 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	//%p.setWhiteOut(%p.rDmg/100);
 
+	if(%p.rDmg >= 80)
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
+		RenderDmg1Explosion.camShakeAmp = "1.2 1.2 1.2";
+		%p.client.bottomPrint("LV5",1);
+	}
+	else if(%p.rDmg >= 64)
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
+		RenderDmg1Explosion.camShakeAmp = "1 1 1";
+		%p.client.bottomPrint("LV4",1);
+	}
+	else if(%p.rDmg >= 48)
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 3;
+		RenderDmg1Explosion.camShakeAmp = "0.8 0.8 0.8";
+		%p.client.bottomPrint("LV3",1);
+	}
+	else if(%p.rDmg >= 32)
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 6;
+		RenderDmg1Explosion.camShakeAmp = "0.6 0.6 0.6";
+		%p.client.bottomPrint("LV2",1);
+	}
+	else if(%p.rDmg >= 16)
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 12;
+		RenderDmg1Explosion.camShakeAmp = "0.4 0.4 0.4";
+		%p.client.bottomPrint("LV1",1);
+	}
+	else
+	{
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 24;
+		RenderDmg1Explosion.camShakeAmp = "0.2 0.2 0.2";
+		%p.client.bottomPrint("LV0",1);
+	}
 	%p.spawnExplosion(RenderDmg1Projectile, 1);
 
 	if(%p.client.staticDebugImmune)
@@ -640,6 +676,7 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 // Uses code from Event_Camera_Control
 function GameConnection::doRenderDeath(%client)
 {
+	// TODO: Never keep face on-screen for more than one tick at a time. This should visually improve the effect
    %camera = %client.camera;
    if(!isObject(%camera))
       return;
