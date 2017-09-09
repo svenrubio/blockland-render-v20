@@ -490,43 +490,57 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	%p.setWhiteOut(%p.rDmg/100);
 
+	//if(%p.rDmg >= 80)
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
+	//	RenderDmg1Explosion.camShakeAmp = "4 4 4";
+	//	%p.client.bottomPrint("LV5",1);
+	//}
+	//else if(%p.rDmg >= 64)
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 3;
+	//	RenderDmg1Explosion.camShakeAmp = "3 3 3";
+	//	%p.client.bottomPrint("LV4",1);
+	//}
+	//else if(%p.rDmg >= 48)
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 6;
+	//	RenderDmg1Explosion.camShakeAmp = "2 2 2";
+	//	%p.client.bottomPrint("LV3",1);
+	//}
+	//else if(%p.rDmg >= 32)
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 12;
+	//	RenderDmg1Explosion.camShakeAmp = "1 1 1";
+	//	%p.client.bottomPrint("LV2",1);
+	//}
+	//else if(%p.rDmg >= 16)
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 24;
+	//	RenderDmg1Explosion.camShakeAmp = "0.8 0.8 0.8";
+	//	%p.client.bottomPrint("LV1",1);
+	//}
+	//else
+	//{
+	//	RenderDmgExplosion1Emitter.ejectionPeriodMS = 48;
+	//	RenderDmg1Explosion.camShakeAmp = "0.4 0.4 0.4";
+	//	%p.client.bottomPrint("LV0",1);
+	//}
+	//%p.spawnExplosion(RenderDmg1Projectile, 1);
+
 	if(%p.rDmg >= 80)
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
-		RenderDmg1Explosion.camShakeAmp = "4 4 4";
-		%p.client.bottomPrint("LV5",1);
-	}
+		%proj = RenderDmg6Projectile;
 	else if(%p.rDmg >= 64)
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 3;
-		RenderDmg1Explosion.camShakeAmp = "3 3 3";
-		%p.client.bottomPrint("LV4",1);
-	}
+		%proj = RenderDmg5Projectile;
 	else if(%p.rDmg >= 48)
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 6;
-		RenderDmg1Explosion.camShakeAmp = "2 2 2";
-		%p.client.bottomPrint("LV3",1);
-	}
+		%proj = RenderDmg4Projectile;
 	else if(%p.rDmg >= 32)
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 12;
-		RenderDmg1Explosion.camShakeAmp = "1 1 1";
-		%p.client.bottomPrint("LV2",1);
-	}
+		%proj = RenderDmg3Projectile;
 	else if(%p.rDmg >= 16)
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 24;
-		RenderDmg1Explosion.camShakeAmp = "0.8 0.8 0.8";
-		%p.client.bottomPrint("LV1",1);
-	}
+		%proj = RenderDmg2Projectile;
 	else
-	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 48;
-		RenderDmg1Explosion.camShakeAmp = "0.4 0.4 0.4";
-		%p.client.bottomPrint("LV0",1);
-	}
-	%p.spawnExplosion(RenderDmg1Projectile, 1);
+		%proj = RenderDmg1Projectile;
+	%p.spawnExplosion(%proj, 1);
 
 	if(%p.client.staticDebugImmune)
 		return;

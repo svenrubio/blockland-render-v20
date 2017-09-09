@@ -458,9 +458,7 @@ datablock ParticleEmitterData(RenderBoardEmitter)
 };
 
 // ## Damage
-
-// ### Level 1
-datablock ParticleData(RenderDmgExplosion1Particle)
+datablock ParticleData(RenderDmgExplosionParticle)
 {
 	dragCoefficient      = 10;
 	gravityCoefficient   = 0.0;
@@ -492,11 +490,12 @@ datablock ParticleData(RenderDmgExplosion1Particle)
 	times[3] = 2;
 };
 
-datablock ParticleEmitterData(RenderDmgExplosion1Emitter)
+// ### Level 1 (Base)
+datablock ParticleEmitterData(RenderDmg1ExplosionEmitter)
 {
 	lifeTimeMS = 50;
 
-	ejectionPeriodMS = 20;
+	ejectionPeriodMS = 48;
 	periodVarianceMS = 0;
 	ejectionVelocity = 4;
 	velocityVariance = 4;
@@ -507,9 +506,7 @@ datablock ParticleEmitterData(RenderDmgExplosion1Emitter)
 	phiVariance      = 360;
 	overrideAdvance  = false;
 
-	particles = "RenderDmgExplosion1Particle";
-
-	uiName = "RExplosion1Emitter";
+	particles = "RenderDmgExplosionParticle";
 };
 
 datablock ExplosionData(RenderDmg1Explosion)
@@ -517,14 +514,14 @@ datablock ExplosionData(RenderDmg1Explosion)
    //explosionShape = "";
    lifeTimeMS = 500;
 
-   emitter[0] = RenderDmgExplosion1Emitter;
+   emitter[0] = RenderDmg1ExplosionEmitter;
 
    faceViewer     = true;
    explosionScale = "1 1 1";
 
    shakeCamera = true;
-   camShakeFreq = "1 1 1";
-   camShakeAmp = "0.25 0.25 0.25";
+   camShakeFreq = "0.4 0.4 0.4";
+   camShakeAmp = "0.4 0.4 0.4";
    camShakeDuration = 0.13;
    camShakeRadius = 10;
 
@@ -533,8 +530,6 @@ datablock ExplosionData(RenderDmg1Explosion)
    lightEndRadius = 0;
    lightStartColor = "0 0 0";
    lightEndColor = "0 0 0";
-
-	 uiName = "RExplosion1";
 };
 
 datablock ProjectileData(RenderDmg1Projectile)
@@ -544,7 +539,7 @@ datablock ProjectileData(RenderDmg1Projectile)
    directDamageType    = $DamageType::Default;
    radiusDamageType    = $DamageType::Default;
 
-   brickExplosionImpact = false;          //destroy a brick if we hit it directly?
+   brickExplosionImpact = false;
 
    impactImpulse	     = 000;
    verticalImpulse	  = 100;
@@ -569,12 +564,92 @@ datablock ProjectileData(RenderDmg1Projectile)
    lightColor  = "0 0 0.5";
 };
 
-//////# EVENTS
+// ### Level 2
+datablock ParticleEmitterData(RenderDmg2ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 24;
+};
+datablock ExplosionData(RenderDmg2Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg2ExplosionEmitter;
+	camShakeAmp = "0.8 0.8 0.8";
+};
+datablock ProjectileData(RenderDmg2Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg2Explosion;
+   bloodExplosion	=	RenderDmg2Explosion;
+};
+
+// ### Level 3
+datablock ParticleEmitterData(RenderDmg3ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 12;
+};
+datablock ExplosionData(RenderDmg3Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg3ExplosionEmitter;
+	camShakeAmp = "1 1 1";
+};
+datablock ProjectileData(RenderDmg3Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg3Explosion;
+   bloodExplosion	=	RenderDmg3Explosion;
+};
+
+// ### Level 4
+datablock ParticleEmitterData(RenderDmg4ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 6;
+};
+datablock ExplosionData(RenderDmg4Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg4ExplosionEmitter;
+	camShakeAmp = "2 2 2";
+};
+datablock ProjectileData(RenderDmg4Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg4Explosion;
+   bloodExplosion	=	RenderDmg4Explosion;
+};
+
+// ### Level 5
+datablock ParticleEmitterData(RenderDmg5ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 3;
+};
+datablock ExplosionData(RenderDmg5Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg5ExplosionEmitter;
+	camShakeAmp = "3 3 3";
+};
+datablock ProjectileData(RenderDmg5Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg5Explosion;
+   bloodExplosion	=	RenderDmg5Explosion;
+};
+
+// ### Level 6
+datablock ParticleEmitterData(RenderDmg6ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 1;
+};
+datablock ExplosionData(RenderDmg6Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg6ExplosionEmitter;
+	camShakeAmp = "4 4 4";
+};
+datablock ProjectileData(RenderDmg6Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg6Explosion;
+   bloodExplosion	=	RenderDmg6Explosion;
+};
+
+////// # EVENTS
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 
-//////# MISC
+////// # MISC
 new simGroup(RenderBotGroup) {}; //Render bot group
 
 new simGroup(RenderMiscGroup) {}; //Render object group
