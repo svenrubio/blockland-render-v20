@@ -12,18 +12,26 @@ function r_getRandomScreenPos()
   return %x SPC %y;
 }
 
-// TODO: Test for issues and make this function call at random times (but only on the main menu)
 function R_Check()
 {
-  if(mainMenuGui.isAwake())
+  cancel($R_Check);
+
+  if(!mainMenuGui.isAwake())
+    return;
+
+  %rand = getRandom(1,5);
+
+  if(%rand == 1)
   {
     RenderBitmap.position = r_getRandomScreenPos();
     canvas.pushDialog(RenderBitmapGui);
-    R_Loop();
+    R_Check_Loop();
   }
+
+  $R_Check = schedule(30000, 0, R_Check); // 50000
 }
 
-function R_Loop()
+function R_Check_Loop()
 {
   if(!$R_LoopCount)
     $R_LoopCount = 0;
@@ -41,5 +49,21 @@ function R_Loop()
     RenderBitmap.setBitmap("Add-Ons/Support_Render/ui/render_0000" @ $R_LoopCount @ ".png");
 
   $R_LoopCount++;
-  $R_UiLoop = schedule(16, 0, R_Loop);
+  $R_UiLoop = schedule(16, 0, R_Check_Loop);
 }
+
+package CheckPackage
+{
+  function MainMenuGui::onSleep()
+  {
+    Parent::onSleep();
+    cancel($R_Check);
+  }
+
+  function MainMenuGui::onRender()
+  {
+    Parent::onRender();
+    $R_Check = schedule(30000, 0, R_Check);
+  }
+};
+activatePackage("CheckPackage");
