@@ -489,7 +489,7 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(%p.client.staticDebug)
 		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC mCeil(0.03*%p.rDmg));
 
-	//%p.setWhiteOut(%p.rDmg/100);
+	%p.setWhiteOut(%p.rDmg/100);
 
 	if(%p.rDmg >= 80)
 	{
@@ -546,7 +546,16 @@ function Render_InflictDamage(%p,%render,%distance)
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
-		%p.client.playSound(rAttackB);
+	{
+		// Only play the sound every 200ms to prevent clipping/overflow
+		//talk(%render.audioNext);
+		if(getSimTime() >= %render.audioNext)
+		{
+			%p.client.playSound(rAttackB);
+			%render.audioNext = getSimTime()+200;
+		}
+
+	}
 }
 
 function Render_DoMount(%death,%p)
