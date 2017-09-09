@@ -72,7 +72,7 @@ $Library::EnvServer::Ver = 0;
 deactivatepackage("renderdebugpackage");
 package renderDebugPackage
 {
-	function serverCmdSpawnR(%client, %delete, %useOldChance)
+	function serverCmdSpawnR(%client, %attack, %delete, %useOldChance)
 	{
 		if(!%client.isSuperAdmin)
 			return;
@@ -89,6 +89,9 @@ package renderDebugPackage
 
 		if(%delete)
 			%rendy.delete();
+
+		if(%attack)
+			%rendy.debugOverride = 1;
 	}
 
 	function serverCmdMoveR(%client, %resetUsed)
