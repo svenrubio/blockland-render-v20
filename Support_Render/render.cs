@@ -493,37 +493,37 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(%p.rDmg >= 80)
 	{
 		RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
-		RenderDmg1Explosion.camShakeAmp = "1.2 1.2 1.2";
+		RenderDmg1Explosion.camShakeAmp = "4 4 4";
 		%p.client.bottomPrint("LV5",1);
 	}
 	else if(%p.rDmg >= 64)
 	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 1;
-		RenderDmg1Explosion.camShakeAmp = "1 1 1";
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 3;
+		RenderDmg1Explosion.camShakeAmp = "3 3 3";
 		%p.client.bottomPrint("LV4",1);
 	}
 	else if(%p.rDmg >= 48)
 	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 3;
-		RenderDmg1Explosion.camShakeAmp = "0.8 0.8 0.8";
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 6;
+		RenderDmg1Explosion.camShakeAmp = "2 2 2";
 		%p.client.bottomPrint("LV3",1);
 	}
 	else if(%p.rDmg >= 32)
 	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 6;
-		RenderDmg1Explosion.camShakeAmp = "0.6 0.6 0.6";
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 12;
+		RenderDmg1Explosion.camShakeAmp = "1 1 1";
 		%p.client.bottomPrint("LV2",1);
 	}
 	else if(%p.rDmg >= 16)
 	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 12;
-		RenderDmg1Explosion.camShakeAmp = "0.4 0.4 0.4";
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 24;
+		RenderDmg1Explosion.camShakeAmp = "0.8 0.8 0.8";
 		%p.client.bottomPrint("LV1",1);
 	}
 	else
 	{
-		RenderDmgExplosion1Emitter.ejectionPeriodMS = 24;
-		RenderDmg1Explosion.camShakeAmp = "0.2 0.2 0.2";
+		RenderDmgExplosion1Emitter.ejectionPeriodMS = 48;
+		RenderDmg1Explosion.camShakeAmp = "0.4 0.4 0.4";
 		%p.client.bottomPrint("LV0",1);
 	}
 	%p.spawnExplosion(RenderDmg1Projectile, 1);
