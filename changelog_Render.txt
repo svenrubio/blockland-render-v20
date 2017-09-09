@@ -1,7 +1,7 @@
 <version:2.0>
 	<ul>
-		<li>Render's kills now have their own icon.</li>
 		<li>Added new effects for Render damage and deaths.</li>
+		<li>Render's kills now have their own icon.</li>
 		<li>Mount sound no-longer plays when Render captures players.</li>
 		<li>Renamed Health Mode to Damage Mode.</li>
 	</ul>

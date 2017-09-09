@@ -485,7 +485,6 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 
-	// TODO: Implement staged particle damage (mCeil(0.03*%p.rDmg) for three stages)
 	if(%p.client.staticDebug)
 		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC mCeil(0.03*%p.rDmg));
 
@@ -537,7 +536,6 @@ function Render_InflictDamage(%p,%render,%distance)
 		%client = %p.client;
 
 		%client.doRenderDeath = 1;
-		// TODO: Fix game showing "mid-air'd" messages
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
@@ -686,35 +684,35 @@ function Render_RequestDespawn(%r) // AI requests to delete the bot
 function GameConnection::doRenderDeath(%client)
 {
 	// TODO: Never keep face on-screen for more than one tick at a time. This should visually improve the effect
-   %camera = %client.camera;
-   if(!isObject(%camera))
-      return;
+	%camera = %client.camera;
+  if(!isObject(%camera))
+		return;
 
-   %pos = "-2.6 0 -666.05";
-   %deltaX = 1;
-   %deltaY = 0;
-   %deltaZ = 0;
-   %deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
+  %pos = "-2.6 0 -666.05";
+  %deltaX = 1;
+  %deltaY = 0;
+  %deltaZ = 0;
+  %deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
 
-   %rotZ = mAtan(%deltaX, %deltaY) * -1;
-   %rotX = mAtan(%deltaZ, %deltaXYHyp);
+  %rotZ = mAtan(%deltaX, %deltaY) * -1;
+  %rotX = mAtan(%deltaZ, %deltaXYHyp);
 
-   %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
+  %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
 
-   %camera.setTransform(%pos SPC %aa);
-   %camera.setFlyMode();
-   %camera.mode = "Observer";
+  %camera.setTransform(%pos SPC %aa);
+  %camera.setFlyMode();
+  %camera.mode = "Observer";
 
-   %client.setControlObject(%camera);
+  %client.setControlObject(%camera);
 
-   %player = %client.player;
+  %player = %client.player;
 
-    %camera.setControlObject(%client.dummyCamera);
+  %camera.setControlObject(%client.dummyCamera);
 
-		%client.cameraTime = getSimTime()+2400;
+	%client.cameraTime = getSimTime()+2400;
 
-		%client.playSound("rGlitch");
-		deathCameraLoop(%client);
+	%client.playSound("rGlitch");
+	deathCameraLoop(%client);
 }
 
 function deathCameraLoop(%client)
