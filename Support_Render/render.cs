@@ -487,7 +487,10 @@ function Render_DeleteR(%render)
 	}
 
 	if(%render.isRenderPlayer)
+	{
+		%render.client.bottomPrint("",0,1);
 		%render.client.instantRespawn();
+	}
 	else
 		%render.delete();
 }

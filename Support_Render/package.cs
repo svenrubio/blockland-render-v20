@@ -113,7 +113,6 @@ package Render
 	}
 
 	// Chat message event
-	// TODO: Verify no VCE conflict or overflow
 	function gameConnection::ChatMessage(%client, %msg)
 	{
 		return Parent::ChatMessage(%client, strReplace(%msg, "%renderServerShrineRange", $Render::C_ShrString[$Pref::Server::RenderShrineRange]), %client, %client.player);
@@ -195,12 +194,30 @@ package Render
 
 		Parent::ServerCmdDropCameraAtPlayer(%client);
 	}
+
 	function Armor::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f)
 	{
 		if(%obj.dataBlock.getId() == RenderDeathArmor.getId())
 			return;
 
 		parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
+	}
+
+	function serverCmdlight(%client)
+	{
+		if(%client.player.isRenderPlayer)
+		{
+			if(%client.player.attackInit)
+				Render_RequestDespawn(%client.player);
+			else
+			{
+				// The player sends a request to start attacking.
+				%client.player.aiStartAttacking = 1;
+				%client.player.attackInit = 1;
+			}
+		}
+		else
+			Parent::serverCmdLight(%client);
 	}
 };
 
