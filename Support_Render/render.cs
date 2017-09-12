@@ -296,12 +296,22 @@ function Render_Loop_Local(%render)
 							%renderDamage = %target.dataBlock.maxDamage*0.8/%distance;
 
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
+							{
+								%target.client.playSound(rAttackC);
+								%target.client.doRenderDeath = 1;
 								%render.targetKilled = 1;
+							}
 
 							// Incdicate that this is Render damage so the package can disable the particles.
 							%target.renderDamage = 1;
 
-							// TODO: Show Render face on death
+							// Only play the sound every 200ms to prevent clipping/overflow
+							if(getSimTime() >= %render.audioNext)
+							{
+								%target.client.playSound(rAttackB);
+								%render.audioNext = getSimTime()+200;
+							}
+
 							%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
 						} // Damage type 2 doesn't need this.
 					}
@@ -560,13 +570,11 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(%p.rDmg > 0) // Otherwise, play sounds.
 	{
 		// Only play the sound every 200ms to prevent clipping/overflow
-		//talk(%render.audioNext);
 		if(getSimTime() >= %render.audioNext)
 		{
 			%p.client.playSound(rAttackB);
 			%render.audioNext = getSimTime()+200;
 		}
-
 	}
 }
 
