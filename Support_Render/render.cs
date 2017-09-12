@@ -205,7 +205,7 @@ function Render_Loop_Local(%render)
 		if(!%render.doContinue) // If they aren't attacking at this point, we'll just de-spawn them.
 		{
 			//echo("RENDER: De-spawning, out of time");
-			%render.delete();
+			Render_DeleteR(%render);
 			return;
 		}
 
@@ -222,7 +222,7 @@ function Render_Loop_Local(%render)
 	if(%render.aiNeedsToPay && getRandom(1,2) == 1)
 	{
 		//echo("RENDER: De-spawning (energy check failed)");
-		%render.delete();
+		Render_DeleteR(%render);
 		return;
 	}
 
@@ -246,7 +246,11 @@ function Render_Loop_Local(%render)
 			%render.fxScale = 0;
 
 			%render.isAttacking = 1;
-			%render.setMoveTolerance($Render::C_MoveTolerance);
+
+			// TODO: Move to ai_main.cs
+			if(!%render.isRenderPlayer)
+				%render.setMoveTolerance($Render::C_MoveTolerance);
+
 			Render_UnfreezeRender(%render);
 		}
 	}
@@ -263,7 +267,7 @@ function Render_Loop_Local(%render)
 		//}
 
 		// MUST be an actual player or testing bot; ignore if they have destructo wand
-		if(%target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
+		if(%target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && !%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
 		{
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
@@ -371,7 +375,10 @@ function Render_Loop_Local(%render)
 	if(%render.loopCount == %render.loopViewNext)
 		%render.loopViewNext = %render.loopViewNext+2;
 
-	Render_AI_Control_Loop(%render);
+	if(!%render.isRenderPlayer)
+		Render_AI_Control_Loop(%render);
+	else
+		Render_Player_Control_Loop(%render);
 }
 
 ////// # Target picking function
@@ -459,7 +466,7 @@ function Render_Spawn_Loop()
 				if(!%pos)
 				{
 					//warn("RENDER: Spawn failed for " @ %client);
-					%render.delete();
+					Render_DeleteR(%render);
 				}
 				else
 					%render.setTransform(%pos);
@@ -470,8 +477,22 @@ function Render_Spawn_Loop()
 	$Render::LoopSpawner = schedule($Render::C_SpawnTimer,0,Render_Spawn_Loop);
 }
 
-// # InflictDamage + misc.
+////// # De-spawn
+function Render_DeleteR(%render)
+{
+	if(!isObject(%render))
+	{
+		warn("Support_Render - Attempting to delete non-existent attacker. Ignoring...");
+		return;
+	}
 
+	if(%render.isRenderPlayer)
+		%render.client.instantRespawn();
+	else
+		%render.delete();
+}
+
+////// # InflictDamage + misc.
 function Render_InflictDamage(%p,%render,%distance)
 {
 	// This calculates the damage decay, aka how much we need to subtract.
@@ -563,14 +584,18 @@ function Render_InflictDamage(%p,%render,%distance)
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
-		%client.camera.setDamageFlash(0.75);
-		%client.playSound(rAttackC);
+
+		if(isObject(%client))
+		{
+			%client.camera.setDamageFlash(0.75);
+			%client.playSound(rAttackC);
+		}
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
 	{
 		// Only play the sound every 200ms to prevent clipping/overflow
-		if(getSimTime() >= %render.audioNext)
+		if(getSimTime() >= %render.audioNext && isObject(%p.client))
 		{
 			%p.client.playSound(rAttackB);
 			%render.audioNext = getSimTime()+200;
@@ -600,7 +625,6 @@ function Render_FreezePlayer(%p,%r)
 		%p.client.playSound(rAttackC);
 		%p.client.doRenderDeath = 1;
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
-		// TODO: Add a delay for tag mode deaths
 		return;
 	}
 
@@ -693,10 +717,10 @@ function Render_UnfreezeRender(%p)
 	%p.rIsFrozen = 0;
 }
 
-function Render_RequestDespawn(%r) // AI requests to delete the bot
+function Render_RequestDespawn(%render) // AI requests to delete the bot
 {
 	//if(isObject(%r))
-	%r.delete();
+	Render_DeleteR(%render);
 	//else
 	//	warn("Support_Render - Attempting to delete nonexistent bot!");
 }
@@ -782,7 +806,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		{
 			//Render_Spawn_GetNewDirection(%p);
 			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
-			%p.delete();
+			Render_DeleteR(%p);
 		}
 	}
 

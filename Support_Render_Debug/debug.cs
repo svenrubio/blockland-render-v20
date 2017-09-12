@@ -168,7 +168,8 @@ package renderDebugPackage
 		echo(%client.name @ ": Clearing bots and lines...");
 
 		RenderMiscGroup.chainDeleteAll();
-		RenderBotGroup.chainDeleteAll();
+		for(%i = 0; %i <= RenderBotGroup.getCount()-1; %i++)
+			Render_DeleteR(RenderBotGroup.getObject(%i));
 	}
 
 	function Render_DebugLoop()

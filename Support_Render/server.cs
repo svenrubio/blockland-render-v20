@@ -28,6 +28,7 @@ exec("./modules/lastEvent.cs");
 
 exec("./ai_main.cs");
 exec("./ai_spawn.cs");
+exec("./player.cs");
 
 exec("./bricks.cs");
 
@@ -42,6 +43,3 @@ if(!$Render::Loaded)
 
 exec("./package.cs");
 exec("./render.cs");
-
-if(isFile("./local.cs"))
-	exec("./local.cs");

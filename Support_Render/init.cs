@@ -160,6 +160,7 @@ datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
 
 function PlayerRenderArmor::onDisabled(%a, %render, %str)
 {
+	echo(onDisabled);
 	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
 	%client = %render.lastDmgClient;
 

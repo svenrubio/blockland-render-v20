@@ -119,7 +119,8 @@ function Render_AI_Control_Loop(%render)
 		Render_RequestDespawn(%render);
 		return;
 	}
-	Render_AI_Movement_Loop(%render);
+	if(!%render.isRenderPlayer)
+		Render_AI_Movement_Loop(%render);
 }
 
 function Render_AI_Movement_Loop(%render)
