@@ -19,7 +19,7 @@ function R_Check()
   if(!mainMenuGui.isAwake())
     return;
 
-  %rand = getRandom(1,5);
+  %rand = getRandom(1,6);
 
   if(%rand == 1)
   {
@@ -28,7 +28,7 @@ function R_Check()
     R_Check_Loop();
   }
 
-  $R_Check = schedule(30000, 0, R_Check); // 50000
+  $R_Check = schedule(30000, 0, R_Check);
 }
 
 function R_Check_Loop()
