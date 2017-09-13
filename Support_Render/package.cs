@@ -195,13 +195,15 @@ package Render
 		Parent::ServerCmdDropCameraAtPlayer(%client);
 	}
 
-	function Armor::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f)
-	{
-		if(%obj.dataBlock.getId() == RenderDeathArmor.getId())
-			return;
+	// This fixes the mount sound playing for death mounts, but it causes problems with the rotation.
+	// May re-enable if a fix for the rotation bug is found.
+	//function Armor::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f)
+	//{
+	//	if(%obj.dataBlock.getId() == RenderDeathArmor.getId())
+	//		return;
 
-		parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
-	}
+	//	parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
+	//}
 
 	function serverCmdlight(%client)
 	{
