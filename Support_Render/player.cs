@@ -21,7 +21,6 @@ function createRenderUser(%client)
 }
 
 ///// # Player control loop
-// Currently a copy of the AI loop with misc. tweaks.
 function Render_Player_Control_Loop(%render)
 {
   if(!%render.attackInit)

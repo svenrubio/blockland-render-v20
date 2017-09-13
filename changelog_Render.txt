@@ -2,8 +2,10 @@
 	<ul>
 		<li>Added new effects for Render damage and deaths.</li>
 		<li>Render's kills now have their own icon.</li>
-		<li>Mount sound no-longer plays when Render captures players.</li>
+		<li>Fixed mount sound playing when Render captures players.</li>
 		<li>Renamed Health Mode to Damage Mode.</li>
+		<li>Fixed console errors when Slayer is not installed.</li>
+		<li>Fixed broken pref defaults.</li>
 	</ul>
 </version
 <version:1.4>

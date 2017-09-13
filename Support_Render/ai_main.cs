@@ -1,7 +1,7 @@
 $Render::C_StuckTimer = 250;
 $Render::C_TargetTimer = 800; // (NOT IMPLEMENTED) Time between target checks (in ms)
 
-///// # AI control loop
+////// # AI control loop //////
 function Render_AI_Control_Loop(%render)
 {
 	if(!%render.attackInit)
@@ -13,13 +13,13 @@ function Render_AI_Control_Loop(%render)
 		%render.attackInit = 1;
 	}
 
-	///// # TARGET CHECK
-	// A few ways we could optimize this:
+	////// # TARGET CHECK # //////
+	// TODO: A few ways we could optimize this:
 	//	1.) Delay this check. We don't really need to test for targets this frequently.
 	//	2.) Use the raycast results from the whiteout damage function rather than calling containerRaycast a second time
 
 	// If we don't have a target or our old one is gone...
-	//%render.target.client is a method of checking if the player is alive without creating errors if they don't exist.
+	// %render.target.client is a method of checking if the player is alive without creating errors if they don't exist.
 	if(%render.needsNewTarget || (!isObject(%render.target.client) && !%render.target.rIsTestBot) )
 	{
 		%render.needsNewTarget = 0;
@@ -75,7 +75,7 @@ function Render_AI_Control_Loop(%render)
 		}
 	}
 
-	////// ENERGY CHECK //////
+	////// # ENERGY CHECK # //////
 	// Determine whether we should continue attacking.
 
 	if(%render.freezeTarget) // If we're currently freezing someone, we *probably* don't want to
@@ -84,7 +84,7 @@ function Render_AI_Control_Loop(%render)
 	if(%render.loopCount >= %render.loopPayNext-5000)
 		%render.doContinue = mFloatLength( getRandom(0, 10+%continueChance)/10, 0);
 
-	////// # MOVEMENT
+	////// # MOVEMENT # //////
 
 	if(!%render.freezeTarget && !%render.movingToPlayer) // If we're not moving to someone...
 	{
@@ -110,7 +110,7 @@ function Render_AI_Control_Loop(%render)
 		}
 	}
 
-	////// # OBSERVER DESPAWN
+	////// # OBSERVER DESPAWN # //////
 	// If we aren't planning on attacking, we want to do a timed de-spawn when the player looks at us.
 	if(!%render.aiWillAttack && %render.playersViewing && !%render.aiLoopObserverDespawn)
 		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(250,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
@@ -128,7 +128,7 @@ function Render_AI_Movement_Loop(%render)
 	if(!%render.movingToPlayer)
 		return;
 
-	///// ## NORMAL MOVEMENT
+	///// ## NORMAL MOVEMENT ## /////
 	if(!%render.freezeTarget)
 	{
 		%render.setMoveTolerance($Render::C_MoveTolerance);
