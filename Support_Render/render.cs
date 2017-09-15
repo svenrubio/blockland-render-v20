@@ -50,6 +50,7 @@ function Render_CreateBot(%pos,%client)
 	%render.isRender = 1;
 
 	// ## Minigame Preferences
+	// TODO: Move to a separate function so this isn't repeated (see player.cs)
 	if(%client.minigame.rMode !$= "" && %client.minigame.rMode != -1)
 		%render.mode = %client.minigame.rMode;
 	else
