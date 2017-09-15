@@ -205,21 +205,25 @@ package Render
 	//	parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
 	//}
 
+	// # Render Player Functions # //
 	function serverCmdlight(%client)
 	{
 		if(%client.player.isRenderPlayer)
-		{
-			if(%client.player.attackInit)
-				Render_RequestDespawn(%client.player);
-			else
-			{
-				// The player sends a request to start attacking.
-				%client.player.aiStartAttacking = 1;
-				%client.player.attackInit = 1;
-			}
-		}
+			Render_RequestDespawn(%client.player);
 		else
 			Parent::serverCmdLight(%client);
+	}
+
+	function serverCmdPlantBrick(%client)
+	{
+		if(%client.player.isRenderPlayer && !%client.player.attackInit)
+		{
+			// The player sends a request to start attacking.
+			%client.player.aiStartAttacking = 1;
+			%client.player.attackInit = 1;
+		}
+		else
+			Parent::serverCmdPlantBrick(%client);
 	}
 };
 

@@ -36,11 +36,9 @@ function createRenderUser(%client)
 ///// # Player control loop
 function Render_Player_Control_Loop(%render)
 {
-  if(!%render.attackInit && !%render.mode == 3)
-    %string = "\c7[\c4light\c7] to attack";
-  else
-    %string = "\c7[\c4light\c7] to leave";
-
+  %string = "\c7[\c6light\c7] leave    ";
+  if(!%render.attackInit && %render.mode != 3)
+    %string = %string @ "\c7[\c6plant\c7] attack ";
 
   %render.client.bottomPrint("<font:impact:38>\c7" @ mCeil((%render.loopPayNext-%render.loopCount)*$Render::C_LoopTimer/1000) @ "<just:right>" @ %string ,1,1);
 }
