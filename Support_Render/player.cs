@@ -3,7 +3,9 @@
 // TODO: Client interface
 // TODO: Choosing spawn locations
 // TODO: Slayer integration
+// (see compat/slayer.cs and GameMode_Slayer/server/defaults/team-preferences.cs)
 // TODO: Minigame events integration
+// TODO: ai_spawn integration
 
 // # CreateRenderUser
 function createRenderUser(%client)
@@ -13,6 +15,7 @@ function createRenderUser(%client)
   %render.isRenderPlayer = 1;
   %render.isRender = 1;
   %render.changeDatablock(PlayerRenderArmor);
+  Render_ApplyAppearance(%render);
 
   // ## Minigame Preferences
   // TODO: Move to a separate function so this isn't repeated (see render.cs)

@@ -16,25 +16,53 @@ $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player 
 function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
-	%this.unhidenode(chest);
-	%this.unhidenode(pants);
-	%this.unhidenode(LShoe);
-	%this.unhidenode(RShoe);
-	%this.unhidenode(LArm);
-	%this.unhidenode(LHand);
-	%this.unhidenode(RArm);
-	%this.unhidenode(RHand);
-	%this.setnodecolor(chest, "0 0 0 1");
-	%this.setnodecolor(headskin, "0 0 0 1");
-	%this.setnodecolor(pants, "0 0 0 1");
-	%this.setnodecolor(LShoe, "0 0 0 1");
-	%this.setnodecolor(RShoe, "0 0 0 1");
-	%this.setnodecolor(LArm, "0 0 0 1");
-	%this.setnodecolor(LHand, "0 0 0 1");
-	%this.setnodecolor(RArm, "0 0 0 1");
-	%this.setnodecolor(RHand, "0 0 0 1");
-	%this.setdecalname("AAA-None");
-	%this.setfacename("asciiTerror");
+
+	if(getRandom(1, 64) == 1) // 1, 64
+	{
+		%this.unhidenode("chest");
+		%this.unhidenode("pants");
+		%this.unhidenode("LShoe");
+		%this.unhidenode("RShoe");
+		%this.unhidenode("LArm");
+		%this.unhidenode("RArm");
+		%this.unhidenode("LHand");
+		%this.unhidenode("RHand");
+		%this.unhidenode("scoutHat");
+		%this.setnodecolor("scoutHat", "0.078 0.078 0.078 1");
+		%this.setnodecolor("chest", "0.105 0.458 0.768 1");
+		%this.setnodecolor("headskin", "1 0.878 0.611 1");
+		%this.setnodecolor("pants", "0.078 0.078 0.078 1");
+		%this.setnodecolor("LShoe", "0.392 0.196 0 1");
+		%this.setnodecolor("RShoe", "0.392 0.196 0 1");
+		%this.setnodecolor("LArm", "0.105 0.458 0.768 1");
+		%this.setnodecolor("RArm", "0.105 0.458 0.768 1");
+		%this.setnodecolor("LHand", "1 0.878 0.611 1");
+		%this.setnodecolor("RHand", "1 0.878 0.611 1");
+		%this.setdecalname("Alyx");
+		%this.setfacename("asciiTerror");
+	}
+	else
+	{
+		%this.unhidenode("chest");
+		%this.unhidenode("pants");
+		%this.unhidenode("LShoe");
+		%this.unhidenode("RShoe");
+		%this.unhidenode("LArm");
+		%this.unhidenode("RArm");
+		%this.unhidenode("LHand");
+		%this.unhidenode("RHand");
+		%this.setnodecolor("chest", "0 0 0 1");
+		%this.setnodecolor("headskin", "0 0 0 1");
+		%this.setnodecolor("pants", "0 0 0 1");
+		%this.setnodecolor("LShoe", "0 0 0 1");
+		%this.setnodecolor("RShoe", "0 0 0 1");
+		%this.setnodecolor("LArm", "0 0 0 1");
+		%this.setnodecolor("RArm", "0 0 0 1");
+		%this.setnodecolor("LHand", "0 0 0 1");
+		%this.setnodecolor("RHand", "0 0 0 1");
+		%this.setdecalname("AAA-None");
+		%this.setfacename("asciiTerror");
+	}
 }
 
 ////// # Bot Creation Function
