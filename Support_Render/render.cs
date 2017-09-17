@@ -652,8 +652,6 @@ function Render_DoMount(%death,%p)
 // Freeze player function. This creates a "death mount" and forces the player on it, allowing us to freeze them without changing their datablock.
 function Render_FreezePlayer(%p,%r)
 {
-	// TODO: Fix AI behavior so Render doesn't 'shuffle' when the target is invincible.
-
 	// If attack mode is 2, rip
 	if(%r.mode == 2)
 	{

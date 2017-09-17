@@ -146,60 +146,64 @@ function Render_AI_Movement_Loop(%render)
 		{
 			%render.nextStuckCheck = %render.loopCount+$Render::C_StuckTimer/$Render::C_LoopTimer;
 
-			// Increase distance after the first check to prevent a stuck-unstuck-stuck-unstuck pattern.
-			if(%render.stuckConsecutive)
-				%distCheck = 0.3;
-			else
-				%distCheck = 0.1;
-
-			%dist = vectorDist(%render.lastPosition, %render.getPosition());
-			if(!%render.rIsFrozen && %dist <= %distCheck && !%render.freezeTarget && %render.stuckEnd != %render.getPosition())
+			// We'll want to skip the stuck check if we're within freezing distance.
+			%distPlayer = vectorDist(%render.position, %render.target.position);
+			if(%distPlayer > 2.8)
 			{
-				//talk("AI Main: Bot is stuck!" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
-
-				%render.stuckEnd = ""; // This value means "if we're still stuck at this position, give up." We want this blank for now.
-				%render.stuckConsecutive++;
-
-				if(%render.stuckConsecutive == 6)
-					%render.setCrouching(1);
+				// Increase distance after the first check to prevent a stuck-unstuck-stuck-unstuck pattern.
+				if(%render.stuckConsecutive)
+					%distCheck = 0.3;
 				else
-					%render.setCrouching(0);
+					%distCheck = 0.1;
 
-				if(%render.stuckConsecutive == 8)
+				%dist = vectorDist(%render.lastPosition, %render.getPosition());
+				if(!%render.rIsFrozen && %dist <= %distCheck && !%render.freezeTarget && %render.stuckEnd != %render.getPosition())
 				{
-					%render.hAvoidObstacles = 1;
-					%render.hAvoidObstacle(0,0,1); // SO APPARENTLY THIS LETS RENDER OPEN DOORS AND IT SCARED THE PISS OUT OF ME. I'M BLAMING ROTONDO FOR THAT ONE.
+					talk("AI Main: Bot is stuck!" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
+
+					%render.stuckEnd = ""; // This value means "if we're still stuck at this position, give up." We want this blank for now.
+					%render.stuckConsecutive++;
+
+					if(%render.stuckConsecutive == 6)
+						%render.setCrouching(1);
+					else
+						%render.setCrouching(0);
+
+					if(%render.stuckConsecutive == 8)
+					{
+						%render.hAvoidObstacles = 1;
+						%render.hAvoidObstacle(0,0,1); // SO APPARENTLY THIS LETS RENDER OPEN DOORS AND IT SCARED THE PISS OUT OF ME. I'M BLAMING ROTONDO FOR THAT ONE.
+					}
+
+					if(%render.stuckConsecutive >= 16)
+						%render.stuckEnd = %render.getPosition(); // Give up if we remain stuck in the exact same spot for too long. The stuck check will resume if the bot's position changes at all.
+
+					%render.setMoveX(Render_AI_GetRelativeDirection2D(%render.position,%render.target.position));
+
+					//%render.setJumping(1);
+					//%render.schedCrouch = %render.schedule(500,0,setCrouching,0);
+					//%render.schedJump = %render.schedule(500,0,setJumping,0);
+
+					%render.lastFrozenCheckPos = %render.getPosition();
 				}
+				else
+				{
+					talk("AI Main: Not stuck;" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
+					%render.stuckConsecutive = 0;
+					%render.hAvoidObstacles = 0;
 
-				if(%render.stuckConsecutive >= 16)
-					%render.stuckEnd = %render.getPosition(); // Give up if we remain stuck in the exact same spot for too long. The stuck check will resume if the bot's position changes at all.
-
-
-				%render.setMoveX(Render_AI_GetRelativeDirection2D(%render.position,%render.target.position));
-
-				//%render.setJumping(1);
-				//%render.schedCrouch = %render.schedule(500,0,setCrouching,0);
-				//%render.schedJump = %render.schedule(500,0,setJumping,0);
-
-				%render.lastFrozenCheckPos = %render.getPosition();
+					%render.clearMoveX();
+					%render.clearMoveY();
+					%render.setCrouching(0);
+					%render.setJumping(0);
+				}
 			}
+
+			if(%render.rIsFrozen) // If we're frozen, reset the stuck check so we don't freak out.
+				%render.lastPosition = "0 0 -9999";
 			else
-			{
-				//talk("AI Main: Not stuck;" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
-				%render.stuckConsecutive = 0;
-				%render.hAvoidObstacles = 0;
-
-				%render.clearMoveX();
-				%render.clearMoveY();
-				%render.setCrouching(0);
-				%render.setJumping(0);
-			}
+				%render.lastPosition = %render.getPosition();
 		}
-
-		if(%render.rIsFrozen) // If we're frozen, reset the stuck check so we don't freak out.
-			%render.lastPosition = "0 0 -9999";
-		else
-			%render.lastPosition = %render.getPosition();
 	}
 	else ////// ## FREEZING A TARGET/MOVEMENT DISABLED
 	{
