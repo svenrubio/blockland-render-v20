@@ -1,4 +1,5 @@
-//This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
+// This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
+// TODO: Reduce cam shake radius so other players aren't easily affected.
 $Render::C_ShrineLimit = 32;
 
 //////# PREFERENCES

@@ -17,7 +17,7 @@ function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
 
-	if(getRandom(1, 64) == 1) // 1, 64
+	if(getRandom(1, 96) == 1)
 	{
 		%this.unhidenode("chest");
 		%this.unhidenode("pants");
@@ -358,9 +358,10 @@ function Render_Loop_Local(%render)
 						if(!%render.freezeTarget && %targetMount !$= "RenderDeathArmor")
 						{
 							//talk("RENDER" SPC %render @ ": Freezing a target!");
-							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile") // If the target isn't already frozen and isn't holding a destructo wand.
-								Render_FreezePlayer(%target,%render);
 
+							// If the target isn't already frozen and isn't holding a destructo wand.
+							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
+								Render_FreezePlayer(%target,%render);
 							%render.freezeTarget = %target;
 						}
 					}

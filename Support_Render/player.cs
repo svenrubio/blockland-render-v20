@@ -6,6 +6,10 @@
 // (see compat/slayer.cs and GameMode_Slayer/server/defaults/team-preferences.cs)
 // TODO: Minigame events integration
 // TODO: ai_spawn integration
+// TODO: Replace free movement with manual button when freezing players
+// (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
+
+// See package.cs for button press code
 
 // # CreateRenderUser
 function createRenderUser(%client)
