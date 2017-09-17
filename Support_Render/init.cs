@@ -525,7 +525,7 @@ datablock ExplosionData(RenderDmg1Explosion)
    camShakeFreq = "0.4 0.4 0.4";
    camShakeAmp = "0.4 0.4 0.4";
    camShakeDuration = 0.13;
-   camShakeRadius = 10;
+   camShakeRadius = 1;
 
    // Dynamic light
    lightStartRadius = 0;
