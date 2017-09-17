@@ -159,7 +159,7 @@ function Render_AI_Movement_Loop(%render)
 				%dist = vectorDist(%render.lastPosition, %render.getPosition());
 				if(!%render.rIsFrozen && %dist <= %distCheck && !%render.freezeTarget && %render.stuckEnd != %render.getPosition())
 				{
-					talk("AI Main: Bot is stuck!" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
+					//talk("AI Main: Bot is stuck!" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
 
 					%render.stuckEnd = ""; // This value means "if we're still stuck at this position, give up." We want this blank for now.
 					%render.stuckConsecutive++;
@@ -188,7 +188,7 @@ function Render_AI_Movement_Loop(%render)
 				}
 				else
 				{
-					talk("AI Main: Not stuck;" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
+					//talk("AI Main: Not stuck;" SPC %dist SPC "||" SPC %render.lastPosition SPC %render.freezeTarget SPC %render.lastFrozenCheckPos);
 					%render.stuckConsecutive = 0;
 					%render.hAvoidObstacles = 0;
 
