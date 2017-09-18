@@ -146,28 +146,29 @@ package Render
 			%player.detectorDecay = 0;
 		}
 
-		%str = "\c6"; // Start out with red
-
-		// Change the color to yellow when we reach the bar that corresponnds with the value.
-		// The values are randomized to simulate noise.
-		for(%i = 1; %i <= 60; %i++)
-	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+		%str = ""; // Start out with red
 
 		if(!$Pref::Server::RenderDisableDetectorText)
 		{
 			if(%player.detector < 0.2)
 				%text = "No glitch energy detected.";
 			else if(%player.detector < 2)
-				%text = "Slight glitch energy trace detected. Investigate.";
+				%text = "Slight glitch energy trace detected.<color:FFD5D5>";
 			else if(%player.detector < 3)
-				%text = "Moderate glitch energy detected. Investigate.";
+				%text = "Caution: Moderate glitch energy detected.<color:FFAAAA>";
 			else if(%player.detector < 4)
-				%text = "High glitch energy blip detected nearby. Euclid prescence possible. Stay clear.";
+				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<color:FF8080>";
 			else if(%player.detector < 5)
-				%text = "Very high glitch energy reading detected. User advised to leave area as soon as possible.";
+				%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
 			else if(%player.detector)
-				%text = "OFF SCALE GLITCH ACTIVITY DETECTED. EUCLID PRESCENCE CERTAIN.";
+				%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
 		}
+
+		// Change the color to grey when we reach the bar that corresponnds with the value.
+		// The values are randomized to simulate noise.
+		for(%i = 1; %i <= 60; %i++)
+	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+
 		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>" @ %str,1,1);
 		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
 
