@@ -276,10 +276,6 @@ function Render_Loop_Local(%render)
 
 			%render.isAttacking = 1;
 
-			// TODO: Move to ai_main.cs
-			if(!%render.isRenderPlayer)
-				%render.setMoveTolerance($Render::C_MoveTolerance);
-
 			Render_UnfreezeRender(%render);
 		}
 	}
