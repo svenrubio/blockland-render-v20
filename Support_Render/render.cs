@@ -361,13 +361,6 @@ function Render_Loop_Local(%render)
 							%render.freezeTarget = %target;
 						}
 					}
-					else if(!%render.isRenderPlayer)
-					{
-						// This is a temporary solution because the AI does not stop attempting to follow the player, even at close distances.
-						// TODO: Fix the AI and remove this
-						Render_FreezeRender(%render);
-						%froze = 1;
-					}
 				}
 
 				// If we have a target that is too far away or gone, unfreeze them and Render.
