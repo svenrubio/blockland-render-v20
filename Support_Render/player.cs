@@ -11,7 +11,7 @@
 
 // See package.cs for button press code
 
-// # CreateRenderUser
+////// # CreateRenderUser
 function createRenderUser(%client)
 {
   // ## Properties
@@ -40,10 +40,17 @@ function createRenderUser(%client)
     $Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
 }
 
-///// # Player control loop
+////// # Do Render Transition
+function Render_DoRenderTransition(%client)
+{
+  %client.isRenderClient = 1;
+  %client.instantRespawn();
+}
+
+////// # Player control loop
 function Render_Player_Control_Loop(%render)
 {
-  %string = "\c7[\c6light\c7] leave    ";
+  %string = "\c7[\c6light\c7] leave ";
   if(!%render.attackInit && %render.mode != 3)
     %string = %string @ "\c7[\c6plant\c7] attack ";
 

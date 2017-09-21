@@ -206,7 +206,7 @@ package Render
 	//	parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
 	//}
 
-	// # Render Player Functions # //
+	////// # Render Player Functions # //////
 	function serverCmdlight(%client)
 	{
 		if(%client.player.isRenderPlayer)
@@ -225,6 +225,24 @@ package Render
 		}
 		else
 			Parent::serverCmdPlantBrick(%client);
+	}
+
+	function GameConnection::createPlayer(%client, %transform)
+	{
+		//if(%client.isRenderClient)
+		//	%transform = "0 0 -9999";
+
+		Parent::createPlayer(%client, %transform);
+
+		if(%client.isRenderClient)
+		{
+			// This is only needed on spawn, so we can set it to 0 now.
+			%client.isRenderClient = 0;
+
+			Render_ApplyAppearance(%client.player);
+			createRenderUser(%client);
+			%client.player.setShapeNameDistance(0);
+		}
 	}
 };
 

@@ -17,7 +17,7 @@ function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
 
-	if(getRandom(1, 96) == 1)
+	if(getRandom(1, 192) == 1)
 	{
 		%this.unhidenode("chest");
 		%this.unhidenode("pants");
@@ -751,7 +751,6 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 // Uses code from Event_Camera_Control
 function GameConnection::doRenderDeath(%client)
 {
-	// TODO: Never keep face on-screen for more than one tick at a time. This should visually improve the effect
 	%camera = %client.camera;
   if(!isObject(%camera))
 		return;
