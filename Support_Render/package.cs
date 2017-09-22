@@ -240,7 +240,7 @@ package Render
 			%client.isRenderClient = 0;
 
 			Render_ApplyAppearance(%client.player);
-			createRenderUser(%client);
+			createRenderPlayer(%client.player);
 			%client.player.setShapeNameDistance(0);
 		}
 	}

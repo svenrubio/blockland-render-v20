@@ -8,32 +8,34 @@
 // TODO: ai_spawn integration
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
+// TODO: Disable attack button when there isn't enough time to attack
+// (Maybe offset the timer to count down to when attacks can no-longer be carried out)
+// TODO: Disable bricks, tools, paint, sitting, emotes
 
 // See package.cs for button press code
 
-////// # CreateRenderUser
-function createRenderUser(%client)
+////// # CreateRenderPlayer
+function createRenderPlayer(%player)
 {
   // ## Properties
-  %render = %client.player;
-  %render.isRenderPlayer = 1;
-  %render.isRender = 1;
-  %render.changeDatablock(PlayerRenderArmor);
-  Render_ApplyAppearance(%render);
+  %player.isRenderPlayer = 1;
+  %player.isRender = 1;
+  %player.changeDatablock(PlayerRenderArmor);
+  Render_ApplyAppearance(%player);
 
   // ## Minigame Preferences
   // TODO: Move to a separate function so this isn't repeated (see render.cs)
   if(%client.minigame.rMode !$= "" && %client.minigame.rMode != -1)
-		%render.mode = %client.minigame.rMode;
+		%player.mode = %client.minigame.rMode;
 	else
-		%render.mode = $Pref::Server::RenderDamageType;
+		%player.mode = $Pref::Server::RenderDamageType;
 
 	if(%client.minigame.rInvincible !$= "" && %client.minigame.rInvincible != -1)
-		%render.invincible = %client.minigame.rInvincible;
+		%player.invincible = %client.minigame.rInvincible;
 	else
-		%render.invincible = $Pref::Server::RenderIsInvincible;
+		%player.invincible = $Pref::Server::RenderIsInvincible;
 
-  RenderBotGroup.add(%render);
+  RenderBotGroup.add(%player);
 
   // ## Loop
   if(!isEventPending($Render::LoopBot))
