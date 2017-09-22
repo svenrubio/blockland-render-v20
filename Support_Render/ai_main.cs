@@ -81,9 +81,6 @@ function Render_AI_Control_Loop(%render)
 	if(%render.freezeTarget) // If we're currently freezing someone, we *probably* don't want to
 		%continueChance += 4;
 
-	if(%render.loopCount >= %render.loopPayNext-5000)
-		%render.doContinue = mFloatLength( getRandom(0, 10+%continueChance)/10, 0);
-
 	////// # MOVEMENT # //////
 
 	if(!%render.freezeTarget && !%render.movingToPlayer) // If we're not moving to someone...

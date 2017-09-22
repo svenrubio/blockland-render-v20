@@ -56,5 +56,5 @@ function Render_Player_Control_Loop(%render)
   if(!%render.attackInit && %render.mode != 3)
     %string = %string @ "\c7[\c6plant\c7] attack ";
 
-  %render.client.bottomPrint("<font:impact:38>\c7" @ mCeil((%render.loopPayNext-%render.loopCount)*$Render::C_LoopTimer/1000) @ "<just:right>" @ %string ,1,1);
+  %render.client.bottomPrint("<font:impact:38>\c7" @ mCeil((%render.loopEnergyTimeout-%render.loopCount)*$Render::C_LoopTimer/1000) @ "<just:right>" @ %string ,1,1);
 }

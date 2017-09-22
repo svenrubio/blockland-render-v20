@@ -3,7 +3,7 @@
 ////// # CONSTANTS
 $Render::C_MoveTolerance = 2;
 $Render::C_MoveToleranceObserve = 10;
-$Render::C_EnergyTimer = 25000; // Minimum: 5000
+$Render::C_EnergyTimer = 30000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
 $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
@@ -222,37 +222,23 @@ function Render_Loop_Local(%render)
 	if(!%render.loopCount)
 	{
 		%render.loopViewNext = 2;
-		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
+		%render.loopEnergyTimeout = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
 	}
 
 	%render.players = 0;
 	%render.playersViewing = 0;
 	%render.loopCount++;
 
-	if(%render.loopCount >= %render.loopPayNext) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
+	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
-		if(!%render.doContinue) // If they aren't attacking at this point, we'll just de-spawn them.
-		{
-			//echo("RENDER: De-spawning, out of time");
-			Render_DeleteR(%render);
-			return;
-		}
-
-		%render.doContinue = 0; // Reset this
-
-		%render.aiNeedsToPay = 1;
-		%render.payCount++;
-
-		%render.loopPayNext = %render.loopPayNext+$Render::C_EnergyTimer/$Render::C_LoopTimer; //
-	}
-
-	// Until energy is implemented, we will use a random chance that is influenced by how long Render has already been alive.
-	// This is planned to be determined by a more sophisticated AI, considering factors like whether we're freezing a player, how many players we're pursuing, etc.
-	if(%render.aiNeedsToPay && getRandom(1,2) == 1)
-	{
-		//echo("RENDER: De-spawning (energy check failed)");
+		echo("RENDER: De-spawning, out of time");
 		Render_DeleteR(%render);
 		return;
+
+		//else if(%render.doContinue)
+		//{
+		//	%render.loopEnergyTimeout = %render.loopEnergyTimeout+$Render::C_EnergyTimer/$Render::C_LoopTimer;
+		//	%render.payCount++;
 	}
 
 	// ## VIEW CHECK + MOVEMENT CHECK A
