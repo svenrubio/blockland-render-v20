@@ -4,6 +4,7 @@
 		<li>Render's kills now have their own icon.</li>
 		<li>Updated the Glitch Detector's display text and coloring.</li>
 		<li>Renamed Health Mode to Damage Mode.</li>
+		<li>Fixed AI not properly detecting haunt mode.</li>
 		<li>Fixed console errors when Slayer is not installed.</li>
 		<li>Fixed broken pref defaults.</li>
 	</ul>

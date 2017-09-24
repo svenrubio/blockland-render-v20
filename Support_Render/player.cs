@@ -11,6 +11,7 @@
 // TODO: Disable attack button when there isn't enough time to attack
 // (Maybe offset the timer to count down to when attacks can no-longer be carried out)
 // TODO: Disable bricks, tools, paint, sitting, emotes
+// TODO: Test invincible pref
 
 // See package.cs for button press code
 
@@ -58,3 +59,50 @@ function Render_Player_Control_Loop(%render)
 
   %render.client.bottomPrint("<font:impact:38>\c7" @ mCeil((%render.loopEnergyTimeout-%render.loopCount)*$Render::C_LoopTimer/1000) @ "<just:right>" @ %string ,1,1);
 }
+
+
+////// # Render Player Package # //////
+
+package RenderPlayer
+{
+  function serverCmdlight(%client)
+  {
+    if(%client.player.isRenderPlayer)
+      Render_RequestDespawn(%client.player);
+    else
+      Parent::serverCmdLight(%client);
+  }
+
+  function serverCmdPlantBrick(%client)
+  {
+    if(%client.player.isRenderPlayer && !%client.player.attackInit)
+    {
+      // The player sends a request to start attacking.
+      %client.player.aiStartAttacking = 1;
+      %client.player.attackInit = 1;
+    }
+    else
+      Parent::serverCmdPlantBrick(%client);
+  }
+
+  function GameConnection::createPlayer(%client, %transform)
+  {
+    //if(%client.isRenderClient)
+    //	%transform = "0 0 -9999";
+
+    Parent::createPlayer(%client, %transform);
+
+    if(%client.isRenderClient)
+    {
+      // This is only needed on spawn, so we can set it to 0 now.
+      %client.isRenderClient = 0;
+
+      Render_ApplyAppearance(%client.player);
+      createRenderPlayer(%client.player);
+      %client.player.setShapeNameDistance(0);
+    }
+  }
+};
+
+deactivatePackage("RenderPlayer");
+activatePackage("RenderPlayer");

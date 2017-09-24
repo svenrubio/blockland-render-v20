@@ -63,7 +63,7 @@ function Render_AI_Control_Loop(%render)
 
 		if(!%targets && %render.movingToPlayer) // Nobody's there. If we aren't on a path, we'll just assume everyone's gone.
 		{
-			//echo("AI Main: no targets, despawning");
+			echo("AI Main: no targets, despawning");
 
 			Render_RequestDespawn(%render);
 			return;

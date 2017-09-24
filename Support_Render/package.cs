@@ -21,10 +21,10 @@ package Render
 		Parent::destroyServer();
 	}
 
-	function armor::onCollision(%this, %obj, %col, %pos, %vel) //ripped from Event_OnBotTouched. modify for render bot functions
-	{
-		parent::onCollision(%this, %obj, %col, %pos, %vel);
-	}
+	//function armor::onCollision(%this, %obj, %col, %pos, %vel) //ripped from Event_OnBotTouched. modify for render bot functions
+	//{
+	//	parent::onCollision(%this, %obj, %col, %pos, %vel);
+	//}
 
 	function Player::emote(%player, %emote)
 	{
@@ -84,6 +84,7 @@ package Render
 		Parent::onDisabled(%a, %p, %e);
 	}
 
+	// TODO: Test with Render players
 	function Player::setTempColor(%player, %a, %b, %c, %d)
 	{
 		if(%player.isRender)
@@ -205,45 +206,6 @@ package Render
 
 	//	parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
 	//}
-
-	////// # Render Player Functions # //////
-	function serverCmdlight(%client)
-	{
-		if(%client.player.isRenderPlayer)
-			Render_RequestDespawn(%client.player);
-		else
-			Parent::serverCmdLight(%client);
-	}
-
-	function serverCmdPlantBrick(%client)
-	{
-		if(%client.player.isRenderPlayer && !%client.player.attackInit)
-		{
-			// The player sends a request to start attacking.
-			%client.player.aiStartAttacking = 1;
-			%client.player.attackInit = 1;
-		}
-		else
-			Parent::serverCmdPlantBrick(%client);
-	}
-
-	function GameConnection::createPlayer(%client, %transform)
-	{
-		//if(%client.isRenderClient)
-		//	%transform = "0 0 -9999";
-
-		Parent::createPlayer(%client, %transform);
-
-		if(%client.isRenderClient)
-		{
-			// This is only needed on spawn, so we can set it to 0 now.
-			%client.isRenderClient = 0;
-
-			Render_ApplyAppearance(%client.player);
-			createRenderPlayer(%client.player);
-			%client.player.setShapeNameDistance(0);
-		}
-	}
 };
 
 deactivatePackage("Render");
