@@ -28,8 +28,8 @@ package Render
 
 	function Player::emote(%player, %emote)
 	{
-		// Hide the pain emotes if:
-		// a.) The player is taking damage from Render.
+		// Hide emotes if:
+		// a.) The player is taking damage from Render. (Hides the pain emote)
 		// b.) The player is Render.
 		if(%player.renderDamage || %player.isRender)
 		{

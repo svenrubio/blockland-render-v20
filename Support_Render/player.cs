@@ -10,7 +10,6 @@
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
 // TODO: Disable attack button when there isn't enough time to attack
 // (Maybe offset the timer to count down to when attacks can no-longer be carried out)
-// TODO: Disable bricks, tools, paint, sitting, emotes
 // TODO: Test invincible pref
 
 // See package.cs for button press code
@@ -101,6 +100,41 @@ package RenderPlayer
       createRenderPlayer(%client.player);
       %client.player.setShapeNameDistance(0);
     }
+  }
+
+  /// ## Server Command Disablers ## ///
+
+  function serverCmdSit(%client)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdSit(%client);
+  }
+
+  // TODO: Fix these on the client side so the boxes don't work.
+  function serverCmdUseInventory(%client, %inv)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdUseInventory(%client, %inv);
+  }
+
+  function serverCmdUseSprayCan(%client, %inv)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdUseSprayCan(%client, %inv);
+  }
+
+  function serverCmdUseTool(%client, %inv)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdUseTool(%client, %inv);
   }
 };
 
