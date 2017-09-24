@@ -107,6 +107,21 @@ package RenderPlayer
   }
 
   /// ## Server Command Disablers ## ///
+  function serverCmdShiftBrick(%client, %a, %b, %direction)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdShiftBrick(%client, %a, %b, %direction);
+  }
+
+  function serverCmdRotateBrick(%client, %direction)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::ServerCmdRotateBrick(%client, %direction);
+  }
 
   function serverCmdSit(%client)
   {
