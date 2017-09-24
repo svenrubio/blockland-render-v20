@@ -8,8 +8,6 @@
 // TODO: ai_spawn integration
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
-// TODO: Disable attack button when there isn't enough time to attack
-// (Maybe offset the timer to count down to when attacks can no-longer be carried out)
 // TODO: Test invincible pref
 
 // See package.cs for button press code
@@ -53,7 +51,9 @@ function Render_DoRenderTransition(%client)
 function Render_Player_Control_Loop(%render)
 {
   %string = "\c7[\c6light\c7] leave ";
-  if(!%render.attackInit && %render.mode != 3)
+
+  // TODO: Apply the 'five-second rule' in render.cs
+  if(!%render.attackInit && %render.mode != 3 && %render.loopCount <= %render.loopEnergyTimeout-(5000/$Render::C_LoopTimer))
     %string = %string @ "\c7[\c6plant\c7] attack ";
 
   %render.client.bottomPrint("<font:impact:38>\c7" @ mCeil((%render.loopEnergyTimeout-%render.loopCount)*$Render::C_LoopTimer/1000) @ "<just:right>" @ %string ,1,1);
@@ -74,11 +74,15 @@ package RenderPlayer
 
   function serverCmdPlantBrick(%client)
   {
-    if(%client.player.isRenderPlayer && !%client.player.attackInit)
+    if(%client.player.isRenderPlayer)
     {
-      // The player sends a request to start attacking.
-      %client.player.aiStartAttacking = 1;
-      %client.player.attackInit = 1;
+      // Two if checks are used so we only return to parent if they aren't a Render player.
+      if(!%client.player.attackInit)
+      {
+        // The player sends a request to start attacking.
+        %client.player.aiStartAttacking = 1;
+        %client.player.attackInit = 1;
+      }
     }
     else
       Parent::serverCmdPlantBrick(%client);

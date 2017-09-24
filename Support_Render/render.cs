@@ -245,7 +245,7 @@ function Render_Loop_Local(%render)
 
 	// If haunt mode is disabled and the AI requests to start attacking...
 	// Note: The AI is also aware when haunt mode is on and will despawn accordingly.
-	if(%render.aiStartAttacking && %render.mode != 3 || %render.debugOverride == 1)
+	if(%render.aiStartAttacking && %render.mode != 3 && %render.loopCount <= %render.loopEnergyTimeout-(5000/$Render::C_LoopTimer) || %render.debugOverride == 1)
 	{
 		// Note: Existing Render bots can still attack, but new ones can't.
 		if(!%render.loopAttackStart)
