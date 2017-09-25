@@ -1,4 +1,3 @@
-// TODO: Fix attackers being unable to freeze players (may be specitic to victims)
 // TODO: Jet mechanic
 // TODO: Client interface
 // TODO: Choosing spawn locations
