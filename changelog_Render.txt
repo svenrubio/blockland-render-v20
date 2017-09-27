@@ -1,6 +1,7 @@
 <version:2.0>
 	<ul>
 		<li>Added new effects for Render damage and deaths.</li>
+		<li>Render's attacks and the glitch gun now affect nearby bricks.</li>
 		<li>Render's kills now have their own icon.</li>
 		<li>Updated the Glitch Detector's display text and coloring.</li>
 		<li>Renamed Health Mode to Damage Mode.</li>

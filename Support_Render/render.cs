@@ -811,6 +811,8 @@ function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
+	Render_DoLightFlicker(%obj.position, 3000);
+
 	%obj.setWhiteOut(1);
 	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
 	while(%p=containerSearchNext())
@@ -834,6 +836,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 
 // # LIGHT FLICKER FUNCTION
 
+// TODO: Add a pref to disable this
 function Render_DoLightFlicker(%pos, %duration)
 {
 	initContainerRadiusSearch(%pos, 20, $TypeMasks::FxBrickObjectType);
