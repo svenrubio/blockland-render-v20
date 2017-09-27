@@ -130,6 +130,38 @@ package RenderPlayer
     Parent::ServerCmdSit(%client);
   }
 
+  function serverCmdDropCameraAtPlayer(%client)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::serverCmdDropCameraAtPlayer(%client);
+  }
+
+  function serverCmdDropPlayerAtCamera(%client)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::serverCmdDropPlayerAtCamera(%client);
+  }
+
+  function serverCmdFind(%client, %target)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::serverCmdFind(%client, %target);
+  }
+
+  function serverCmdFetch(%client, %target)
+  {
+    if(%client.player.isRenderPlayer)
+      return;
+
+    Parent::serverCmdFetch(%client, %target);
+  }
+
   // TODO: Fix these on the client side so the boxes don't work.
   function serverCmdUseInventory(%client, %inv)
   {
