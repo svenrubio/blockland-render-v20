@@ -231,7 +231,10 @@ function Render_Loop_Local(%render)
 
 	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
-		echo("RENDER: De-spawning, out of time");
+		if(getRandom(1,2))
+			Render_DoLightFlicker(%render.position, 4000);
+
+		//echo("RENDER: De-spawning, out of time");
 		Render_DeleteR(%render);
 		return;
 
@@ -256,9 +259,13 @@ function Render_Loop_Local(%render)
 			Render_FreezeRender(%render); // Render stays frozen when he's about to attack.
 		}
 
-		if(%render.loopCount > %render.loopAttackStart) // Start attacking
+		 // Start attacking if we haven't already
+		if(!%render.isAttacking && %render.loopCount > %render.loopAttackStart)
 		{
 			%render.fxScale = 0;
+
+			if(getRandom(1,2))
+				Render_DoLightFlicker(%render.position, 4000);
 
 			%render.isAttacking = 1;
 
@@ -823,4 +830,47 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 
 	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
 	%obj.unMountImage(0);
+}
+
+// # LIGHT FLICKER FUNCTION
+
+function Render_DoLightFlicker(%pos, %duration)
+{
+	initContainerRadiusSearch(%pos, 20, $TypeMasks::FxBrickObjectType);
+
+	%lightCount = 0;
+	while(%brick=containerSearchNext()) // For all bricks in the area...
+	{
+		if(%lightCount >= 50) // Capped at 50 bricks to prevent lag
+			break;
+
+		// Try the next brick if this one doesn't have a light or is already blacked out.
+		if(!%brick.light || %brick.rBlackout)
+			continue;
+
+		%lightCount++;
+
+		// Save the properties of the brick so they can be reapplied later
+		%brick.rLight = %brick.light.dataBlock;
+		%brick.rFX = %brick.getColorFXID();
+		%brick.rEmitter = %brick.emitter.emitter;
+
+		%brick.setLight(0);
+		%brick.setColorFX(0);
+		%brick.setEmitter(0);
+
+		%brick.rBlackout = 1;
+		schedule(%duration, 0, Render_LightFlickerRestore, %brick);
+	}
+}
+
+function Render_LightFlickerRestore(%brick)
+{
+	if(!isObject(%brick))
+		return;
+
+	%brick.rBlackout = 0;
+	%brick.setLight(%brick.rLight);
+	%brick.setColorFX(%brick.rFX);
+	%brick.setEmitter(%brick.rEmitter);
 }

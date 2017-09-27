@@ -206,6 +206,33 @@ package Render
 
 	//	parent::onMount(%this,%player,%obj,%a,%b,%c,%d,%e,%f);
 	//}
+
+	// ## Brick Blackout Functions
+
+	function fxDTSBrick::setLight(%brick, %datablock, %client)
+	{
+		if(%brick.rBlackout)
+			%brick.rLight = %datablock;
+		else
+			Parent::setLight(%brick, %datablock, %client);
+	}
+
+	function fxDTSBrick::setEmitter(%brick, %datablock, %client)
+	{
+		if(%brick.rBlackout)
+			%brick.rEmitter = %datablock;
+		else
+			Parent::setEmitter(%brick, %datablock, %client);
+	}
+
+	function fxDTSBrick::setColorFX(%brick, %datablock)
+	{
+		if(%brick.rBlackout)
+			%brick.rFX = %datablock;
+		else
+			Parent::setColorFX(%brick, %datablock);
+	}
+
 };
 
 deactivatePackage("Render");
