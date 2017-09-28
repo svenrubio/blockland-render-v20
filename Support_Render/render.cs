@@ -839,6 +839,9 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 // TODO: Add a pref to disable this
 function Render_DoLightFlicker(%pos, %duration)
 {
+	if(!$Pref::Server::RenderAllowBrickEffects)
+		return;
+
 	initContainerRadiusSearch(%pos, 20, $TypeMasks::FxBrickObjectType);
 
 	%lightCount = 0;

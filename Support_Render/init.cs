@@ -20,6 +20,7 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Health 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "Support_Render", 4, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "Support_Render", 28, 0, 0);
+	RTB_registerPref("Affect bricks and lights", "Render", "$Pref::Server::RenderAllowBrickEffects", "bool", "Support_Render", 1, 0, 0);
 	RTB_registerPref("Only spawn at night (Day cycle)", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "Support_Render", 0, 0, 0);
@@ -29,8 +30,9 @@ else
 {
 	//$Pref::Server::RenderDifficulty = 100;
 	$Pref::Server::RenderDamageType = 0;
-	$Pref::Server::RenderSpawnRate = 6;
+	$Pref::Server::RenderSpawnRate = 4;
 	$Pref::Server::RenderShrineRange = 28;
+	$Pref::Server::RenderAllowBrickEffects = 1;
 }
 
 // Extra load check; these are the things that REALLY shouldn't run twice.
