@@ -836,7 +836,6 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 
 // # LIGHT FLICKER FUNCTION
 
-// TODO: Add a pref to disable this
 function Render_DoLightFlicker(%pos, %duration)
 {
 	if(!$Pref::Server::RenderAllowBrickEffects)
