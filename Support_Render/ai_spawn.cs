@@ -209,8 +209,8 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 
 			if(getWord(%pos,0) == %this)
 			{
-				error("Render_Spawn_GetNewDirection: Something happened.");
-				return;
+				error("Render_Spawn_GetNewDirection - Something happened.");
+				return 0;
 			}
 
 			if(!%disableUsedMark) // Mark position as "used" unless disabled
@@ -223,6 +223,6 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			return %pos;
 		}
 	}
-	error("Render_Spawn_GetNewDirection - Returning blank");
-	return;
+	error("Render_Spawn_GetNewDirection - Spawn failed.");
+	return 0;
 }

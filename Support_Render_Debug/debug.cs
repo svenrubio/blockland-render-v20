@@ -82,6 +82,13 @@ package renderDebugPackage
 		%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
 		%pos = Render_Spawn_GetNewDirection(%rendy, %client.player.getEyePoint(), 0, 0, !%useOldChance);
 
+		if(!%pos)
+		{
+			talk("RENDER: Spawn failed for " @ %client);
+			Render_DeleteR(%rendy);
+			return;
+		}
+
 		%rendy.setTransform(%pos);
 		%client.lastSpawnedRender = %rendy;
 
