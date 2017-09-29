@@ -1,8 +1,6 @@
 //°Д°
 
 ////// # CONSTANTS
-$Render::C_MoveTolerance = 2;
-$Render::C_MoveToleranceObserve = 10;
 $Render::C_EnergyTimer = 30000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
@@ -102,8 +100,6 @@ function Render_CreateBot(%pos,%client)
 	//%render.setMaxForwardSpeed(6); // Default: 7
 	//%render.setMaxBackwardSpeed(3); // Default: 4
 	//%render.setMaxSideSpeed(5); // Default: 5
-
-	%render.setMoveTolerance($Render::C_MoveToleranceObserve);
 
 	// Bot hole stuff
 	%render.hMelee = 1;

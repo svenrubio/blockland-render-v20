@@ -4,6 +4,8 @@ $Render::C_TargetTimer = 800; // (NOT IMPLEMENTED) Time between target checks (i
 ////// # AI control loop //////
 function Render_AI_Control_Loop(%render)
 {
+	//echo("==================" @ %render @ "==================");
+	//echo("AI Main: Currently at " @ %render.position);
 	if(!%render.attackInit)
 	{
 		// The AI sends a request to start attacking, but only if not in haunt mode.
@@ -45,7 +47,7 @@ function Render_AI_Control_Loop(%render)
 			{
 				if(%render.player[%i].getObjectMount() != getWord(%raycheck[%i],0)) // Make sure we aren't hitting their vehicle (if we are, mark as valid)
 				{
-					////echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
+					//echo("AI Main: Skipping target '" @ %player @ "' (out of view)");
 					%render.targetHidden[%i] = 1;
 					%actualPlayers--;
 					continue;
@@ -102,6 +104,7 @@ function Render_AI_Control_Loop(%render)
 			//	%node = %render.from;
 			//}
 
+			//echo("AI Main: Destination is to node " @ %node);
 			if(%render.getMoveDestination() != %node)
 				%render.setMoveDestination(%node);
 		}
@@ -128,8 +131,6 @@ function Render_AI_Movement_Loop(%render)
 	///// ## NORMAL MOVEMENT ## /////
 	if(!%render.freezeTarget)
 	{
-		%render.setMoveTolerance($Render::C_MoveTolerance);
-
 		%moveDist = vectorDist(getWords(%render.target.position, 0, 1), getWords(%render.position, 0, 1));
 		if(%render.getMoveObject() != %render.target && isObject(%render.target))
 		{
@@ -204,9 +205,10 @@ function Render_AI_Movement_Loop(%render)
 	}
 	else ////// ## FREEZING A TARGET/MOVEMENT DISABLED
 	{
-		%render.setMoveTolerance(50); // Disable movement.
 		%render.clearMoveX();
 		%render.clearMoveY();
+		%render.clearMoveDestination();
+		%render.setMoveObject(0);
 	}
 
 	if(%render.target.isJetting && !%render.freezeTarget && !%render.rIsFrozen)
