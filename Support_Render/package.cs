@@ -84,7 +84,6 @@ package Render
 		Parent::onDisabled(%a, %p, %e);
 	}
 
-	// TODO: Test with Render players
 	function Player::setTempColor(%player, %a, %b, %c, %d)
 	{
 		if(%player.isRender)

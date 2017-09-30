@@ -7,7 +7,7 @@
 // TODO: ai_spawn integration
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
-// TODO: Test invincible pref
+// TODO: Fix death message showing when Render players die
 
 // See package.cs for button press code
 
