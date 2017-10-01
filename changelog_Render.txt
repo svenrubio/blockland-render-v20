@@ -9,6 +9,7 @@
 		<li>Fixed console errors when Slayer is not installed.</li>
 		<li>Fixed numerous bugs with preferences, including broken defaults.</li>
 		<li>Fixed 'ghost lights' and map turning extremely dark/bright when Render spawns.</li>
+		<li>Fixed extra 'Standard Player' datablocks created by the mod.</li>
 	</ul>
 </version
 <version:1.4>

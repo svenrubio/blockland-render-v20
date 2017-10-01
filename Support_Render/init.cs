@@ -145,11 +145,15 @@ datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;
 	//maxSideSpeed = 60;
+
+	uiName = "";
 };
 
 datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
 {
 	maxDamage = 600;
+
+	uiName = "";
 };
 
 function PlayerRenderArmor::onDisabled(%a, %render, %str)
