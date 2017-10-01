@@ -809,7 +809,8 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
 	Render_DoLightFlicker(%obj.position, 3000);
 
-	%obj.setWhiteOut(1);
+	%obj.setWhiteOut(0.4);
+	%obj.spawnExplosion(RenderDmg6Projectile, 1);
 	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
 	while(%p=containerSearchNext())
 	{
