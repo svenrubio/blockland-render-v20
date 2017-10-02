@@ -36,6 +36,7 @@ package Render
 			%player.renderDamage = 0;
 			return;
 		}
+
 		Parent::emote(%player, %emote);
 	}
 
@@ -73,16 +74,29 @@ package Render
 	function Armor::onDisabled(%a, %p, %e)
 	{
 		Render_UnfreezePlayer(%p);
-		if(isObject(%p.client) && %p.client.doRenderDeath)
+		if(isObject(%p.client))
 		{
-			// Note: Invincible players are still marked as 'dead' by Render.
-			// If they later die by other means, they will see the Render death screen.
-			%p.client.doRenderDeath();
-			%p.client.doRenderDeath = 0;
+			if(%p.client.doRenderDeath)
+			{
+				// Note: Invincible players are still marked as 'dead' by Render.
+				// If they later die by other means, they will see the Render death screen.
+				%p.client.doRenderDeath();
+				%p.client.doRenderDeath = 0;
+			}
+
+			// Chance of the client becoming an attacker
+			%rand = getRandom(1,8);
+			if(%rand <= $Pref::Server::RenderPlSpawnChance)
+			{
+				echo(%rand);
+				%p.client.isRenderClient = 1;
+			}
 		}
 
 		Parent::onDisabled(%a, %p, %e);
 	}
+
+	//function Armor::Damage(%data, %obj, %source, %position ,%damage, %damageType)
 
 	function Player::setTempColor(%player, %a, %b, %c, %d)
 	{

@@ -228,9 +228,8 @@ function RenderDeathArmor::onRemove(%this, %obj)
 		%player.canDismount = 1;
 }
 
-//////# ITEMS
-//## Glitch Gun
-// TODO: Add glitch gun effects
+////// # ITEMS
+// ## Glitch Gun
 datablock ItemData(GlitchEnergyGunItem)
 {
 	category = "Weapon";  // Mission editor category
@@ -365,7 +364,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
-//////# DEATH BOARD
+////// # DEATH BOARD
 // TODO: Fix sunflare being visible behind the death board
 datablock staticShapeData(renderDeathBoardData)
 {
@@ -407,7 +406,7 @@ function Render_CreateDeathBoard()
 	missionCleanup.add(%obj2);
 }
 
-//////# PARTICLES
+////// # PARTICLES
 
 // ## Face
 datablock ParticleData(RenderBoardParticle)
@@ -451,8 +450,6 @@ datablock ParticleEmitterData(RenderBoardEmitter)
    thetaMax         = 90.0;
 
    particles = RenderBoardParticle;
-
-	 //uiName = "RenderBoardEmitter";
 };
 
 // ## Damage
@@ -648,9 +645,9 @@ registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 
 ////// # MISC
-new simGroup(RenderBotGroup) {}; //Render bot group
+new simGroup(RenderBotGroup) {}; // Render bot group
 
-new simGroup(RenderMiscGroup) {}; //Render object group
+new simGroup(RenderMiscGroup) {}; // Render object group
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);
