@@ -73,13 +73,6 @@ datablock AudioProfile(renderMove)
    preload = true;
 };
 
-datablock AudioProfile(renderForm)
-{
-   filename    = "./sound/entityForm.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
 datablock AudioProfile(glitchFire)
 {
    filename    = "./sound/glitchFire.wav";
