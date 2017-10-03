@@ -28,7 +28,6 @@ exec("./modules/lastEvent.cs");
 
 exec("./ai_main.cs");
 exec("./ai_spawn.cs");
-exec("./player.cs");
 
 exec("./bricks.cs");
 
@@ -40,6 +39,8 @@ if(!$Render::Loaded)
 	$Render::Loaded = 1;
 	$Render::LoadedB = 1;
 }
+
+exec("./player.cs");
 
 exec("./package.cs");
 exec("./render.cs");
