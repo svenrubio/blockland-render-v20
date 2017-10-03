@@ -496,9 +496,13 @@ function Render_DeleteR(%render)
 		return;
 	}
 
+	ServerPlay3D(renderMove, %render.position);
+
 	if(%render.isRenderPlayer)
 	{
 		%render.client.bottomPrint("",0,1);
+		%render.client.playSound(renderMove);
+		
 		%render.client.instantRespawn();
 	}
 	else
