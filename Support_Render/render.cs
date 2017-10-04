@@ -438,7 +438,8 @@ function Render_Spawn_Loop()
 			initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
 			while(%target=containerSearchNext())
 			{
-				if(%target.getClassName() !$= "Player") // Make sure they aren't a bot.
+				// Make sure they aren't a bot or a Render player.
+				if(%target.getClassName() !$= "Player" || %target.isRenderPlayer)
 					continue;
 
 				// Get each player's spawnrate.

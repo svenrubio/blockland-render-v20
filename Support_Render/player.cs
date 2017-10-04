@@ -17,6 +17,12 @@ RTB_registerPref("Transform chance at spawn", "Render|Render Players", "$Pref::S
 ////// # CreateRenderPlayer
 function createRenderPlayer(%player)
 {
+  if(!isObject(%player.client))
+  {
+    warn("Support_Render - Attempting to create a Render player with a non-player object.");
+    return;
+  }
+  
   // ## Properties
   %player.isRenderPlayer = 1;
   %player.isRender = 1;
