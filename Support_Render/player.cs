@@ -8,6 +8,10 @@
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
 // TODO: Fix death message showing when Render players die
+// TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
+// TODO: Use bots instead of players. For multiple reasons:
+// - Render players can trigger player->___ events.
+// - Render players count for their player's minigame team, creating many complications with events, damage, bots, etc.
 
 // See package.cs for button press code
 
@@ -22,7 +26,7 @@ function createRenderPlayer(%player)
     warn("Support_Render - Attempting to create a Render player with a non-player object.");
     return;
   }
-  
+
   // ## Properties
   %player.isRenderPlayer = 1;
   %player.isRender = 1;
