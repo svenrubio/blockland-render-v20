@@ -7,56 +7,29 @@
 // TODO: ai_spawn integration
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
-// TODO: Fix death message showing when Render players die
 // TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
-// TODO: Use bots instead of players. For multiple reasons:
-// - Render players can trigger player->___ events.
-// - Render players count for their player's minigame team, creating many complications with events, damage, bots, etc.
+// TODO: Cancel the loop if clients get detached from bot
+// TODO: Lower the bottomprint rate
+// TODO: Fix tool, paint, and bricks bars on the client side so the boxes don't work.
 
 // See package.cs for button press code
 
 ////// # Prefs and Initialization
 RTB_registerPref("Transform chance at spawn", "Render|Render Players", "$Pref::Server::RenderPlSpawnChance", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6 Always 24", "Support_Render", 0, 0, 0);
 
-////// # CreateRenderPlayer
-function createRenderPlayer(%player)
-{
-  if(!isObject(%player.client))
-  {
-    warn("Support_Render - Attempting to create a Render player with a non-player object.");
-    return;
-  }
-
-  // ## Properties
-  %player.isRenderPlayer = 1;
-  %player.isRender = 1;
-  %player.changeDatablock(PlayerRenderArmor);
-  Render_ApplyAppearance(%player);
-
-  // ## Minigame Preferences
-  // TODO: Move to a separate function so this isn't repeated (see render.cs)
-  if(%client.minigame.rMode !$= "" && %client.minigame.rMode != -1)
-		%player.mode = %client.minigame.rMode;
-	else
-		%player.mode = $Pref::Server::RenderDamageType;
-
-	if(%client.minigame.rInvincible !$= "" && %client.minigame.rInvincible != -1)
-		%player.invincible = %client.minigame.rInvincible;
-	else
-		%player.invincible = $Pref::Server::RenderIsInvincible;
-
-  RenderBotGroup.add(%player);
-
-  // ## Loop
-  if(!isEventPending($Render::LoopBot))
-    $Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
-}
-
 ////// # Do Render Transition
 function Render_DoRenderTransition(%client)
 {
   %client.isRenderClient = 1;
-  %client.instantRespawn();
+
+  %render = Render_CreateBot(%client.player.getTransform());
+  %client.render = %render;
+
+  %render.isRenderPlayer = 1;
+  %render.client = %client;
+
+  %client.player.delete();
+  %client.setControlObject(%render);
 }
 
 ////// # Player control loop
@@ -78,22 +51,22 @@ package RenderPlayer
 {
   function serverCmdlight(%client)
   {
-    if(%client.player.isRenderPlayer)
-      Render_RequestDespawn(%client.player);
+    if(%client.isRenderClient)
+      Render_RequestDespawn(%client.render);
     else
       Parent::serverCmdLight(%client);
   }
 
   function serverCmdPlantBrick(%client)
   {
-    if(%client.player.isRenderPlayer)
+    if(%client.isRenderClient)
     {
       // Two if checks are used so we only return to parent if they aren't a Render player.
-      if(!%client.player.attackInit)
+      if(!%client.render.attackInit)
       {
         // The player sends a request to start attacking.
-        %client.player.aiStartAttacking = 1;
-        %client.player.attackInit = 1;
+        %client.render.aiStartAttacking = 1;
+        %client.render.attackInit = 1;
       }
     }
     else
@@ -102,50 +75,22 @@ package RenderPlayer
 
   function GameConnection::createPlayer(%client, %transform)
   {
-    //if(%client.isRenderClient)
-    //	%transform = "0 0 -9999";
-
     Parent::createPlayer(%client, %transform);
-
     if(%client.isRenderClient)
-    {
-      // This is only needed on spawn, so we can set it to 0 now.
       %client.isRenderClient = 0;
-
-      Render_ApplyAppearance(%client.player);
-      createRenderPlayer(%client.player);
-      %client.player.setShapeNameDistance(0);
-    }
   }
 
   /// ## Server Command Disablers ## ///
-  function serverCmdShiftBrick(%client, %a, %b, %direction)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
 
-    Parent::ServerCmdShiftBrick(%client, %a, %b, %direction);
-  }
-
-  function serverCmdRotateBrick(%client, %direction)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::ServerCmdRotateBrick(%client, %direction);
-  }
-
-  function serverCmdSit(%client)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::ServerCmdSit(%client);
-  }
+  //function serverCmdShiftBrick(%client, %a, %b, %direction)
+  //function serverCmdRotateBrick(%client, %direction)
+  //function serverCmdSit(%client)
+  //function serverCmdFind(%client, %target)
+  //function serverCmdFetch(%client, %target)
 
   function serverCmdDropCameraAtPlayer(%client)
   {
-    if(%client.player.isRenderPlayer)
+    if(%client.isRenderClient)
       return;
 
     Parent::serverCmdDropCameraAtPlayer(%client);
@@ -153,51 +98,10 @@ package RenderPlayer
 
   function serverCmdDropPlayerAtCamera(%client)
   {
-    if(%client.player.isRenderPlayer)
+    if(%client.isRenderClient)
       return;
 
     Parent::serverCmdDropPlayerAtCamera(%client);
-  }
-
-  function serverCmdFind(%client, %target)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::serverCmdFind(%client, %target);
-  }
-
-  function serverCmdFetch(%client, %target)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::serverCmdFetch(%client, %target);
-  }
-
-  // TODO: Fix these on the client side so the boxes don't work.
-  function serverCmdUseInventory(%client, %inv)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::ServerCmdUseInventory(%client, %inv);
-  }
-
-  function serverCmdUseSprayCan(%client, %inv)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::ServerCmdUseSprayCan(%client, %inv);
-  }
-
-  function serverCmdUseTool(%client, %inv)
-  {
-    if(%client.player.isRenderPlayer)
-      return;
-
-    Parent::ServerCmdUseTool(%client, %inv);
   }
 };
 

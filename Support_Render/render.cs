@@ -489,6 +489,7 @@ function Render_Spawn_Loop()
 }
 
 ////// # De-spawn
+// TODO: Move this to the onRemove function in package.cs?
 function Render_DeleteR(%render)
 {
 	if(!isObject(%render))
@@ -503,11 +504,12 @@ function Render_DeleteR(%render)
 	{
 		%render.client.bottomPrint("",0,1);
 		%render.client.playSound(renderMove);
-		
+
 		%render.client.instantRespawn();
+		%render.client.isRenderClient = 0;
 	}
-	else
-		%render.delete();
+
+	%render.delete();
 }
 
 ////// # InflictDamage + misc.
