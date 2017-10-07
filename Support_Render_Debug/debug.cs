@@ -99,6 +99,8 @@ package renderDebugPackage
 
 		if(%attack)
 			%rendy.debugOverride = 1;
+
+		return %rendy;
 	}
 
 	function serverCmdMoveR(%client, %resetUsed)

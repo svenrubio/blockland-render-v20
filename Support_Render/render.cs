@@ -15,7 +15,7 @@ function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
 
-	if(getRandom(1, 192) == 1)
+	if(getRandom(1, 256) == 1)
 	{
 		%this.unhidenode("chest");
 		%this.unhidenode("pants");
@@ -424,11 +424,13 @@ function Render_Spawn_Loop()
 		// By doing this, we keep the spawnrate balanced regardless of playercount and avoid an unintended bias toward groups of players.
 
 		// First, we're going to go through all the clients in the server.
+		// This system is also used in player.cs
 		for(%i = 0; %i < clientGroup.getCount(); %i++)
 		{
 			%client = clientGroup.getObject(%i);
 
 			// If player is nonexistent or already marked, skip them.
+			// Note that this check also prevents the radius search below, potentially blocking nearby players.
 			if(!isObject(%client.player) || %groupGet[%client.player])
 				continue;
 
