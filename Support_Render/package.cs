@@ -28,6 +28,10 @@ package Render
 
 	function Player::emote(%player, %emote)
 	{
+		// Spawn particles to indicate that something is happening
+		if(%player.isRender)
+			%player.spawnExplosion(RenderDmg5Projectile, 1);
+
 		// Hide emotes if:
 		// a.) The player is taking damage from Render. (Hides the pain emote)
 		// b.) The player is Render.
