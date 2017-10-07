@@ -8,7 +8,6 @@
 // TODO: Replace free movement with manual button when freezing players
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
 // TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
-// TODO: Cancel the loop if clients get detached from bot
 // TODO: Fix tool, paint, and bricks bars on the client side so the boxes don't work.
 
 // See package.cs for button press code
@@ -34,6 +33,13 @@ function Render_DoRenderTransition(%client)
 ////// # Player control loop
 function Render_Player_Control_Loop(%render)
 {
+  // Cancel if the client is detached.
+  if(%render.client.getControlObject() != %render)
+  {
+    Render_DeleteR(%render);
+    return;
+  }
+
   %string = "\c7[\c6light\c7] leave ";
 
   // TODO: Apply the 'five-second rule' in render.cs
