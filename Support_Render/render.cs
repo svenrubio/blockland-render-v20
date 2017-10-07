@@ -382,13 +382,14 @@ function Render_Loop_Local(%render)
 			Render_UnfreezeRender(%render);
 	}
 
-	if(%render.loopCount == %render.loopViewNext)
-		%render.loopViewNext = %render.loopViewNext+2;
 
 	if(!%render.isRenderPlayer)
 		Render_AI_Control_Loop(%render);
-	else
+	else if(%render.loopCount == %render.loopViewNext)
 		Render_Player_Control_Loop(%render);
+
+	if(%render.loopCount == %render.loopViewNext)
+		%render.loopViewNext = %render.loopViewNext+2;
 }
 
 ////// # Target picking function
