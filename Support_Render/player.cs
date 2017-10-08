@@ -67,7 +67,7 @@ function Render_DoRenderTransition(%rClient, %debug)
   // TODO: Try another client rather than cancelling the check
   if(!%pos)
   {
-    //warn("RENDER: Spawn failed for " @ %client);
+    warn("RENDER: Spawn failed for " @ %client);
     Render_DeleteR(%render);
     return;
   }
@@ -82,6 +82,7 @@ function Render_DoRenderTransition(%rClient, %debug)
 
   %rClient.player.delete();
   %rClient.setControlObject(%render);
+  //echo(%rClient.getControlObject() SPC %render);
 }
 
 ////// # Player control loop
@@ -90,6 +91,7 @@ function Render_Player_Control_Loop(%render)
   // Cancel if the client is detached.
   if(%render.client.getControlObject() != %render)
   {
+    warn("Support_Render - Client detached, de-spawning...");
     Render_DeleteR(%render);
     return;
   }
@@ -137,6 +139,12 @@ package RenderPlayer
     Parent::createPlayer(%client, %transform);
     if(%client.isRenderClient)
       %client.isRenderClient = 0;
+
+    if(%client.doRenderTransition)
+    {
+      %client.doRenderTransition = 0;
+      Render_DoRenderTransition(%client);
+    }
   }
 
   /// ## Server Command Disablers ## ///
@@ -161,6 +169,21 @@ package RenderPlayer
       return;
 
     Parent::serverCmdDropPlayerAtCamera(%client);
+  }
+
+	function Armor::onDisabled(%a, %p, %e)
+	{
+		if(isObject(%p.client))
+
+    // Chance of the client becoming an attacker
+    %rand = getRandom(1,8);
+    if(%rand <= $Pref::Server::RenderPlSpawnChance)
+    {
+      echo(%rand);
+      %p.client.doRenderTransition = 1;
+    }
+
+    Parent::onDisabled(%a, %p, %e);
   }
 };
 

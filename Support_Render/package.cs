@@ -87,14 +87,6 @@ package Render
 				%p.client.doRenderDeath();
 				%p.client.doRenderDeath = 0;
 			}
-
-			// Chance of the client becoming an attacker
-			%rand = getRandom(1,8);
-			if(%rand <= $Pref::Server::RenderPlSpawnChance)
-			{
-				echo(%rand);
-				%p.client.isRenderClient = 1;
-			}
 		}
 
 		Parent::onDisabled(%a, %p, %e);
