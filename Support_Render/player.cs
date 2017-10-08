@@ -67,7 +67,7 @@ function Render_DoRenderTransition(%rClient, %debug)
   // TODO: Try another client rather than cancelling the check
   if(!%pos)
   {
-    warn("RENDER: Spawn failed for " @ %client);
+    //warn("RENDER: Spawn failed for " @ %client);
     Render_DeleteR(%render);
     return;
   }
@@ -91,7 +91,6 @@ function Render_Player_Control_Loop(%render)
   // Cancel if the client is detached.
   if(%render.client.getControlObject() != %render)
   {
-    warn("Support_Render - Client detached, de-spawning...");
     Render_DeleteR(%render);
     return;
   }
@@ -179,7 +178,7 @@ package RenderPlayer
     %rand = getRandom(1,8);
     if(%rand <= $Pref::Server::RenderPlSpawnChance)
     {
-      echo(%rand);
+      //echo(%rand);
       %p.client.doRenderTransition = 1;
     }
 
