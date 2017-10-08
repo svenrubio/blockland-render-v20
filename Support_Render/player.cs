@@ -14,49 +14,55 @@
 RTB_registerPref("Transform chance at spawn", "Render|Render Players", "$Pref::Server::RenderPlSpawnChance", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6 Always 24", "Support_Render", 0, 0, 0);
 
 ////// # Do Render Transition
-function Render_DoRenderTransition(%rClient)
+function Render_DoRenderTransition(%rClient, %debug)
 {
-  // First we need to pick a player to spawn near.
-  // This uses the same grouping system as render.cs with modifications.
-  for(%i = 0; %i < clientGroup.getCount(); %i++)
+  if(%debug)
   {
-    %client = clientGroup.getObject(%i);
-
-    // If player is nonexistent, already marked, or matches the active client, skip them.
-    // Note that this check also prevents the radius search below, potentially blocking nearby players.
-    if(!isObject(%client.player) || %groupGet[%client.player] || %client == %rClient)
-      continue;
-
-    // Otherwise, this player counts as a new group.
-    %groups++;
-
-    // For all players in the area...
-    initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
-    while(%target=containerSearchNext())
+    %render = Render_CreateBot("0 0 -10000",%client);
+    %pos = %rClient.player.position;
+  }
+  else
+  {
+    // First we need to pick a player to spawn near.
+    // This uses the same grouping system as render.cs with modifications.
+    for(%i = 0; %i < clientGroup.getCount(); %i++)
     {
-      // Make sure they aren't a bot, a Render player, or worse yet, the active Render client.
-      if(%target.getClassName() !$= "Player" || %target.isRenderPlayer || %target.client == %rClient)
+      %client = clientGroup.getObject(%i);
+
+      // If player is nonexistent, already marked, or matches the active client, skip them.
+      // Note that this check also prevents the radius search below, potentially blocking nearby players.
+      if(!isObject(%client.player) || %groupGet[%client.player] || %client == %rClient)
         continue;
 
-      %groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
-      %groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
+      // Otherwise, this player counts as a new group.
+      %groups++;
+
+      // For all players in the area...
+      initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
+      while(%target=containerSearchNext())
+      {
+        // Make sure they aren't a bot, a Render player, or worse yet, the active Render client.
+        if(%target.getClassName() !$= "Player" || %target.isRenderPlayer || %target.client == %rClient)
+          continue;
+
+        %groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
+        %groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
+      }
     }
+
+    // If there are no available players, cancel.
+    if(!%groups)
+      return;
+
+    // Unlike render.cs, which has a set chance per group, we're going to pick a random client in a random group.
+    %group = getRandom(1,%groups);
+    %client = %groupList[%group, getRandom(1, %groupCount[%group]) ].client;
+
+    %render = Render_CreateBot("0 0 -10000",%client);
+
+    %hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
+    %pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
   }
-
-  // If there are no available players, cancel.
-  if(!%groups)
-    return;
-
-  // Unlike render.cs, which has a set chance per group, we're going to pick a random client in a random group.
-  %group = getRandom(1,%groups);
-  %client = %groupList[%group, getRandom(1, %groupCount[%group]) ].client;
-
-  echo(%client SPC %rClient);
-
-  %render = Render_CreateBot("0 0 -10000",%client);
-
-  %hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
-  %pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
 
   // TODO: Try another client rather than cancelling the check
   if(!%pos)
