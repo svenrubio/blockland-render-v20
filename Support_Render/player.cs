@@ -7,6 +7,7 @@
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
 // TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
 // TODO: Fix tool, paint, and bricks bars on the client side so the boxes don't work.
+// TODO: Fix attack not working in the last 10 (or so) seconds.
 
 // See package.cs for button press code
 
