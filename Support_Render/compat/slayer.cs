@@ -1,4 +1,5 @@
-forceRequiredAddOn("GameMode_Slayer");
+if(!isObject(Slayer_PrefSO))
+  forceRequiredAddOn("GameMode_Slayer");
 
 new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
 {
