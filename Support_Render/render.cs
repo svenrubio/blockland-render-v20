@@ -412,7 +412,7 @@ function Render_Spawn_Loop()
 			%skipSpawn = 1;
 	}
 
-	if(!%skipSpawn && $Pref::Server::RenderSpawnRate != 0)
+	if(!%skipSpawn)
 	{
 		// Play ambient sound effects
 

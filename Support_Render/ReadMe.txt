@@ -1,0 +1,1 @@
+If packaging this add-on in a game-mode with Slayer, be sure to place GameMode_Slayer ABOVE Support_Render in the list.
