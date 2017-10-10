@@ -7,7 +7,6 @@
 // (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
 // TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
 // TODO: Fix tool, paint, and bricks bars on the client side so the boxes don't work.
-// TODO: Fix attack not working in the last 10 (or so) seconds.
 
 // See package.cs for button press code
 
@@ -98,7 +97,6 @@ function Render_Player_Control_Loop(%render)
 
   %string = "\c7[\c6light\c7] leave ";
 
-  // TODO: Apply the 'five-second rule' in render.cs
   if(!%render.attackInit && %render.mode != 3 && %render.loopCount <= %render.loopEnergyTimeout-(5000/$Render::C_LoopTimer))
     %string = %string @ "\c7[\c6plant\c7] attack ";
 
