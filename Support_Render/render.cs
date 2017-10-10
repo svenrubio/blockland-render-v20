@@ -256,7 +256,6 @@ function Render_Loop_Local(%render)
 		}
 
 		 // Start attacking if we haven't already
-		 talk(%render.isAttacking SPC %render.loopCount SPC %render.loopAttackStart);
 		if(!%render.isAttacking && %render.loopCount > %render.loopAttackStart)
 		{
 			%render.fxScale = 0;
