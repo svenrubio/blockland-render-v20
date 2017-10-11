@@ -69,6 +69,13 @@ datablock AudioProfile(renderAmb2)
    preload = true;
 };
 
+datablock AudioProfile(renderAmb3)
+{
+   filename    = "./sound/rendercycle3.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 datablock AudioProfile(renderMove)
 {
    filename    = "./sound/entityMove.wav";

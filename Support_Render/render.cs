@@ -418,7 +418,7 @@ function Render_Spawn_Loop()
 
 		if(!$Pref::Server::RenderDisableAmbientSounds)
 			if(getRandom(1,12) <= $Pref::Server::RenderSpawnRate) // Bleh
-				serverPlay2D("RenderAmb" @ getRandom(1,2));
+				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
 		// By doing this, we keep the spawnrate balanced regardless of playercount and avoid an unintended bias toward groups of players.
