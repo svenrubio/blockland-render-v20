@@ -119,6 +119,14 @@ function Render_CreateBot(%pos,%client)
 	}
 
 	%render.setTransform(%pos);
+
+	// In case the bot group somehow gets removed
+	if(!isObject(RenderBotGroup))
+	{
+		new simGroup(RenderBotGroup) {};
+		warn("Support_Render - Bot group is missing! Creating a new one...");
+	}
+
 	RenderBotGroup.add(%render);
 
 	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
@@ -154,7 +162,7 @@ function Player::rFOVCheck(%observer, %object, %checkRaycast)
 	// This lets us check for obstructions. Optional, only applies if main check passed.
 	if(%fovCheck && %checkRaycast)
 	{
-		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
 		if(%ray != 0)
 			%fovCheck = 0;
@@ -636,6 +644,8 @@ function Render_FreezePlayer(%p,%r)
 
 		%r.freezeTarget = %p;
 	}
+
+	return %death;
 }
 
 function Render_UnfreezePlayer(%p,%r)

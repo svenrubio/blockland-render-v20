@@ -44,3 +44,6 @@ exec("./player.cs");
 
 exec("./package.cs");
 exec("./render.cs");
+
+if($Version < 21)
+	exec("./compat/v20.cs");
