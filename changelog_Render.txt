@@ -13,6 +13,7 @@
 	<b>Fixes</b>
 	<ul>
 		<li>The add-on now partially supports version 20 of Blockland.</li>
+		<li>Fixed an exploit that would allow players to become invincible to Render.</li>
 		<li>Fixed numerous bugs with preferences, including broken defaults.</li>
 		<li>Fixed 'ghost lights' and map turning extremely dark/bright when Render spawns.</li>
 		<li>Fixed extra 'Standard Player' datablocks created by the mod.</li>
