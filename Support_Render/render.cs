@@ -569,7 +569,7 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(%p.client.staticDebugImmune)
 		return;
 
-	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
+	if(%p.rDmg >= 100) // If damage is ≥ 100, rip
 	{
 		%client = %p.client;
 
