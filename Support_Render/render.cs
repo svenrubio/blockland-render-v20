@@ -354,7 +354,11 @@ function Render_Loop_Local(%render)
 
 							// If the target isn't already frozen and isn't holding a destructo wand.
 							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
+							{
 								Render_FreezePlayer(%target,%render);
+								Render_FreezeRender(%render);
+							}
+
 							%render.freezeTarget = %target;
 						}
 					}
@@ -365,6 +369,7 @@ function Render_Loop_Local(%render)
 				{
 					//talk("RENDER" SPC %render @ ": Unfroze player" SPC %target.client.name SPC %distance SPC %render.freezeTarget SPC %render.freezeTarget.isFrozen);
 					Render_UnfreezePlayer(%target,%render);
+					Render_UnfreezeRender(%render);
 				}
 
 				if(%target.isFrozen && %target.frozenPosition !$= "") // Extra precaution to make sure frozen targets stay in place. This will likely cause problems on ramp bricks.
@@ -386,8 +391,6 @@ function Render_Loop_Local(%render)
 	{
 		if(!%render.isAttacking && %render.playersViewing)
 			Render_FreezeRender(%render);
-		else if(%render.rIsFrozen && !%froze) // Necessary?
-			Render_UnfreezeRender(%render);
 	}
 
 
