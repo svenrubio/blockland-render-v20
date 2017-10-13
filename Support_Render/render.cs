@@ -601,6 +601,7 @@ function Render_DoMount(%death,%p)
 	if(isObject(%p.client)) // Checking if the player exists returns 1 (wtf?), but checking player.client doesn't.
 	{
 		%p.dismount(); // Just in case, we'll do this a second time
+		$Render::FreezeMount = 1; // Disable the mount sound. See package.cs.
 		%death.mountObject(%p,8);
 	}
 	else
