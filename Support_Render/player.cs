@@ -1,13 +1,3 @@
-// TODO: Jet mechanic
-// TODO: Client interface
-// TODO: Slayer integration
-// (see compat/slayer.cs and GameMode_Slayer/server/defaults/team-preferences.cs)
-// TODO: Minigame events integration
-// TODO: Replace free movement with manual button when freezing players
-// (Rather than being able to walk away, attacker should only be able to release the player by pressing a button)
-// TODO: Fix being able to jump and jet with Render_FreezeRender. This will likely require special render datablocks.
-// TODO: Fix tool, paint, and bricks bars on the client side so the boxes don't work.
-
 // See package.cs for button press code
 
 ////// # Prefs and Initialization

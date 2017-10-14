@@ -352,8 +352,11 @@ function Render_Loop_Local(%render)
 						{
 							//talk("RENDER" SPC %render @ ": Freezing a target!");
 
-							// If the target isn't already frozen and isn't holding a destructo wand.
-							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
+							// Check for obstructions before freezing a player
+							%ray = containerRaycast(%render.getEyePoint(), %target.getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
+
+							// If the target isn't already frozen, isn't holding a destructo wand, and isn't obstructed.
+							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && %ray == 0)
 							{
 								Render_FreezePlayer(%target,%render);
 								Render_FreezeRender(%render);
