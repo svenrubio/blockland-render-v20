@@ -235,7 +235,7 @@ function Render_Loop_Local(%render)
 
 	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
-		if(getRandom(1,2))
+		if(getRandom(1,4))
 			Render_DoLightFlicker(%render.position, 4000);
 
 		//echo("RENDER: De-spawning, out of time");
@@ -268,8 +268,8 @@ function Render_Loop_Local(%render)
 		{
 			%render.fxScale = 0;
 
-			if(getRandom(1,2))
-				Render_DoLightFlicker(%render.position, 4000);
+			if(getRandom(1,3))
+				Render_DoLightFlicker(%render.position, 8000);
 
 			%render.isAttacking = 1;
 
@@ -360,6 +360,9 @@ function Render_Loop_Local(%render)
 							{
 								Render_FreezePlayer(%target,%render);
 								Render_FreezeRender(%render);
+
+								if(getRandom(1,6))
+									Render_DoLightFlicker(%render.position, 4000);
 							}
 
 							%render.freezeTarget = %target;
