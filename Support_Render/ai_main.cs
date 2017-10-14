@@ -211,10 +211,10 @@ function Render_AI_Movement_Loop(%render)
 		%render.setMoveObject(0);
 	}
 
-	if(%render.target.isJetting && !%render.freezeTarget && !%render.rIsFrozen)
-		%render.setJetting(1);
-	else if(%render.isJetting())
-		%render.setJetting(0);
+	//if(%render.target.isJetting && !%render.freezeTarget && !%render.rIsFrozen)
+	//	%render.setJetting(1);
+	//else if(%render.isJetting())
+	//	%render.setJetting(0);
 }
 
 // EXPERIMENTAL: This checks the player's velocity for changes in direction.

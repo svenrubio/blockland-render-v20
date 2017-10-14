@@ -16,6 +16,7 @@
 		<li>Fixed an exploit that would allow players to become invincible to Render.</li>
 		<li>Fixed Render being able to freeze players through walls.</li>
 		<li>Fixed numerous bugs with preferences, including broken defaults.</li>
+		<li>Render can no-longer use jets due to AI complications.</li>
 		<li>Fixed 'ghost lights' and map turning extremely dark/bright when Render spawns.</li>
 		<li>Fixed extra 'Standard Player' datablocks created by the mod.</li>
 		<li>Fixed console errors when Slayer is not installed.</li>

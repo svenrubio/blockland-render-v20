@@ -143,6 +143,8 @@ datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 	magicWandImmunity = 1;
 	maxDamage = 300; // Max health
 
+	canJet = 0;
+
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;
 	//maxSideSpeed = 60;
