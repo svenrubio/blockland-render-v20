@@ -7,6 +7,10 @@ function brickGlitchShrineData::onPlant(%a,%br) // Planted
 {
 	Parent::onPlant(%a,%br);
 	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br);
+
+	if($Pref::Server::RenderShrineRange == -1)
+		%br.client.chatMessage("Shrines are currently disabled on this server.");
+
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 	// (This may only be necessary for onLoadPlant)
 
