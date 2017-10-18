@@ -288,8 +288,8 @@ function Render_Loop_Local(%render)
 		//	continue;
 		//}
 
-		// MUST be an actual player or testing bot; ignore if they have destructo wand
-		if(%target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && !%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
+		// MUST be an actual player or testing bot
+		if(!%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
 		{
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
@@ -309,7 +309,7 @@ function Render_Loop_Local(%render)
 				////// ## DAMAGE TARGET
 				//%render.playerIsViewing[%render.players] = %isViewing; // Mark them as "viewing"
 				%render.playerViewing = %target;
-				if(%isViewing)
+				if(%isViewing && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
 				{
 					%render.playersViewing++;
 
@@ -371,7 +371,7 @@ function Render_Loop_Local(%render)
 				}
 
 				// If we have a target that is too far away or gone, unfreeze them and Render.
-				if(%render.freezeTarget && (!%render.freezeTarget.isFrozen || %target == %render.freezeTarget && %distance > 5))
+				if(%render.freezeTarget && (!%render.freezeTarget.isFrozen || %target == %render.freezeTarget) && (%distance > 5 || %target.getMountedImage(0).Projectile $= "AdminWandProjectile") )
 				{
 					//talk("RENDER" SPC %render @ ": Unfroze player" SPC %target.client.name SPC %distance SPC %render.freezeTarget SPC %render.freezeTarget.isFrozen);
 					Render_UnfreezePlayer(%target,%render);
