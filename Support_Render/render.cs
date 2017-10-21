@@ -3,7 +3,7 @@
 ////// # CONSTANTS
 $Render::C_EnergyTimer = 30000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
-$Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
+$Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms). Maximum: 250
 $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
 $Render::C_DamageRate = 200;
 $Render::C_DamageDecay = $Render::C_DamageRate/100;
@@ -61,6 +61,9 @@ function Render_ApplyAppearance(%this)
 		%this.setdecalname("AAA-None");
 		%this.setfacename("asciiTerror");
 	}
+
+		if(getRandom(1,92) == 1)
+			%this.setfacename("memeGrinMan");
 }
 
 ////// # Bot Creation Function
@@ -513,6 +516,7 @@ function Render_Spawn_Loop()
 // TODO: Move this to the onRemove function in package.cs?
 function Render_DeleteR(%render)
 {
+	//backtrace();
 	if(!isObject(%render))
 	{
 		warn("Support_Render - Attempting to delete non-existent attacker. Ignoring...");

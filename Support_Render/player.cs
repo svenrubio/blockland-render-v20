@@ -106,7 +106,7 @@ package RenderPlayer
 {
   function serverCmdlight(%client)
   {
-    if(%client.isRenderClient)
+    if(%client.isRenderClient && %client.render.loopCount > 500/$Render::C_LoopTimer)
       Render_RequestDespawn(%client.render);
     else
       Parent::serverCmdLight(%client);
