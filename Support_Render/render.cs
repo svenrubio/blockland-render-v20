@@ -481,6 +481,7 @@ function Render_Spawn_Loop()
 			//echo("RENDER: Average spawnrate is " @ %avgSpawnrate);
 
 			// Now, we choose if we want to spawn for this group.
+			// TODO: Re-balance this
 			%random = getRandom(1,6);
 			if(%random <= %avgSpawnrate)
 			{

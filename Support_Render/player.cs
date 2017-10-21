@@ -35,13 +35,19 @@ function Render_DoRenderTransition(%rClient, %debug)
         if(%target.getClassName() !$= "Player" || %target.isRenderPlayer || %target.client == %rClient)
           continue;
 
+        // If the Render client is in a minigame, the target player has to be in the same one.
+        if(%rClient.minigame > 0 && %target.client.minigame != %rClient.minigame)
+          continue;
+
         %groupGet[%target] = %groups; // So we can easily 'get' the group containing a target
         %groupList[%groups,%groupCount[%groups]++] = %target; // So we can list all targets for a group.
+
+        %targets++;
       }
     }
 
     // If there are no available players, cancel.
-    if(!%groups)
+    if(!%groups || !%targets)
       return;
 
     // Unlike render.cs, which has a set chance per group, we're going to pick a random client in a random group.
@@ -165,7 +171,14 @@ package RenderPlayer
 
     // Chance of the client becoming an attacker
     %rand = getRandom(1,8);
-    if(%rand <= $Pref::Server::RenderPlSpawnChance)
+
+    // Account for both mini-game and server configuration.
+    if(%p.client.minigame.rSpawnRatePlayer $= "" || %p.client.minigame.rSpawnRatePlayer == -1)
+      %spawnrate = $Pref::Server::RenderPlSpawnChance;
+    else
+      %spawnrate = %p.client.minigame.rSpawnRatePlayer;
+
+    if(%rand <= %spawnrate)
     {
       //echo(%rand);
       %p.client.doRenderTransition = 1;

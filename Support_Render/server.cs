@@ -40,6 +40,7 @@ if(!$Render::Loaded)
 	$Render::LoadedB = 1;
 }
 
+// Note: This also has parts in compat/slayer.cs.
 exec("./player.cs");
 
 exec("./package.cs");

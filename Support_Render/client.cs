@@ -1,5 +1,4 @@
-//%date = getDateTime();
-%date = "10/31/17 00:00:00";
+%date = getDateTime();
 // TODO: Change to getDateTime() before release
 
 // 10/21 - 11/10
