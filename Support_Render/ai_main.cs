@@ -129,7 +129,7 @@ function Render_AI_Movement_Loop(%render)
 		return;
 
 	///// ## NORMAL MOVEMENT ## /////
-	if(!%render.freezeTarget)
+	if(!%render.freezeTarget && !%render.aiStopMoving)
 	{
 		%moveDist = vectorDist(getWords(%render.target.position, 0, 1), getWords(%render.position, 0, 1));
 		if(%render.getMoveObject() != %render.target && isObject(%render.target))
@@ -137,6 +137,18 @@ function Render_AI_Movement_Loop(%render)
 			%render.clearMoveY();
 			%render.setMoveObject(%render.target);
 		}
+
+		// When not attacking, we'll only walk until we reach a certain distance to the player.
+		if(%render.aiWillAttack == 0)
+		{
+			talk(%moveDist SPC %render.aiStopDistance);
+			if(!%render.aiStopDistance)
+				%render.aiStopDistance = getRandom(3,32);
+
+			if(%moveDist <= %render.aiStopDistance)
+				%render.aiStopMoving = 1;
+		}
+
 
 		// Basic "stuck" detection. This is a very simple solution to Render spawning stuck and not being able to navigate simple obstacles.
 		// Ensure that: at least ($Render::C_StuckTimer)ms has passed since last stuck check; our current position is close to the position form the last stuck check; we aren't freezing a player; we aren't in the spot where we froze a player; we are allowed to move
