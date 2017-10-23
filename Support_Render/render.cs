@@ -218,7 +218,18 @@ function Render_Loop()
 	if(%i)
 		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
 	else
-		$Render::LoopBot = 0;
+	{
+		// If any misc. objects (e.g. death mounts, lines) still exist, clear them.
+		// This prevents death mounts from being permanently stuck if they don't de-spawn.
+		%miscCount = RenderMiscGroup.getCount();
+		if(%miscCount)
+		{
+			warn("Support_Render - Found " @ %miscCount @ " uncleared object(s) after de-spawn. Clearing...");
+			RenderMiscGroup.chainDeleteAll();
+		}
+
+		$Render::LoopBot = 0; // Clear the loop variable.
+	}
 }
 
 ////// # Local loop. This function is called individually for each bot every 50ms.
@@ -650,7 +661,7 @@ function Render_FreezePlayer(%p,%r)
 		%p.dismount(); // We have to do this before we set the mount's position, otherwise it'll end up inside the vehicle.
 		%death.setTransform(%p.getTransform());
 		%death.playAudio(0,renderGrowl);
-		MissionCleanup.add(%death);
+		renderMiscGroup.add(%death);
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
 		// If anyone knows of a better solution, please let me know.

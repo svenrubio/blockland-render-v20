@@ -20,6 +20,7 @@
 		<li>Render can no-longer use jets due to AI complications.</li>
 		<li>Fixed 'ghost lights' and map turning extremely dark/bright when Render spawns.</li>
 		<li>Fixed extra 'Standard Player' datablocks created by the mod.</li>
+		<li>Fixed players unfreezing when admins type /clearBots.</li>
 		<li>Fixed console errors when Slayer is not installed.</li>
 		<li>Fixed AI not properly detecting haunt mode.</li>
 		<li>Fixed Slayer preferences not working in game-modes.</li>
