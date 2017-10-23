@@ -141,7 +141,6 @@ function Render_AI_Movement_Loop(%render)
 		// When not attacking, we'll only walk until we reach a certain distance to the player.
 		if(%render.aiWillAttack == 0)
 		{
-			talk(%moveDist SPC %render.aiStopDistance);
 			if(!%render.aiStopDistance)
 				%render.aiStopDistance = getRandom(3,32);
 
