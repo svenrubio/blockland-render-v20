@@ -78,7 +78,6 @@ function Render_DoRenderTransition(%rClient, %debug)
 
   %rClient.player.delete();
   %rClient.setControlObject(%render);
-  //echo(%rClient.getControlObject() SPC %render);
 }
 
 ////// # Player control loop
@@ -179,10 +178,7 @@ package RenderPlayer
       %spawnrate = %p.client.minigame.rSpawnRatePlayer;
 
     if(%rand <= %spawnrate)
-    {
-      //echo(%rand);
       %p.client.doRenderTransition = 1;
-    }
 
     Parent::onDisabled(%a, %p, %e);
   }
