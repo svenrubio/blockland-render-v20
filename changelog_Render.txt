@@ -1,0 +1,91 @@
+<version:2.0>
+	<b>Summary</b>
+	<ul>
+		<li>Visual effects have been overhauled</li>
+		<li>New and improved sound effects</li>
+		<li>(Experimental) You can now play as Render. Controllable Render spawns can be enabled in preferences.</li>
+		<li>Partial compatibility with v20</li>
+		<li>Tons of minor tweaks and bugfixes</li>
+	</ul>
+	<b>Additions</b>
+	<ul>
+		<li>Added new effects for Render damage and deaths.</li>
+		<li>Render now affects lights and bricks.</li>
+		<li>Updated the sound effects.</li>
+		<li>(EXPERIMENTAL) Players can now play as Renderman. This can be enabled in the server preferences or in Slayer mini-game options.</li>
+		<li>Render's kills now have their own icon.</li>
+		<li>Render now has damage particles when shot or attacked.</li>
+		<li>Players are now notified when placing a shrine while they are disabled.</li>
+		<li>Renamed Health Mode to Damage Mode.</li>
+	</ul>
+	<br>
+	<b>Fixes</b>
+	<ul>
+		<li>The add-on now partially supports version 20 of Blockland.</li>
+		<li>Fixed an exploit that would allow players to become invincible to Render.</li>
+		<li>Fixed Render being able to freeze players through walls.</li>
+		<li>Fixed numerous bugs with preferences, including broken defaults.</li>
+		<li>Render can no-longer use jets due to AI complications.</li>
+		<li>Fixed 'ghost lights' and map turning extremely dark/bright when Render spawns.</li>
+		<li>Fixed extra 'Standard Player' datablocks created by the mod.</li>
+		<li>Fixed players unfreezing when admins type /clearBots.</li>
+		<li>Fixed console errors when Slayer is not installed.</li>
+		<li>Fixed mount sound playing when Render captures players.</li>
+		<li>Fixed AI not properly detecting haunt mode.</li>
+		<li>Fixed Slayer preferences not working in game-modes.</li>
+		<li>Fixed Slayer minigames never spawning Render when the global spawnrate is set to 'disabled'.</li>
+	</ul>
+</version>
+<version:1.4>
+	<ul>
+		<li>Added minigame events: setRenderSpawnrate, setRenderInvincibility, setRenderMode</li>
+		<li>Added detector bricks! These bricks call onRelay when Render is nearby.</li>
+		<li>Glitch Shrines now show the shrine range when clicked.</li>
+		<li>Added Haunt Mode, a mode where Render does not attack at all.</li>
+		<li>Fixed sound effects not playing in tag mode.</li>
+		<li>Fixed screen flickering when Render attacks an invincible player.</li>
+		<li>Shrines are now much less likely to cause performance issues when spammed. (Also applies to the new detector bricks)</li>
+		<li>Added Slayer pref: Points for killing Render</li>
+	</ul>
+</version>
+<version:1.3>
+	<ul>
+		<li>Added Slayer compatibility! You can now configure Render to work differently in a mini-game.</li>
+		<li>Updated Render's max health to be more balanced. Max health is now different between normal and tag mode.</li>
+		<li>Fixed glitches when running the mod in certain static maps. (Particularly the new kitchen port)</li>
+	</ul>
+</version>
+<version:1.2.1>
+	Updated pref names. The reveal:
+	<ul>
+		<li>Self-Defense (Mystery Update A): By popular request, you can now use weapons against Render! There is a preference to toggle this on or off.</li>
+		<li>Tag Mode (Mystery Update B): This is a new mode that can be enabled under the preferences menu. In tag mode, it is safe to look at Render at any time. Don't let him catch you, though...</li>
+	</ul>
+</version>
+
+<version:1.2.0>
+April 1 - The Mystery Update
+	<ul>
+		<li>Added Mystery Update A. Something seems different about Render...</li>
+		<li>Added Mystery Update B.</li>
+		<li>Numerous changes and fixes for Render's 'static' damage effect.</li>
+		<li>Fixed an issue with preferences not loading properly. If you were previously having trouble accessing prefs, try them now.</li>
+		<li>Minor pref updates for clarification.</li>
+	</ul>
+</version>
+
+<version:1.1.0>
+	<ul>
+		<li>Added the Glitch Gun! This is a single-use item that allows you to repel Render.</li>
+		<li>Updated the description to include model credit and Blockland IDs.</li>
+		<li>Tweaked the detector text for accuracy.</li>
+		<li>Fixed detectors getting stuck in certain states.</li>
+		<li>Fixed detector icon not showing up in the tool menu.</li>
+		<li>Fixed console error related to detectors on server start.</li>
+		<li>Improved the spawning AI; Render's choices of spawn positions are sneakier and more balanced.</li>
+	</ul>
+</version>
+
+<version:1.0.0>
+	Initial release
+</version>

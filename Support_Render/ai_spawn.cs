@@ -14,22 +14,22 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 	if(!%skipNorth)
 	{
 		%toNorth = vectorAdd(%from, "0 100 0");
-		%rayNorth = containerRaycast(%from, %toNorth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%rayNorth = containerRaycast(%from, %toNorth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 	}
 	if(!%skipSouth)
 	{
 		%toSouth = vectorAdd(%from, "0 -100 0");
-		%raySouth = containerRaycast(%from, %toSouth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%raySouth = containerRaycast(%from, %toSouth, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 	}
 	if(!%skipEast)
 	{
 		%toEast = vectorAdd(%from, "100 0 0");
-		%rayEast = containerRaycast(%from, %toEast, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%rayEast = containerRaycast(%from, %toEast, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 	}
 	if(!%skipWest)
 	{
 		%toWest = vectorAdd(%from, "-100 0 0");
-		%rayWest = containerRaycast(%from, %toWest, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%rayWest = containerRaycast(%from, %toWest, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 	}
 
 	for(%i = 1; %i <= 4; %i++) // For all directions; north, south, east, and west...
@@ -52,8 +52,8 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 		if(%dist[%dir] < $Pref::Server::RenderMinSpawnDistance) // If it's too close to the player (based on pref) we have to skip it.
 			continue;
 
-		%ray[%sA] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToA), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
-		%ray[%sB] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToB), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%ray[%sA] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToA), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
+		%ray[%sB] = containerRaycast(%hit[%dir], vectorAdd(%hit[%dir], %sToB), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
 		%hit[%sA] = posFromRaycast(%ray[%sA]);
 		%hit[%sB] = posFromRaycast(%ray[%sB]);
@@ -180,7 +180,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			//echo("i " @ %i @ "; to " @ %to);
 
 			// We're going to do another check to randomize our position.
-			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
 			if(!%rayForward)
 				%hit = %to;
@@ -209,8 +209,8 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 
 			if(getWord(%pos,0) == %this)
 			{
-				error("Render_Spawn_GetNewDirection: Something happened.");
-				return;
+				error("Render_Spawn_GetNewDirection - Something happened.");
+				return 0;
 			}
 
 			if(!%disableUsedMark) // Mark position as "used" unless disabled
@@ -223,6 +223,6 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			return %pos;
 		}
 	}
-	error("Render_Spawn_GetNewDirection - Returning blank");
-	return;
+	error("Render_Spawn_GetNewDirection - Spawn failed.");
+	return 0;
 }

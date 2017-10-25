@@ -9,7 +9,7 @@ new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
   permissionLevel = $Slayer::PermissionLevel["Any"];
   variable = "%mini.rMode";
   type = "list";
-  list_items = "-1 Use Server Preference" NL "0 Static" NL "1 Health" NL "2 Tag" NL "3 Haunt";
+  list_items = "-1 Use Server Preference" NL "0 Static" NL "1 Damage" NL "2 Tag" NL "3 Haunt";
   guiTag = "Advanced";
 };
 
@@ -47,5 +47,17 @@ new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
   type = "int";
   int_maxValue = 999;
   int_minValue = -999;
+  guiTag = "Advanced";
+};
+
+new ScriptObject(Slayer_PrefSO : Slayer_DefaultPrefSO)
+{
+  category = "Render";
+  title = "Player Transformation Rate";
+  defaultValue = -1;
+  permissionLevel = $Slayer::PermissionLevel["Any"];
+  variable = "%mini.rSpawnRatePlayer";
+  type = "list";
+  list_items = "-1 Use Server Preference" NL "0 Disabled" NL "2 Low"  NL "3 Below Normal" NL "4 Normal" NL "5 Above Normal" NL "6 High" NL "24 Always";
   guiTag = "Advanced";
 };

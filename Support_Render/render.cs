@@ -1,11 +1,9 @@
 //°Д°
 
 ////// # CONSTANTS
-$Render::C_MoveTolerance = 2;
-$Render::C_MoveToleranceObserve = 10;
-$Render::C_EnergyTimer = 25000; // Minimum: 5000
+$Render::C_EnergyTimer = 30000; // Minimum: 5000
 $Render::C_SpawnTimer = 30000;
-$Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms)
+$Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms). Maximum: 250
 $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
 $Render::C_DamageRate = 200;
 $Render::C_DamageDecay = $Render::C_DamageRate/100;
@@ -16,25 +14,56 @@ $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player 
 function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
-	%this.unhidenode(chest);
-	%this.unhidenode(pants);
-	%this.unhidenode(LShoe);
-	%this.unhidenode(RShoe);
-	%this.unhidenode(LArm);
-	%this.unhidenode(LHand);
-	%this.unhidenode(RArm);
-	%this.unhidenode(RHand);
-	%this.setnodecolor(chest, "0 0 0 1");
-	%this.setnodecolor(headskin, "0 0 0 1");
-	%this.setnodecolor(pants, "0 0 0 1");
-	%this.setnodecolor(LShoe, "0 0 0 1");
-	%this.setnodecolor(RShoe, "0 0 0 1");
-	%this.setnodecolor(LArm, "0 0 0 1");
-	%this.setnodecolor(LHand, "0 0 0 1");
-	%this.setnodecolor(RArm, "0 0 0 1");
-	%this.setnodecolor(RHand, "0 0 0 1");
-	%this.setdecalname("AAA-None");
-	%this.setfacename("asciiTerror");
+
+	if(getRandom(1, 256) == 1)
+	{
+		%this.unhidenode("chest");
+		%this.unhidenode("pants");
+		%this.unhidenode("LShoe");
+		%this.unhidenode("RShoe");
+		%this.unhidenode("LArm");
+		%this.unhidenode("RArm");
+		%this.unhidenode("LHand");
+		%this.unhidenode("RHand");
+		%this.unhidenode("scoutHat");
+		%this.setnodecolor("scoutHat", "0.078 0.078 0.078 1");
+		%this.setnodecolor("chest", "0.105 0.458 0.768 1");
+		%this.setnodecolor("headskin", "1 0.878 0.611 1");
+		%this.setnodecolor("pants", "0.078 0.078 0.078 1");
+		%this.setnodecolor("LShoe", "0.392 0.196 0 1");
+		%this.setnodecolor("RShoe", "0.392 0.196 0 1");
+		%this.setnodecolor("LArm", "0.105 0.458 0.768 1");
+		%this.setnodecolor("RArm", "0.105 0.458 0.768 1");
+		%this.setnodecolor("LHand", "1 0.878 0.611 1");
+		%this.setnodecolor("RHand", "1 0.878 0.611 1");
+		%this.setdecalname("Alyx");
+		%this.setfacename("asciiTerror");
+	}
+	else
+	{
+		%this.unhidenode("chest");
+		%this.unhidenode("pants");
+		%this.unhidenode("LShoe");
+		%this.unhidenode("RShoe");
+		%this.unhidenode("LArm");
+		%this.unhidenode("RArm");
+		%this.unhidenode("LHand");
+		%this.unhidenode("RHand");
+		%this.setnodecolor("chest", "0 0 0 1");
+		%this.setnodecolor("headskin", "0 0 0 1");
+		%this.setnodecolor("pants", "0 0 0 1");
+		%this.setnodecolor("LShoe", "0 0 0 1");
+		%this.setnodecolor("RShoe", "0 0 0 1");
+		%this.setnodecolor("LArm", "0 0 0 1");
+		%this.setnodecolor("RArm", "0 0 0 1");
+		%this.setnodecolor("LHand", "0 0 0 1");
+		%this.setnodecolor("RHand", "0 0 0 1");
+		%this.setdecalname("AAA-None");
+		%this.setfacename("asciiTerror");
+	}
+
+		if(getRandom(1,92) == 1)
+			%this.setfacename("memeGrinMan");
 }
 
 ////// # Bot Creation Function
@@ -50,6 +79,7 @@ function Render_CreateBot(%pos,%client)
 	%render.isRender = 1;
 
 	// ## Minigame Preferences
+	// TODO: Move to a separate function so this isn't repeated (see player.cs)
 	if(%client.minigame.rMode !$= "" && %client.minigame.rMode != -1)
 		%render.mode = %client.minigame.rMode;
 	else
@@ -74,8 +104,6 @@ function Render_CreateBot(%pos,%client)
 	//%render.setMaxBackwardSpeed(3); // Default: 4
 	//%render.setMaxSideSpeed(5); // Default: 5
 
-	%render.setMoveTolerance($Render::C_MoveToleranceObserve);
-
 	// Bot hole stuff
 	%render.hMelee = 1;
 	%render.name = "Render";
@@ -94,6 +122,14 @@ function Render_CreateBot(%pos,%client)
 	}
 
 	%render.setTransform(%pos);
+
+	// In case the bot group somehow gets removed
+	if(!isObject(RenderBotGroup))
+	{
+		new simGroup(RenderBotGroup) {};
+		warn("Support_Render - Bot group is missing! Creating a new one...");
+	}
+
 	RenderBotGroup.add(%render);
 
 	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
@@ -129,7 +165,7 @@ function Player::rFOVCheck(%observer, %object, %checkRaycast)
 	// This lets us check for obstructions. Optional, only applies if main check passed.
 	if(%fovCheck && %checkRaycast)
 	{
-		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType);
+		%ray = containerRaycast(%observer.getEyePoint(), %posObject, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
 		if(%ray != 0)
 			%fovCheck = 0;
@@ -182,7 +218,18 @@ function Render_Loop()
 	if(%i)
 		$Render::LoopBot = schedule($Render::C_LoopTimer,0,Render_Loop);
 	else
-		$Render::LoopBot = 0;
+	{
+		// If any misc. objects (e.g. death mounts, lines) still exist, clear them.
+		// This prevents death mounts from being permanently stuck if they don't de-spawn.
+		%miscCount = RenderMiscGroup.getCount();
+		if(%miscCount)
+		{
+			warn("Support_Render - Found " @ %miscCount @ " uncleared object(s) after de-spawn. Clearing...");
+			RenderMiscGroup.chainDeleteAll();
+		}
+
+		$Render::LoopBot = 0; // Clear the loop variable.
+	}
 }
 
 ////// # Local loop. This function is called individually for each bot every 50ms.
@@ -193,44 +240,33 @@ function Render_Loop_Local(%render)
 	if(!%render.loopCount)
 	{
 		%render.loopViewNext = 2;
-		%render.loopPayNext = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
+		%render.loopEnergyTimeout = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
 	}
 
 	%render.players = 0;
 	%render.playersViewing = 0;
 	%render.loopCount++;
 
-	if(%render.loopCount >= %render.loopPayNext) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
+	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
-		if(!%render.doContinue) // If they aren't attacking at this point, we'll just de-spawn them.
-		{
-			//echo("RENDER: De-spawning, out of time");
-			%render.delete();
-			return;
-		}
+		if(getRandom(1,4))
+			Render_DoLightFlicker(%render.position, 4000);
 
-		%render.doContinue = 0; // Reset this
-
-		%render.aiNeedsToPay = 1;
-		%render.payCount++;
-
-		%render.loopPayNext = %render.loopPayNext+$Render::C_EnergyTimer/$Render::C_LoopTimer; //
-	}
-
-	// Until energy is implemented, we will use a random chance that is influenced by how long Render has already been alive.
-	// This is planned to be determined by a more sophisticated AI, considering factors like whether we're freezing a player, how many players we're pursuing, etc.
-	if(%render.aiNeedsToPay && getRandom(1,2) == 1)
-	{
-		//echo("RENDER: De-spawning (energy check failed)");
-		%render.delete();
+		//echo("RENDER: De-spawning, out of time");
+		Render_DeleteR(%render);
 		return;
+
+		//else if(%render.doContinue)
+		//{
+		//	%render.loopEnergyTimeout = %render.loopEnergyTimeout+$Render::C_EnergyTimer/$Render::C_LoopTimer;
+		//	%render.payCount++;
 	}
 
 	// ## VIEW CHECK + MOVEMENT CHECK A
 
 	// If haunt mode is disabled and the AI requests to start attacking...
 	// Note: The AI is also aware when haunt mode is on and will despawn accordingly.
-	if(%render.aiStartAttacking && %render.mode != 3)
+	if(%render.aiStartAttacking && %render.mode != 3 || %render.debugOverride == 1)
 	{
 		// Note: Existing Render bots can still attack, but new ones can't.
 		if(!%render.loopAttackStart)
@@ -241,12 +277,16 @@ function Render_Loop_Local(%render)
 			Render_FreezeRender(%render); // Render stays frozen when he's about to attack.
 		}
 
-		if(%render.loopCount > %render.loopAttackStart) // Start attacking
+		 // Start attacking if we haven't already
+		if(!%render.isAttacking && %render.loopCount > %render.loopAttackStart)
 		{
 			%render.fxScale = 0;
 
+			if(getRandom(1,3))
+				Render_DoLightFlicker(%render.position, 8000);
+
 			%render.isAttacking = 1;
-			%render.setMoveTolerance($Render::C_MoveTolerance);
+
 			Render_UnfreezeRender(%render);
 		}
 	}
@@ -262,8 +302,8 @@ function Render_Loop_Local(%render)
 		//	continue;
 		//}
 
-		// MUST be an actual player or testing bot; ignore if they have destructo wand
-		if(%target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
+		// MUST be an actual player or testing bot
+		if(!%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
 		{
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
@@ -283,25 +323,37 @@ function Render_Loop_Local(%render)
 				////// ## DAMAGE TARGET
 				//%render.playerIsViewing[%render.players] = %isViewing; // Mark them as "viewing"
 				%render.playerViewing = %target;
-				if(%isViewing)
+				if(%isViewing && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
 				{
 					%render.playersViewing++;
 
 					if(%render.isAttacking)
 					{
-						if(%render.mode == 0) // Whiteout Damage
-							Render_InflictWhiteOutDamage(%target,%render,%distance);
+						if(%render.mode == 0) // Normal Damage
+							Render_InflictDamage(%target,%render,%distance);
 						else if(%render.mode == 1) // Health damage
 						{
 							%renderDamage = %target.dataBlock.maxDamage*0.8/%distance;
 
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
+							{
+								%target.client.playSound(rAttackC);
+								%target.client.doRenderDeath = 1;
 								%render.targetKilled = 1;
+							}
 
+							// Incdicate that this is Render damage so the package can disable the particles.
 							%target.renderDamage = 1;
-							%target.addHealth(-%renderDamage);
-						} // Damage type 2 doesn't need this.
 
+							// Only play the sound every 200ms to prevent clipping/overflow
+							if(getSimTime() >= %render.audioNext)
+							{
+								%target.client.playSound(rAttackB);
+								%render.audioNext = getSimTime()+200;
+							}
+
+							%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
+						} // Damage type 2 doesn't need this.
 					}
 				}
 
@@ -313,24 +365,31 @@ function Render_Loop_Local(%render)
 						if(!%render.freezeTarget && %targetMount !$= "RenderDeathArmor")
 						{
 							//talk("RENDER" SPC %render @ ": Freezing a target!");
-							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile") // If the target isn't already frozen and isn't holding a destructo wand.
+
+							// Check for obstructions before freezing a player
+							%ray = containerRaycast(%render.getEyePoint(), %target.getEyePoint(), $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
+
+							// If the target isn't already frozen, isn't holding a destructo wand, and isn't obstructed.
+							if(%targetMount !$= "RenderDeathArmor" && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && %ray == 0)
+							{
 								Render_FreezePlayer(%target,%render);
+								Render_FreezeRender(%render);
+
+								if(getRandom(1,6))
+									Render_DoLightFlicker(%render.position, 4000);
+							}
 
 							%render.freezeTarget = %target;
 						}
 					}
-					else
-					{
-						Render_FreezeRender(%render);
-						%froze = 1;
-					}
 				}
 
 				// If we have a target that is too far away or gone, unfreeze them and Render.
-				if(%render.freezeTarget && (!%render.freezeTarget.isFrozen || %target == %render.freezeTarget && %distance > 5))
+				if(%render.freezeTarget && (!%render.freezeTarget.isFrozen || %target == %render.freezeTarget) && (%distance > 5 || %target.getMountedImage(0).Projectile $= "AdminWandProjectile") )
 				{
 					//talk("RENDER" SPC %render @ ": Unfroze player" SPC %target.client.name SPC %distance SPC %render.freezeTarget SPC %render.freezeTarget.isFrozen);
 					Render_UnfreezePlayer(%target,%render);
+					Render_UnfreezeRender(%render);
 				}
 
 				if(%target.isFrozen && %target.frozenPosition !$= "") // Extra precaution to make sure frozen targets stay in place. This will likely cause problems on ramp bricks.
@@ -352,14 +411,16 @@ function Render_Loop_Local(%render)
 	{
 		if(!%render.isAttacking && %render.playersViewing)
 			Render_FreezeRender(%render);
-		else if(%render.rIsFrozen && !%froze) // Necessary?
-			Render_UnfreezeRender(%render);
 	}
+
+
+	if(!%render.isRenderPlayer)
+		Render_AI_Control_Loop(%render);
+	else if(%render.loopCount == %render.loopViewNext)
+		Render_Player_Control_Loop(%render);
 
 	if(%render.loopCount == %render.loopViewNext)
 		%render.loopViewNext = %render.loopViewNext+2;
-
-	Render_AI_Control_Loop(%render);
 }
 
 ////// # Target picking function
@@ -388,17 +449,19 @@ function Render_Spawn_Loop()
 
 		if(!$Pref::Server::RenderDisableAmbientSounds)
 			if(getRandom(1,12) <= $Pref::Server::RenderSpawnRate) // Bleh
-				serverPlay2D("RenderAmb" @ getRandom(1,2));
+				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
 		// By doing this, we keep the spawnrate balanced regardless of playercount and avoid an unintended bias toward groups of players.
 
 		// First, we're going to go through all the clients in the server.
+		// This system is also used in player.cs
 		for(%i = 0; %i < clientGroup.getCount(); %i++)
 		{
 			%client = clientGroup.getObject(%i);
 
 			// If player is nonexistent or already marked, skip them.
+			// Note that this check also prevents the radius search below, potentially blocking nearby players.
 			if(!isObject(%client.player) || %groupGet[%client.player])
 				continue;
 
@@ -409,7 +472,8 @@ function Render_Spawn_Loop()
 			initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
 			while(%target=containerSearchNext())
 			{
-				if(%target.getClassName() !$= "Player") // Make sure they aren't a bot.
+				// Make sure they aren't a bot or a Render player.
+				if(%target.getClassName() !$= "Player" || %target.isRenderPlayer)
 					continue;
 
 				// Get each player's spawnrate.
@@ -431,6 +495,7 @@ function Render_Spawn_Loop()
 			//echo("RENDER: Average spawnrate is " @ %avgSpawnrate);
 
 			// Now, we choose if we want to spawn for this group.
+			// TODO: Re-balance this
 			%random = getRandom(1,6);
 			if(%random <= %avgSpawnrate)
 			{
@@ -447,7 +512,7 @@ function Render_Spawn_Loop()
 				if(!%pos)
 				{
 					//warn("RENDER: Spawn failed for " @ %client);
-					%render.delete();
+					Render_DeleteR(%render);
 				}
 				else
 					%render.setTransform(%pos);
@@ -458,9 +523,33 @@ function Render_Spawn_Loop()
 	$Render::LoopSpawner = schedule($Render::C_SpawnTimer,0,Render_Spawn_Loop);
 }
 
-// # InflictWhiteOutDamage + misc.
+////// # De-spawn
+// TODO: Move this to the onRemove function in package.cs?
+function Render_DeleteR(%render)
+{
+	//backtrace();
+	if(!isObject(%render))
+	{
+		warn("Support_Render - Attempting to delete non-existent attacker. Ignoring...");
+		return;
+	}
 
-function Render_InflictWhiteOutDamage(%p,%render,%distance)
+	ServerPlay3D(renderMove, %render.position);
+
+	if(%render.isRenderPlayer)
+	{
+		%render.client.bottomPrint("",0,1);
+		%render.client.playSound(renderMove);
+
+		%render.client.instantRespawn();
+		%render.client.isRenderClient = 0;
+	}
+
+	%render.delete();
+}
+
+////// # InflictDamage + misc.
+function Render_InflictDamage(%p,%render,%distance)
 {
 	// This calculates the damage decay, aka how much we need to subtract.
 	// We're using the sim time instead of keeping a loop running.
@@ -484,27 +573,51 @@ function Render_InflictWhiteOutDamage(%p,%render,%distance)
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 
 	if(%p.client.staticDebug)
-		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>SND:" SPC %p.rDmg/50,1);
-
-	//if(%p.client.staticDebugImmune)
-	//	return;
+		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC mCeil(0.03*%p.rDmg));
 
 	%p.setWhiteOut(%p.rDmg/100);
 
-	if(%p.rDmg >= 100 && %p.rDmg <= 200) // If damage is ≥ 100, rip
+	if(%p.rDmg >= 80)
+		%proj = RenderDmg6Projectile;
+	else if(%p.rDmg >= 64)
+		%proj = RenderDmg5Projectile;
+	else if(%p.rDmg >= 48)
+		%proj = RenderDmg4Projectile;
+	else if(%p.rDmg >= 32)
+		%proj = RenderDmg3Projectile;
+	else if(%p.rDmg >= 16)
+		%proj = RenderDmg2Projectile;
+	else
+		%proj = RenderDmg1Projectile;
+	%p.spawnExplosion(%proj, 1);
+
+	if(%p.client.staticDebugImmune)
+		return;
+
+	if(%p.rDmg >= 100) // If damage is ≥ 100, rip
 	{
+		%client = %p.client;
+
+		%client.doRenderDeath = 1;
+		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
+
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
-		%p.setWhiteOut(1);
-		%p.client.playSound(rAttackC);
-		%p.kill();
+
+		if(isObject(%client))
+		{
+			%client.camera.setDamageFlash(0.75);
+			%client.playSound(rAttackC);
+		}
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
 	{
-		if(%p.rDmg >= 25)
+		// Only play the sound every 200ms to prevent clipping/overflow
+		if(getSimTime() >= %render.audioNext && isObject(%p.client))
+		{
 			%p.client.playSound(rAttackB);
-		else
-			%p.client.playSound(rStatic);
+			%render.audioNext = getSimTime()+200;
+		}
 	}
 }
 
@@ -513,6 +626,7 @@ function Render_DoMount(%death,%p)
 	if(isObject(%p.client)) // Checking if the player exists returns 1 (wtf?), but checking player.client doesn't.
 	{
 		%p.dismount(); // Just in case, we'll do this a second time
+		$Render::FreezeMount = 1; // Disable the mount sound. See package.cs.
 		%death.mountObject(%p,8);
 	}
 	else
@@ -526,7 +640,8 @@ function Render_FreezePlayer(%p,%r)
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
-		%p.kill();
+		%p.client.doRenderDeath = 1;
+		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 		return;
 	}
 
@@ -546,7 +661,7 @@ function Render_FreezePlayer(%p,%r)
 		%p.dismount(); // We have to do this before we set the mount's position, otherwise it'll end up inside the vehicle.
 		%death.setTransform(%p.getTransform());
 		%death.playAudio(0,renderGrowl);
-		MissionCleanup.add(%death);
+		renderMiscGroup.add(%death);
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
 		// If anyone knows of a better solution, please let me know.
@@ -555,6 +670,8 @@ function Render_FreezePlayer(%p,%r)
 
 		%r.freezeTarget = %p;
 	}
+
+	return %death;
 }
 
 function Render_UnfreezePlayer(%p,%r)
@@ -619,12 +736,74 @@ function Render_UnfreezeRender(%p)
 	%p.rIsFrozen = 0;
 }
 
-function Render_RequestDespawn(%r) // AI requests to delete the bot
+function Render_RequestDespawn(%render) // AI requests to delete the bot
 {
 	//if(isObject(%r))
-	%r.delete();
+	Render_DeleteR(%render);
 	//else
 	//	warn("Support_Render - Attempting to delete nonexistent bot!");
+}
+
+// # DEATH CAMERA
+// Uses code from Event_Camera_Control
+function GameConnection::doRenderDeath(%client)
+{
+	%camera = %client.camera;
+  if(!isObject(%camera))
+		return;
+
+  %pos = "-2.6 0 -666.05";
+  %deltaX = 1;
+  %deltaY = 0;
+  %deltaZ = 0;
+  %deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
+
+  %rotZ = mAtan(%deltaX, %deltaY) * -1;
+  %rotX = mAtan(%deltaZ, %deltaXYHyp);
+
+  %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
+
+  %camera.setTransform(%pos SPC %aa);
+  %camera.setFlyMode();
+  %camera.mode = "Observer";
+
+  %client.setControlObject(%camera);
+
+  %player = %client.player;
+
+  %camera.setControlObject(%client.dummyCamera);
+
+	%client.cameraTime = getSimTime()+2400;
+
+	%client.playSound("rGlitch");
+	deathCameraLoop(%client);
+}
+
+function deathCameraLoop(%client)
+{
+	%posA = "-2.6 0 -666.05"; // Blank screen with face
+	%posB = "-2.6 -3 -666.05"; // Blank screen
+
+	// Cancel if the camera has moved
+	if(%client.camera.position !$= %posA && %client.camera.position !$= %posB)
+		return;
+
+	if(getRandom(1,3) == 1)
+	{
+		%client.camera.setTransform(%posB);
+		%client.playSound("rGlitch");
+	}
+	else
+		%client.camera.setTransform(%posA);
+
+	// The effect lasts 5 seconds
+	if(getSimTime() > %client.cameraTime)
+	{
+		%client.camera.setTransform(%posB);
+		return;
+	}
+
+	schedule(64, 0, deathCameraLoop, %client);
 }
 
 // # GLITCH GUN
@@ -636,7 +815,10 @@ function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
-	%obj.setWhiteOut(1);
+	Render_DoLightFlicker(%obj.position, 3000);
+
+	%obj.setWhiteOut(0.4);
+	%obj.spawnExplosion(RenderDmg6Projectile, 1);
 	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
 	while(%p=containerSearchNext())
 	{
@@ -645,7 +827,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		{
 			//Render_Spawn_GetNewDirection(%p);
 			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
-			%p.delete();
+			Render_DeleteR(%p);
 		}
 	}
 
@@ -655,4 +837,50 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 
 	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
 	%obj.unMountImage(0);
+}
+
+// # LIGHT FLICKER FUNCTION
+
+function Render_DoLightFlicker(%pos, %duration)
+{
+	if(!$Pref::Server::RenderAllowBrickEffects)
+		return;
+
+	initContainerRadiusSearch(%pos, 20, $TypeMasks::FxBrickObjectType);
+
+	%lightCount = 0;
+	while(%brick=containerSearchNext()) // For all bricks in the area...
+	{
+		if(%lightCount >= 50) // Capped at 50 bricks to prevent lag
+			break;
+
+		// Try the next brick if this one doesn't have a light or is already blacked out.
+		if(!%brick.light || %brick.rBlackout)
+			continue;
+
+		%lightCount++;
+
+		// Save the properties of the brick so they can be reapplied later
+		%brick.rLight = %brick.light.dataBlock;
+		%brick.rFX = %brick.getColorFXID();
+		%brick.rEmitter = %brick.emitter.emitter;
+
+		%brick.setLight(0);
+		%brick.setColorFX(0);
+		%brick.setEmitter(0);
+
+		%brick.rBlackout = 1;
+		schedule(%duration, 0, Render_LightFlickerRestore, %brick);
+	}
+}
+
+function Render_LightFlickerRestore(%brick)
+{
+	if(!isObject(%brick))
+		return;
+
+	%brick.rBlackout = 0;
+	%brick.setLight(%brick.rLight);
+	%brick.setColorFX(%brick.rFX);
+	%brick.setEmitter(%brick.rEmitter);
 }

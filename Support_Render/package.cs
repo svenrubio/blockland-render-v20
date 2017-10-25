@@ -1,6 +1,15 @@
 // # PACKAGED
 package Render
 {
+	function onMissionLoaded()
+	{
+		parent::onMissionLoaded();
+		Render_CreateDeathBoard();
+
+		missionCleanup.add(RenderBotGroup);
+		missionCleanup.add(RenderMiscGroup);
+	}
+
 	function destroyServer()
 	{
 		cancel($Render::LoopBot);
@@ -12,21 +21,26 @@ package Render
 		Parent::destroyServer();
 	}
 
-	function armor::onCollision(%this, %obj, %col, %pos, %vel) //ripped from Event_OnBotTouched. modify for render bot functions
-	{
-		parent::onCollision(%this, %obj, %col, %pos, %vel);
-	}
+	//function armor::onCollision(%this, %obj, %col, %pos, %vel) //ripped from Event_OnBotTouched. modify for render bot functions
+	//{
+	//	parent::onCollision(%this, %obj, %col, %pos, %vel);
+	//}
 
 	function Player::emote(%player, %emote)
 	{
-		// Hide the pain emotes if:
-		// a.) The player is taking damage from Render.
+		// Spawn particles to indicate that something is happening
+		if(%player.isRender)
+			%player.spawnExplosion(RenderDmg5Projectile, 1);
+
+		// Hide emotes if:
+		// a.) The player is taking damage from Render. (Hides the pain emote)
 		// b.) The player is Render.
 		if(%player.renderDamage || %player.isRender)
 		{
 			%player.renderDamage = 0;
 			return;
 		}
+
 		Parent::emote(%player, %emote);
 	}
 
@@ -64,8 +78,21 @@ package Render
 	function Armor::onDisabled(%a, %p, %e)
 	{
 		Render_UnfreezePlayer(%p);
+		if(isObject(%p.client))
+		{
+			if(%p.client.doRenderDeath)
+			{
+				// Note: Invincible players are still marked as 'dead' by Render.
+				// If they later die by other means, they will see the Render death screen.
+				%p.client.doRenderDeath();
+				%p.client.doRenderDeath = 0;
+			}
+		}
+
 		Parent::onDisabled(%a, %p, %e);
 	}
+
+	//function Armor::Damage(%data, %obj, %source, %position ,%damage, %damageType)
 
 	function Player::setTempColor(%player, %a, %b, %c, %d)
 	{
@@ -96,7 +123,6 @@ package Render
 	}
 
 	// Chat message event
-	// TODO: Verify no VCE conflict or overflow
 	function gameConnection::ChatMessage(%client, %msg)
 	{
 		return Parent::ChatMessage(%client, strReplace(%msg, "%renderServerShrineRange", $Render::C_ShrString[$Pref::Server::RenderShrineRange]), %client, %client.player);
@@ -169,6 +195,54 @@ package Render
 
 		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
+
+	function serverCmdDropCameraAtPlayer(%client)
+	{
+		// No orbing in death cam
+		if(%client.camera.position $= "-2.6 0 -666.05" || %client.camera.position $= "-2.6 -3 -666.05")
+			return;
+
+		Parent::ServerCmdDropCameraAtPlayer(%client);
+	}
+
+	// ## Mount Sound Disabler
+	function ServerPlay3D(%sound, %pos)
+	{
+		if($Render::FreezeMount && %sound.getID() $= playerMountSound.getID())
+		{
+			$Render::FreezeMount = 0;
+			return;
+		}
+
+		Parent::ServerPlay3D(%sound, %pos);
+	}
+
+	// ## Brick Blackout Functions
+
+	function fxDTSBrick::setLight(%brick, %datablock, %client)
+	{
+		if(%brick.rBlackout)
+			%brick.rLight = %datablock;
+		else
+			Parent::setLight(%brick, %datablock, %client);
+	}
+
+	function fxDTSBrick::setEmitter(%brick, %datablock, %client)
+	{
+		if(%brick.rBlackout)
+			%brick.rEmitter = %datablock;
+		else
+			Parent::setEmitter(%brick, %datablock, %client);
+	}
+
+	function fxDTSBrick::setColorFX(%brick, %datablock)
+	{
+		if(%brick.rBlackout)
+			%brick.rFX = %datablock;
+		else
+			Parent::setColorFX(%brick, %datablock);
+	}
+
 };
 
 deactivatePackage("Render");

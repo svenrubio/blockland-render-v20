@@ -1,5 +1,4 @@
-//This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
-
+// This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
 $Render::C_ShrineLimit = 32;
 
 //////# PREFERENCES
@@ -8,13 +7,6 @@ $Render::C_ShrineLimit = 32;
 //$Pref::Server::RenderMinSpawnDistance = 16; //large rooms/outdoors
 //$Pref::Server::RenderMinSpawnDistance = 8; //medium rooms
 //$Pref::Server::RenderMinSpawnDistance = 4; //super small spaces.
-
-//0; Disabled
-//5/5; 100%; High
-//4/5; 80%; Above Normal
-//3/5; 60%; Normal
-//2/5; 40%; Below Normal
-//1/5; 20%; Low
 
 $Pref::Server::RenderMinSpawnDistance = 2;
 $Pref::Server::RenderAllowMultiples = 0;
@@ -28,6 +20,7 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Health 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "Support_Render", 4, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "Support_Render", 28, 0, 0);
+	RTB_registerPref("Affect bricks and lights", "Render", "$Pref::Server::RenderAllowBrickEffects", "bool", "Support_Render", 1, 0, 0);
 	RTB_registerPref("Only spawn at night (Day cycle)", "Render", "$Pref::Server::RenderDayCycleSpawn", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "Support_Render", 0, 0, 0);
@@ -37,8 +30,9 @@ else
 {
 	//$Pref::Server::RenderDifficulty = 100;
 	$Pref::Server::RenderDamageType = 0;
-	$Pref::Server::RenderSpawnRate = 6;
+	$Pref::Server::RenderSpawnRate = 4;
 	$Pref::Server::RenderShrineRange = 28;
+	$Pref::Server::RenderAllowBrickEffects = 1;
 }
 
 // Extra load check; these are the things that REALLY shouldn't run twice.
@@ -46,8 +40,6 @@ if(!$Render::LoadedB)
 {
 	// NOTE: If including Support_Render and Slayer in a game-mode, make sure to have Slayer load first.
 	// Console errors may occur in game-modes.
-
-	echo(isObject(Slayer_PrefSO));
 
 	if(isObject(Slayer_PrefSO) || ( isFile("Add-Ons/GameMode_Slayer/server.cs") && $AddOn__GameMode_Slayer == 1 ))
 		exec("./compat/slayer.cs");
@@ -75,6 +67,13 @@ datablock AudioProfile(renderAmb2)
    preload = true;
 };
 
+datablock AudioProfile(renderAmb3)
+{
+   filename    = "./sound/rendercycle3.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 datablock AudioProfile(renderMove)
 {
    filename    = "./sound/entityMove.wav";
@@ -82,23 +81,9 @@ datablock AudioProfile(renderMove)
    preload = true;
 };
 
-datablock AudioProfile(renderForm)
-{
-   filename    = "./sound/entityForm.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
 datablock AudioProfile(glitchFire)
 {
    filename    = "./sound/glitchFire.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(rStatic)
-{
-   filename    = "./sound/glimpse.wav";
    description = AudioClose3d;
    preload = true;
 };
@@ -113,6 +98,13 @@ datablock AudioProfile(rAttackB)
 datablock AudioProfile(rAttackC)
 {
    filename    = "./sound/attackC.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(rGlitch)
+{
+   filename    = "./sound/glitch.wav";
    description = AudioClose3d;
    preload = true;
 };
@@ -151,14 +143,20 @@ datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 	magicWandImmunity = 1;
 	maxDamage = 300; // Max health
 
+	canJet = 0;
+
 	//maxBackwardSpeed = 40;
 	//maxForwardSpeed = 70;
 	//maxSideSpeed = 60;
+
+	uiName = "";
 };
 
 datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
 {
 	maxDamage = 600;
+
+	uiName = "";
 };
 
 function PlayerRenderArmor::onDisabled(%a, %render, %str)
@@ -196,6 +194,9 @@ function PlayerRenderTagArmor::onRemove(%a, %render)
 	Parent::onRemove(%a, %render);
 }
 
+////// # DAMAGE TYPE
+AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 0);
+
 //////# FUNCTIONS
 // Death vehicle from Item_Skis was used as a reference for this
 datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
@@ -230,8 +231,8 @@ function RenderDeathArmor::onRemove(%this, %obj)
 		%player.canDismount = 1;
 }
 
-//////# ITEMS
-//## Glitch Gun
+////// # ITEMS
+// ## Glitch Gun
 datablock ItemData(GlitchEnergyGunItem)
 {
 	category = "Weapon";  // Mission editor category
@@ -366,17 +367,290 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
-//////# EVENTS
+////// # DEATH BOARD
+// TODO: Fix sunflare being visible behind the death board
+datablock staticShapeData(renderDeathBoardData)
+{
+	shapeFile = "./models/cube.dts";
+};
+
+function Render_CreateDeathBoard()
+{
+	// Create the background
+	%obj = new staticShape(RenderBoard)
+	{
+		datablock = renderDeathBoardData;
+		position = "0 0 -666";
+		scale = "0.05 24 16";
+	};
+
+	%light = new fxlight()
+	{
+		dataBlock = playerLight;
+		enable = 1;
+		iconsize = 1;
+		position = "-4 0 -666";
+	};
+
+	missionCleanup.add(%obj);
+	missionCleanup.add(%light);
+	%obj.setNodeColor("ALL", "0 0 0 1");
+
+	$Render::DeathBoard = %obj;
+
+	// Create the emitter
+	%obj2 = new ParticleEmitterNode(RenderBoardNode)
+	{
+		datablock = GenericEmitterNode;
+		emitter = RenderBoardEmitter;
+		position = "-2 0 -666";
+		scale = "0.05 0.05 0.05";
+	};
+	missionCleanup.add(%obj2);
+}
+
+////// # PARTICLES
+
+// ## Face
+datablock ParticleData(RenderBoardParticle)
+{
+	dragCoefficient		= 0.0;
+	windCoefficient		= 0.0;
+	gravityCoefficient	= 0.0;
+	inheritedVelFactor	= 0.0;
+	constantAcceleration	= 0.0;
+	lifetimeMS		= 200;
+	lifetimeVarianceMS	= 0;
+	spinSpeed		= 0.0;
+	spinRandomMin		= 0.0;
+	spinRandomMax		= 0.0;
+	useInvAlpha		= true;
+	animateTexture		= false;
+
+	textureName		= "./render.png";
+
+	colors[0]	= "1 1 1 0.5";
+	colors[1]	= "1 1 1 0.0";
+
+	sizes[0]	= 1;
+	sizes[1]	= 1.5;
+
+	times[0]	= 0.0;
+	times[1]	= 1.0;
+};
+
+datablock ParticleEmitterData(RenderBoardEmitter)
+{
+   ejectionPeriodMS = 10;
+   periodVarianceMS = 0;
+
+   ejectionVelocity = 0.2;
+   velocityVariance = 0.2;
+
+   ejectionOffset = 0;
+
+   thetaMin         = 0.0;
+   thetaMax         = 90.0;
+
+   particles = RenderBoardParticle;
+};
+
+// ## Damage
+datablock ParticleData(RenderDmgExplosionParticle)
+{
+	dragCoefficient      = 10;
+	gravityCoefficient   = 0.0;
+	inheritedVelFactor   = 0.2;
+	constantAcceleration = 0.0;
+	useInvAlpha = 1;
+
+	lifetimeMS           = 300;
+	lifetimeVarianceMS   = 290;
+
+	spinSpeed		= 0.0;
+	spinRandomMin		= -150.0;
+	spinRandomMax		= 150.0;
+	textureName          = "base/data/particles/dot";
+
+	colors[0]	= "0.0 0.0 0.0 0.5";
+	colors[1]	= "0.0 0.0 0.0 0.5";
+	colors[2]	= "0.0 0.0 0.0 0.5";
+	colors[3]	= "0.0 0.0 0.0 0.0";
+
+	sizes[0]	= 0.2;
+	sizes[1]	= 0.2;
+	sizes[2]	= 0.1;
+	sizes[3]	= 0.0;
+
+	times[0] = 0.0;
+	times[1] = 0.9;
+	times[2] = 1.0;
+	times[3] = 2;
+};
+
+// ### Level 1 (Base)
+datablock ParticleEmitterData(RenderDmg1ExplosionEmitter)
+{
+	lifeTimeMS = 50;
+
+	ejectionPeriodMS = 48;
+	periodVarianceMS = 0;
+	ejectionVelocity = 4;
+	velocityVariance = 4;
+	ejectionOffset   = 1.25;
+	thetaMin         = 0;
+	thetaMax         = 180;
+	phiReferenceVel  = 0;
+	phiVariance      = 360;
+	overrideAdvance  = false;
+
+	particles = "RenderDmgExplosionParticle";
+};
+
+datablock ExplosionData(RenderDmg1Explosion)
+{
+   //explosionShape = "";
+   lifeTimeMS = 500;
+
+   emitter[0] = RenderDmg1ExplosionEmitter;
+
+   faceViewer     = true;
+   explosionScale = "1 1 1";
+
+   shakeCamera = true;
+   camShakeFreq = "0.4 0.4 0.4";
+   camShakeAmp = "0.4 0.4 0.4";
+   camShakeDuration = 0.13;
+   camShakeRadius = 1;
+
+   // Dynamic light
+   lightStartRadius = 0;
+   lightEndRadius = 0;
+   lightStartColor = "0 0 0";
+   lightEndColor = "0 0 0";
+};
+
+datablock ProjectileData(RenderDmg1Projectile)
+{
+   projectileShapeName = "base/data/shapes/empty.dts";
+   directDamage        = 0;
+   directDamageType    = $DamageType::Default;
+   radiusDamageType    = $DamageType::Default;
+
+   brickExplosionImpact = false;
+
+   impactImpulse	     = 000;
+   verticalImpulse	  = 100;
+   explosion           = RenderDmg1Explosion;
+   bloodExplosion        = RenderDmg1Explosion;
+   explodeOnPlayerImpact = true;
+   explodeOnDeath        = true;
+
+   muzzleVelocity      = 90;
+   velInheritFactor    = 1;
+
+   armingDelay         = 3000;
+   lifetime            = 3000;
+   fadeDelay           = 3500;
+   bounceElasticity    = 0.99;
+   bounceFriction      = 0.20;
+   isBallistic         = true;
+   gravityMod = 0.0;
+
+   hasLight    = false;
+   lightRadius = 3.0;
+   lightColor  = "0 0 0.5";
+};
+
+// ### Level 2
+datablock ParticleEmitterData(RenderDmg2ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 24;
+};
+datablock ExplosionData(RenderDmg2Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg2ExplosionEmitter;
+	camShakeAmp = "0.8 0.8 0.8";
+};
+datablock ProjectileData(RenderDmg2Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg2Explosion;
+   bloodExplosion	=	RenderDmg2Explosion;
+};
+
+// ### Level 3
+datablock ParticleEmitterData(RenderDmg3ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 12;
+};
+datablock ExplosionData(RenderDmg3Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg3ExplosionEmitter;
+	camShakeAmp = "1 1 1";
+};
+datablock ProjectileData(RenderDmg3Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg3Explosion;
+   bloodExplosion	=	RenderDmg3Explosion;
+};
+
+// ### Level 4
+datablock ParticleEmitterData(RenderDmg4ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 6;
+};
+datablock ExplosionData(RenderDmg4Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg4ExplosionEmitter;
+	camShakeAmp = "2 2 2";
+};
+datablock ProjectileData(RenderDmg4Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg4Explosion;
+   bloodExplosion	=	RenderDmg4Explosion;
+};
+
+// ### Level 5
+datablock ParticleEmitterData(RenderDmg5ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 3;
+};
+datablock ExplosionData(RenderDmg5Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg5ExplosionEmitter;
+	camShakeAmp = "3 3 3";
+};
+datablock ProjectileData(RenderDmg5Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg5Explosion;
+   bloodExplosion	=	RenderDmg5Explosion;
+};
+
+// ### Level 6
+datablock ParticleEmitterData(RenderDmg6ExplosionEmitter : RenderDmg1ExplosionEmitter)
+{
+		ejectionPeriodMS = 1;
+};
+datablock ExplosionData(RenderDmg6Explosion : RenderDmg1Explosion)
+{
+	emitter[0] = RenderDmg6ExplosionEmitter;
+	camShakeAmp = "4 4 4";
+};
+datablock ProjectileData(RenderDmg6Projectile : RenderDmg1Projectile)
+{
+   explosion			=	RenderDmg6Explosion;
+   bloodExplosion	=	RenderDmg6Explosion;
+};
+
+////// # EVENTS
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 
-//////# MISC
-new simGroup(RenderBotGroup) {}; //Render bot group
-//missionCleanup.add(RenderBotGroup);
+////// # MISC
+new simGroup(RenderBotGroup) {}; // Render bot group
 
-new simGroup(RenderMiscGroup) {}; //Render object group
-//missionCleanup.add(RenderMiscGroup);
+new simGroup(RenderMiscGroup) {}; // Render object group
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);

@@ -72,7 +72,7 @@ $Library::EnvServer::Ver = 0;
 deactivatepackage("renderdebugpackage");
 package renderDebugPackage
 {
-	function serverCmdSpawnR(%client, %delete, %useOldChance)
+	function serverCmdSpawnR(%client, %attack, %delete, %useOldChance)
 	{
 		if(!%client.isSuperAdmin)
 			return;
@@ -82,6 +82,13 @@ package renderDebugPackage
 		%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %rendy, %skipNorth, %skipSouth, %skipEast, %skipWest);
 		%pos = Render_Spawn_GetNewDirection(%rendy, %client.player.getEyePoint(), 0, 0, !%useOldChance);
 
+		if(!%pos)
+		{
+			talk("RENDER: Spawn failed for " @ %client);
+			Render_DeleteR(%rendy);
+			return;
+		}
+
 		%rendy.setTransform(%pos);
 		%client.lastSpawnedRender = %rendy;
 
@@ -89,6 +96,11 @@ package renderDebugPackage
 
 		if(%delete)
 			%rendy.delete();
+
+		if(%attack)
+			%rendy.debugOverride = 1;
+
+		return %rendy;
 	}
 
 	function serverCmdMoveR(%client, %resetUsed)
@@ -165,7 +177,8 @@ package renderDebugPackage
 		echo(%client.name @ ": Clearing bots and lines...");
 
 		RenderMiscGroup.chainDeleteAll();
-		RenderBotGroup.chainDeleteAll();
+		for(%i = 0; %i <= RenderBotGroup.getCount()-1; %i++)
+			Render_DeleteR(RenderBotGroup.getObject(%i));
 	}
 
 	function Render_DebugLoop()
