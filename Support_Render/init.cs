@@ -353,7 +353,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
 
    mountPoint = 0;
    offset = "0 0 0";
-   eyeoffset = "0.7 1.2 -0.85";
+   eyeoffset = "0.7 1.2 -0.75";
    rotation = eulerToMatrix( "0 0 0" );
 
    correctMuzzleVector = true;
