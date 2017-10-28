@@ -158,21 +158,25 @@ package Render
 
 		%str = ""; // Start out with red
 
+		// Farlands offset (Display only - does not affect actual values)
+		%detectorOffset = vectorDist(%player.getTransform(), "0 0 0")/130000;
+		%detector = %player.detector+%detectorOffset;
+
 		if(!$Pref::Server::RenderDisableDetectorText)
 		{
 			// The line breaks are to prevent the status bar from jumping a line.
 			// May not display correctly if the client has a modified bottom print margin.
-			if(%player.detector < 0.2)
+			if(%detector < 0.2)
 				%text = "No glitch energy detected.<br>";
-			else if(%player.detector < 2)
+			else if(%detector < 2)
 				%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
-			else if(%player.detector < 3)
+			else if(%detector < 3)
 				%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
-			else if(%player.detector < 4)
+			else if(%detector < 4)
 				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
-			else if(%player.detector < 5)
+			else if(%detector < 5)
 				%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
-			else if(%player.detector)
+			else if(%detector)
 				%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
 		}
 
@@ -180,7 +184,7 @@ package Render
 		// The values are randomized to simulate noise.
 		// **Beware of the character limit to prevent flickering/cutoff!**
 		for(%i = 1; %i <= 75; %i++)
-	    %str = %str @ ((%client.player.detector*14.6)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+	    %str = %str @ ((%detector*14.6)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
 
 		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>I" @ %str @ "I",1,1);
 		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
