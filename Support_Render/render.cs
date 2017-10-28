@@ -566,29 +566,19 @@ function Render_InflictDamage(%p,%render,%distance)
 	%dmgOld = %p.rDmg;
 	%p.rDmg = ( %p.rDmg+( $Render::C_DamageRate/%distance ) )-%dif;
 
-
 	if(%p.rDmg <= 0)
 		%p.rDmg = 1;
 
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
-
-	if(%p.client.staticDebug)
-		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC mCeil(0.03*%p.rDmg));
+	%stage = mCeil(0.06*%p.rDmg);
 
 	%p.setWhiteOut(%p.rDmg/100);
 
-	if(%p.rDmg >= 80)
-		%proj = RenderDmg6Projectile;
-	else if(%p.rDmg >= 64)
-		%proj = RenderDmg5Projectile;
-	else if(%p.rDmg >= 48)
-		%proj = RenderDmg4Projectile;
-	else if(%p.rDmg >= 32)
-		%proj = RenderDmg3Projectile;
-	else if(%p.rDmg >= 16)
-		%proj = RenderDmg2Projectile;
-	else
-		%proj = RenderDmg1Projectile;
+	%proj = "RenderDmg" @ %stage @ "Projectile";
+
+	if(%p.client.staticDebug)
+		centerPrint(%p.client,"DIST:" SPC %distance @ "<br>" @ "RPOS:" SPC %render.position @ "<br>" @ "PPOS:" SPC %p.position @ "<br>" @ "DMG:" SPC %p.rDmg-%dmgOld @ "<br>TDMG:" SPC %p.rDmg @ "<BR>DIF:" SPC %dif @ "<BR>STAGE: " SPC %proj);
+
 	%p.spawnExplosion(%proj, 1);
 
 	if(%p.client.staticDebugImmune)
