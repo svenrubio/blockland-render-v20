@@ -160,14 +160,16 @@ package Render
 
 		if(!$Pref::Server::RenderDisableDetectorText)
 		{
+			// The line breaks are to prevent the status bar from jumping a line.
+			// May not display correctly if the client has a modified bottom print margin.
 			if(%player.detector < 0.2)
-				%text = "No glitch energy detected.";
+				%text = "No glitch energy detected.<br>";
 			else if(%player.detector < 2)
-				%text = "Slight glitch energy trace detected.<color:FFD5D5>";
+				%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
 			else if(%player.detector < 3)
-				%text = "Caution: Moderate glitch energy detected.<color:FFAAAA>";
+				%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
 			else if(%player.detector < 4)
-				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<color:FF8080>";
+				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
 			else if(%player.detector < 5)
 				%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
 			else if(%player.detector)
