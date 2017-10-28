@@ -178,9 +178,9 @@ package Render
 
 		// Change the color when we reach the bar that corresponnds with the value.
 		// The values are randomized to simulate noise.
-		// **Beware of the character limit!**
-		for(%i = 1; %i <= 80; %i++)
-	    %str = %str @ ((%client.player.detector*15.6)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+		// **Beware of the character limit to prevent flickering/cutoff!**
+		for(%i = 1; %i <= 75; %i++)
+	    %str = %str @ ((%client.player.detector*14.6)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
 
 		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>I" @ %str @ "I",1,1);
 		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
