@@ -190,9 +190,6 @@ package Render
 		{
 			%decay = %player.detectorDecay/20;
 
-			if(%decay < 0.01)
-				%decay = %player.detectorDecay; // Get rid of the rest so the value stops at zero.
-
 			%player.detectorDecay = %player.detectorDecay-%decay;
 			%player.detector = %player.detector-%decay;
 		}
