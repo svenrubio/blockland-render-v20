@@ -1,3 +1,8 @@
+<version:2.1>
+	<ul>
+		<li>Updated the Glitch Detector's display text and coloring.</li>
+	</ul>
+</version>
 <version:2.0>
 	<b>Summary</b>
 	<ul>
@@ -16,7 +21,6 @@
 		<li>(EXPERIMENTAL) Players can now play as Renderman. This can be enabled in the server preferences or in Slayer mini-game options.</li>
 		<li>Render's kills now have their own icon.</li>
 		<li>Render now has damage particles when shot or attacked.</li>
-		<li>Updated the Glitch Detector's display text and coloring.</li>
 		<li>Players are now notified when placing a shrine while they are disabled.</li>
 		<li>Renamed Health Mode to Damage Mode.</li>
 	</ul>
