@@ -174,12 +174,13 @@ package Render
 				%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
 		}
 
-		// Change the color to grey when we reach the bar that corresponnds with the value.
+		// Change the color when we reach the bar that corresponnds with the value.
 		// The values are randomized to simulate noise.
-		for(%i = 1; %i <= 60; %i++)
-	    %str = %str @ ((%client.player.detector*12)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
+		// **Beware of the character limit!**
+		for(%i = 1; %i <= 80; %i++)
+	    %str = %str @ ((%client.player.detector*15.6)+getRandom(-1,1)+3 <= %i?"\c7-":"-");
 
-		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>" @ %str,1,1);
+		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:arial black:14>I" @ %str @ "I",1,1);
 		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
 
 		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
