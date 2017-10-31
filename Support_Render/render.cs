@@ -15,7 +15,7 @@ function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
 
-	if(getRandom(1, 256) == 1)
+	if(getRandom(1, 384) == 1)
 	{
 		%this.unhidenode("chest");
 		%this.unhidenode("pants");
