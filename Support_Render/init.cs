@@ -1,7 +1,7 @@
 // This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
 $Render::C_ShrineLimit = 32;
 
-//////# PREFERENCES
+////// # PREFERENCES # //////
 
 //$Pref::Server::RenderMinSpawnDistance = 32; //huge open spaces/outdoors
 //$Pref::Server::RenderMinSpawnDistance = 16; //large rooms/outdoors
@@ -45,373 +45,55 @@ if(!$Render::LoadedB)
 		exec("./compat/slayer.cs");
 }
 
-//////# SOUNDS
-datablock AudioProfile(renderGrowl)
+////// # PARTICLES # //////
+
+// ## Detector Blink FX ## //
+datablock ParticleData(GlitchDetectorParticle)
 {
-   filename    = "./sound/indoorgrowl.wav";
-   description = AudioClose3d;
-   preload = true;
+	dragCoefficient		= 0.0;
+	windCoefficient		= 0.0;
+	gravityCoefficient	= 0.0;
+	inheritedVelFactor	= 0.0;
+	constantAcceleration	= 0.0;
+	lifetimeMS		= 200;
+	lifetimeVarianceMS	= 0;
+	spinSpeed		= 0.0;
+	spinRandomMin		= 0.0;
+	spinRandomMax		= 0.0;
+	useInvAlpha		= false;
+	animateTexture		= false;
+
+	textureName		= "base/data/particles/thinRing.png";
+
+	colors[0]	= "1 1 1 1";
+	colors[1]	= "1 1 1 0.0";
+
+	sizes[0]	= 0;
+	sizes[1]	= 0.5;
+
+	times[0]	= 0.0;
+	times[1]	= 1.0;
 };
 
-datablock AudioProfile(renderAmb1)
+datablock ParticleEmitterData(GlitchDetectorEmitter)
 {
-   filename    = "./sound/rendercycle1.wav";
-   description = AudioClose3d;
-   preload = true;
+   ejectionPeriodMS = 500;
+   periodVarianceMS = 0;
+
+   ejectionVelocity = 0.2;
+   velocityVariance = 0;
+
+   ejectionOffset = 0;
+
+   thetaMin         = 0.0;
+   thetaMax         = 0.0;
+
+	 uiName = "_GDEmitter";
+
+   particles = GlitchDetectorParticle;
 };
 
-datablock AudioProfile(renderAmb2)
-{
-   filename    = "./sound/rendercycle2.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(renderAmb3)
-{
-   filename    = "./sound/rendercycle3.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(renderMove)
-{
-   filename    = "./sound/entityMove.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(glitchFire)
-{
-   filename    = "./sound/glitchFire.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(rAttackB)
-{
-   filename    = "./sound/attackB.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(rAttackC)
-{
-   filename    = "./sound/attackC.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(rGlitch)
-{
-   filename    = "./sound/glitch.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-//////# BRICKS
-datablock fxDtsBrickData(brickGlitchShrineData)
-{
-	brickFile = "Add-Ons/Brick_Halloween/pumpkin_ascii.blb";
-	uiName = "Glitch Shrine";
-	category = "Special";
-	subCategory = "Interactive";
-	iconName = "Add-Ons/Support_Render/Glitch Shrine";
-	indestructable = 1;
-};
-
-datablock fxDtsBrickData(brickGlitchDetectorData)
-{
-	brickFile = "base/data/bricks/flats/1x1F.blb";
-	uiName = "Glitch Detector";
-	category = "Special";
-	subCategory = "Interactive";
-	iconName = "base/client/ui/brickIcons/1x1F";
-	indestructable = 1;
-};
-
-//// ## Shrine String
-$Render::C_ShrString[-1] = "NOTE: Shrines are disabled.";
-$Render::C_ShrString[4] = "Shrine range: 16x";
-$Render::C_ShrString[12] = "Shrine range: 32x";
-$Render::C_ShrString[20] = "Shrine range: 48x";
-$Render::C_ShrString[28] = "Shrine range: 64x";
-
-//////# PLAYERTYPE
-datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
-{
-	magicWandImmunity = 1;
-	maxDamage = 300; // Max health
-
-	canJet = 0;
-
-	//maxBackwardSpeed = 40;
-	//maxForwardSpeed = 70;
-	//maxSideSpeed = 60;
-
-	uiName = "";
-};
-
-datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
-{
-	maxDamage = 600;
-
-	uiName = "";
-};
-
-function PlayerRenderArmor::onDisabled(%a, %render, %str)
-{
-	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
-	%client = %render.lastDmgClient;
-
-	// If the client exists AND is in a minigame that awards points for killing Render...
-	if(isObject(%client) && %client.minigame.rPoints)
-		%client.incScore(%client.minigame.rPoints); // Give them their points
-
-	Parent::onDisabled(%a, %render, %str);
-}
-
-function PlayerRenderArmor::onRemove(%a, %render)
-{
-	if(%render.freezeTarget)
-		Render_UnfreezePlayer(%render.freezeTarget);
-
-	Parent::onRemove(%a, %render);
-}
-
-// Same as above but with tag mode armor
-function PlayerRenderTagArmor::onDisabled(%a, %render, %str)
-{
-	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
-	Parent::onDisabled(%a, %render, %str);
-}
-
-function PlayerRenderTagArmor::onRemove(%a, %render)
-{
-	if(%render.freezeTarget)
-		Render_UnfreezePlayer(%render.freezeTarget);
-
-	Parent::onRemove(%a, %render);
-}
-
-////// # DAMAGE TYPE
-AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 0);
-
-//////# FUNCTIONS
-// Death vehicle from Item_Skis was used as a reference for this
-datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
-{
-	airControl = 0;
-
-	canRide = 0;
-
-	cameraMaxDist = 20;
-	cameraVerticalOffset = 15;
-
-	drag = 2;
-
-	isInvincible = 1;
-
-	jumpForce = 0;
-	runForce = 0;
-
-	uiName = "";
-};
-
-function RenderDeathArmor::onAdd(%datablock,%obj)
-{
-	%obj.hideNode("ALL");
-}
-
-function RenderDeathArmor::onRemove(%this, %obj)
-{
-	%player = %obj.getMountedObject(0);
-
-	if(isObject(%player))
-		%player.canDismount = 1;
-}
-
-////// # ITEMS
-// ## Glitch Gun
-datablock ItemData(GlitchEnergyGunItem)
-{
-	category = "Weapon";  // Mission editor category
-	className = "Weapon"; // For inventory system
-
-	// Basic Item Properties
-	shapeFile = "base/data/shapes/printGun.dts";
-	rotate = false;
-	mass = 1;
-	density = 0.2;
-	elasticity = 0.2;
-	friction = 0.6;
-	emap = true;
-
-	uiName = "Glitch Gun";
-	iconName = " ";
-	doColorShift = true;
-	colorShiftColor = "0.0 1.0 1.0 1.0";
-
-	// Dynamic properties defined by the scripts
-	image = GlitchEnergyGunImage;
-	canDrop = true;
-};
-
-datablock ShapeBaseImageData(GlitchEnergyGunImage)
-{
-	// Basic Item properties
-	shapeFile = "base/data/shapes/printGun.dts";
-	emap = true;
-
-	// Specify mount point & offset for 3rd person, and eye offset
-	// for first person rendering.
-	mountPoint = 0;
-	offset = "0 0 0";
-	eyeoffset = "0.7 1.2 -0.55";
-	rotation = eulerToMatrix( "0 0 0" );
-
-	// When firing from a point offset from the eye, muzzle correction
-	// will adjust the muzzle vector to point to the eye LOS point.
-	// Since this weapon doesn't actually fire from the muzzle point,
-	// we need to turn this off.
-	correctMuzzleVector = true;
-
-	// Add the WeaponImage namespace as a parent, WeaponImage namespace
-	// provides some hooks into the inventory system.
-	className = "WeaponImage";
-
-	// Projectile && Ammo.
-	item = GlitchEnergyGunItem;
-	//ammo = " ";
-	//projectile = wrenchProjectile; // The item doesn't actually fire a projectile.
-	//projectileType = Projectile;
-	//
-	//casing = gunShellDebris;
-	//shellExitDir        = "0.0 0.0 0.0";
-	//shellExitOffset     = "0 0 0";
-	//shellExitVariance   = 0.0;
-	//shellVelocity       = 0.0;
-
-	armReady = true;
-
-	doColorShift = true;
-	colorShiftColor = GlitchEnergyGunItem.colorShiftColor; //"0.400 0.196 0 1.000";
-
-	//casing = " ";
-
-	// Images have a state system which controls how the animations
-	// are run, which sounds are played, script callbacks, etc. This
-	// state system is downloaded to the client so that clients can
-	// predict state changes and animate accordingly.  The following
-	// system supports basic ready->fire->reload transitions as
-	// well as a no-ammo->dryfire idle state.
-
-	// Initial start up state
-	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.0;
-	stateTransitionOnTimeout[0]       = "Ready";
-	stateSound[0]					= weaponSwitchSound;
-
-	stateName[1]                    = "Ready";
-	stateTransitionOnTriggerDown[1] = "initiate";
-	stateAllowImageChange[1]        = true;
-
-	stateName[2]                = "initiate";
-	stateScript[2]              = "onInit";
-	stateTimeoutValue[2]        = 1;
-	stateTransitionOnTimeout[2] = "Ready";
-	stateAllowImageChange[2]    = false;
-};
-
-//## Detector
-datablock ItemData(GlitchDetector)
-{
-	category = "Weapon";  // Mission editor category
-	className = "Weapon"; // For inventory system
-
-	shapeFile = "./models/detector.dts";
-	rotate = false;
-	mass = 1;
-	density = 0.2;
-	elasticity = 0.2;
-	friction = 0.6;
-	emap = true;
-
-	uiName = "Glitch Detector";
-	iconName = "./models/Icon_detector";
-	doColorShift = false;
-	colorShiftColor = "1.0 1.0 1.0 1.0";
-
-	image = GlitchDetectorImage;
-	canDrop = true;
-};
-
-datablock ShapeBaseImageData(GlitchDetectorImage)
-{
-   shapeFile = "./models/detector.dts";
-   emap = true;
-
-   mountPoint = 0;
-   offset = "0 0 0";
-   eyeoffset = "0.7 1.2 -0.75";
-   rotation = eulerToMatrix( "0 0 0" );
-
-   correctMuzzleVector = true;
-
-   className = "WeaponImage";
-   item = GlitchDetector;
-
-   armReady = true;
-
-   doColorShift = false;
-   colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
-};
-
-////// # DEATH BOARD
-// TODO: Fix sunflare being visible behind the death board
-datablock staticShapeData(renderDeathBoardData)
-{
-	shapeFile = "./models/cube.dts";
-};
-
-function Render_CreateDeathBoard()
-{
-	// Create the background
-	%obj = new staticShape(RenderBoard)
-	{
-		datablock = renderDeathBoardData;
-		position = "0 0 -666";
-		scale = "0.05 24 16";
-	};
-
-	%light = new fxlight()
-	{
-		dataBlock = playerLight;
-		enable = 1;
-		iconsize = 1;
-		position = "-4 0 -666";
-	};
-
-	missionCleanup.add(%obj);
-	missionCleanup.add(%light);
-	%obj.setNodeColor("ALL", "0 0 0 1");
-
-	$Render::DeathBoard = %obj;
-
-	// Create the emitter
-	%obj2 = new ParticleEmitterNode(RenderBoardNode)
-	{
-		datablock = GenericEmitterNode;
-		emitter = RenderBoardEmitter;
-		position = "-2 0 -666";
-		scale = "0.05 0.05 0.05";
-	};
-	missionCleanup.add(%obj2);
-}
-
-////// # PARTICLES
-
-// ## Face
+// ## Face ## //
 datablock ParticleData(RenderBoardParticle)
 {
 	dragCoefficient		= 0.0;
@@ -455,7 +137,7 @@ datablock ParticleEmitterData(RenderBoardEmitter)
    particles = RenderBoardParticle;
 };
 
-// ## Damage
+// ## Damage ## //
 datablock ParticleData(RenderDmgExplosionParticle)
 {
 	dragCoefficient      = 10;
@@ -642,12 +324,375 @@ datablock ProjectileData(RenderDmg6Projectile : RenderDmg1Projectile)
    bloodExplosion	=	RenderDmg6Explosion;
 };
 
-////// # EVENTS
+////// # SOUNDS # //////
+datablock AudioProfile(renderGrowl)
+{
+   filename    = "./sound/indoorgrowl.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(renderAmb1)
+{
+   filename    = "./sound/rendercycle1.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(renderAmb2)
+{
+   filename    = "./sound/rendercycle2.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(renderAmb3)
+{
+   filename    = "./sound/rendercycle3.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(renderMove)
+{
+   filename    = "./sound/entityMove.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(glitchFire)
+{
+   filename    = "./sound/glitchFire.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(rAttackB)
+{
+   filename    = "./sound/attackB.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(rAttackC)
+{
+   filename    = "./sound/attackC.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+datablock AudioProfile(rGlitch)
+{
+   filename    = "./sound/glitch.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
+////// # BRICKS # //////
+datablock fxDtsBrickData(brickGlitchShrineData)
+{
+	brickFile = "Add-Ons/Brick_Halloween/pumpkin_ascii.blb";
+	uiName = "Glitch Shrine";
+	category = "Special";
+	subCategory = "Interactive";
+	iconName = "Add-Ons/Support_Render/Glitch Shrine";
+	indestructable = 1;
+};
+
+datablock fxDtsBrickData(brickGlitchDetectorData)
+{
+	brickFile = "base/data/bricks/flats/1x1F.blb";
+	uiName = "Glitch Detector";
+	category = "Special";
+	subCategory = "Interactive";
+	iconName = "base/client/ui/brickIcons/1x1F";
+	indestructable = 1;
+};
+
+//// ## Shrine String ## ////
+$Render::C_ShrString[-1] = "NOTE: Shrines are disabled.";
+$Render::C_ShrString[4] = "Shrine range: 16x";
+$Render::C_ShrString[12] = "Shrine range: 32x";
+$Render::C_ShrString[20] = "Shrine range: 48x";
+$Render::C_ShrString[28] = "Shrine range: 64x";
+
+////// # PLAYERTYPE # //////
+datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
+{
+	magicWandImmunity = 1;
+	maxDamage = 300; // Max health
+
+	canJet = 0;
+
+	//maxBackwardSpeed = 40;
+	//maxForwardSpeed = 70;
+	//maxSideSpeed = 60;
+
+	uiName = "";
+};
+
+datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
+{
+	maxDamage = 600;
+
+	uiName = "";
+};
+
+function PlayerRenderArmor::onDisabled(%a, %render, %str)
+{
+	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	%client = %render.lastDmgClient;
+
+	// If the client exists AND is in a minigame that awards points for killing Render...
+	if(isObject(%client) && %client.minigame.rPoints)
+		%client.incScore(%client.minigame.rPoints); // Give them their points
+
+	Parent::onDisabled(%a, %render, %str);
+}
+
+function PlayerRenderArmor::onRemove(%a, %render)
+{
+	if(%render.freezeTarget)
+		Render_UnfreezePlayer(%render.freezeTarget);
+
+	Parent::onRemove(%a, %render);
+}
+
+// Same as above but with tag mode armor
+function PlayerRenderTagArmor::onDisabled(%a, %render, %str)
+{
+	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	Parent::onDisabled(%a, %render, %str);
+}
+
+function PlayerRenderTagArmor::onRemove(%a, %render)
+{
+	if(%render.freezeTarget)
+		Render_UnfreezePlayer(%render.freezeTarget);
+
+	Parent::onRemove(%a, %render);
+}
+
+////// # DAMAGE TYPE # //////
+AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 0);
+
+////// # FUNCTIONS # //////
+// Death vehicle from Item_Skis was used as a reference for this
+datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
+{
+	airControl = 0;
+
+	canRide = 0;
+
+	cameraMaxDist = 20;
+	cameraVerticalOffset = 15;
+
+	drag = 2;
+
+	isInvincible = 1;
+
+	jumpForce = 0;
+	runForce = 0;
+
+	uiName = "";
+};
+
+function RenderDeathArmor::onAdd(%datablock,%obj)
+{
+	%obj.hideNode("ALL");
+}
+
+function RenderDeathArmor::onRemove(%this, %obj)
+{
+	%player = %obj.getMountedObject(0);
+
+	if(isObject(%player))
+		%player.canDismount = 1;
+}
+
+////// # ITEMS //////
+// ## Glitch Gun ## //
+datablock ItemData(GlitchEnergyGunItem)
+{
+	category = "Weapon";  // Mission editor category
+	className = "Weapon"; // For inventory system
+
+	// Basic Item Properties
+	shapeFile = "base/data/shapes/printGun.dts";
+	rotate = false;
+	mass = 1;
+	density = 0.2;
+	elasticity = 0.2;
+	friction = 0.6;
+	emap = true;
+
+	uiName = "Glitch Gun";
+	iconName = " ";
+	doColorShift = true;
+	colorShiftColor = "0.0 1.0 1.0 1.0";
+
+	// Dynamic properties defined by the scripts
+	image = GlitchEnergyGunImage;
+	canDrop = true;
+};
+
+datablock ShapeBaseImageData(GlitchEnergyGunImage)
+{
+	// Basic Item properties
+	shapeFile = "base/data/shapes/printGun.dts";
+	emap = true;
+
+	// Specify mount point & offset for 3rd person, and eye offset
+	// for first person rendering.
+	mountPoint = 0;
+	offset = "0 0 0";
+	eyeoffset = "0.7 1.2 -0.55";
+	rotation = eulerToMatrix( "0 0 0" );
+
+	// When firing from a point offset from the eye, muzzle correction
+	// will adjust the muzzle vector to point to the eye LOS point.
+	// Since this weapon doesn't actually fire from the muzzle point,
+	// we need to turn this off.
+	correctMuzzleVector = true;
+
+	// Add the WeaponImage namespace as a parent, WeaponImage namespace
+	// provides some hooks into the inventory system.
+	className = "WeaponImage";
+
+	// Projectile && Ammo.
+	item = GlitchEnergyGunItem;
+	//ammo = " ";
+	//projectile = wrenchProjectile; // The item doesn't actually fire a projectile.
+	//projectileType = Projectile;
+	//
+	//casing = gunShellDebris;
+	//shellExitDir        = "0.0 0.0 0.0";
+	//shellExitOffset     = "0 0 0";
+	//shellExitVariance   = 0.0;
+	//shellVelocity       = 0.0;
+
+	armReady = true;
+
+	doColorShift = true;
+	colorShiftColor = GlitchEnergyGunItem.colorShiftColor; //"0.400 0.196 0 1.000";
+
+	//casing = " ";
+
+	// Images have a state system which controls how the animations
+	// are run, which sounds are played, script callbacks, etc. This
+	// state system is downloaded to the client so that clients can
+	// predict state changes and animate accordingly.  The following
+	// system supports basic ready->fire->reload transitions as
+	// well as a no-ammo->dryfire idle state.
+
+	// Initial start up state
+	stateName[0]                     = "Activate";
+	stateTimeoutValue[0]             = 0.0;
+	stateTransitionOnTimeout[0]       = "Ready";
+	stateSound[0]					= weaponSwitchSound;
+
+	stateName[1]                    = "Ready";
+	stateTransitionOnTriggerDown[1] = "initiate";
+	stateAllowImageChange[1]        = true;
+
+	stateName[2]                = "initiate";
+	stateScript[2]              = "onInit";
+	stateTimeoutValue[2]        = 1;
+	stateTransitionOnTimeout[2] = "Ready";
+	stateAllowImageChange[2]    = false;
+};
+
+// ## Detector ## //
+datablock ItemData(GlitchDetector)
+{
+	category				= "Weapon";  // Mission editor category
+	className				= "Weapon"; // For inventory system
+
+	shapeFile				= "./models/detector.dts";
+	rotate					= false;
+	mass						= 1;
+	density					= 0.2;
+	elasticity			= 0.2;
+	friction				= 0.6;
+	emap						= true;
+
+	uiName					= "Glitch Detector";
+	iconName				= "./models/Icon_detector";
+	doColorShift		= false;
+	colorShiftColor	= "1.0 1.0 1.0 1.0";
+
+	image						= GlitchDetectorImage;
+	canDrop					= true;
+};
+
+datablock ShapeBaseImageData(GlitchDetectorImage)
+{
+   shapeFile = "./models/detector.dts";
+   emap = true;
+
+   mountPoint = 0;
+   offset = "0 0 0";
+   eyeoffset = "0.7 1.2 -0.75";
+   rotation = eulerToMatrix( "0 0 0" );
+
+   correctMuzzleVector = true;
+
+   className = "WeaponImage";
+   item = GlitchDetector;
+
+   armReady = true;
+
+   doColorShift = false;
+   colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
+};
+
+////// # DEATH BOARD # //////
+datablock staticShapeData(renderDeathBoardData)
+{
+	shapeFile = "./models/cube.dts";
+};
+
+function Render_CreateDeathBoard()
+{
+	// Create the background
+	%obj = new staticShape(RenderBoard)
+	{
+		datablock = renderDeathBoardData;
+		position = "0 0 -666";
+		scale = "0.05 24 16";
+	};
+
+	%light = new fxlight()
+	{
+		dataBlock = playerLight;
+		enable = 1;
+		iconsize = 1;
+		position = "-4 0 -666";
+	};
+
+	missionCleanup.add(%obj);
+	missionCleanup.add(%light);
+	%obj.setNodeColor("ALL", "0 0 0 1");
+
+	$Render::DeathBoard = %obj;
+
+	// Create the emitter
+	%obj2 = new ParticleEmitterNode(RenderBoardNode)
+	{
+		datablock = GenericEmitterNode;
+		emitter = RenderBoardEmitter;
+		position = "-2 0 -666";
+		scale = "0.05 0.05 0.05";
+	};
+	missionCleanup.add(%obj2);
+}
+
+////// # EVENTS # //////
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 
-////// # MISC
+////// # MISC # //////
 new simGroup(RenderBotGroup) {}; // Render bot group
 
 new simGroup(RenderMiscGroup) {}; // Render object group
