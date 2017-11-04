@@ -440,17 +440,19 @@ datablock PlayerData(PlayerRenderTagArmor : PlayerRenderArmor)
 
 function PlayerRenderArmor::onDisabled(%a, %render, %str)
 {
-	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
-	%client = %render.lastDmgClient;
-
-	// If the client exists AND is in a minigame that awards points for killing Render...
-	if(isObject(%client) && %client.minigame.rPoints)
-		%client.incScore(%client.minigame.rPoints); // Give them their points
+	Render_OnDisabled(%render);
 
 	Parent::onDisabled(%a, %render, %str);
 }
 
-function PlayerRenderArmor::onRemove(%a, %render)
+// Same as above but with tag mode armor
+function PlayerRenderTagArmor::onDisabled(%a, %render, %str)
+{
+	Render_OnDisabled(%render);
+	Parent::onDisabled(%a, %render, %str);
+}
+
+function PlayerRenderTagArmor::onRemove(%a, %render)
 {
 	if(%render.freezeTarget)
 		Render_UnfreezePlayer(%render.freezeTarget);
@@ -458,14 +460,7 @@ function PlayerRenderArmor::onRemove(%a, %render)
 	Parent::onRemove(%a, %render);
 }
 
-// Same as above but with tag mode armor
-function PlayerRenderTagArmor::onDisabled(%a, %render, %str)
-{
-	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
-	Parent::onDisabled(%a, %render, %str);
-}
-
-function PlayerRenderTagArmor::onRemove(%a, %render)
+function PlayerRenderArmor::onRemove(%a, %render)
 {
 	if(%render.freezeTarget)
 		Render_UnfreezePlayer(%render.freezeTarget);

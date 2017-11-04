@@ -524,7 +524,6 @@ function Render_Spawn_Loop()
 }
 
 ////// # De-spawn
-// TODO: Move this to the onRemove function in package.cs?
 function Render_DeleteR(%render)
 {
 	//backtrace();
@@ -546,6 +545,22 @@ function Render_DeleteR(%render)
 	}
 
 	%render.delete();
+}
+
+function Render_onDisabled(%render)
+{
+	%render.schedule(32,delete); // Render instantly disappears when he gets 'killed'
+	%client = %render.lastDmgClient;
+
+	// If the client exists AND is in a minigame that awards points for killing Render...
+	if(isObject(%client) && %client.minigame.rPoints)
+		%client.incScore(%client.minigame.rPoints); // Give them their points
+}
+
+function Render_onRemove(%render)
+{
+	if(%render.freezeTarget)
+		Render_UnfreezePlayer(%render.freezeTarget);
 }
 
 ////// # InflictDamage + misc.
