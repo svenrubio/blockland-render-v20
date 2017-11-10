@@ -160,21 +160,21 @@ package Render
 
 		// Farlands offset (Display only - does not affect actual values)
 		%detectorOffset = vectorDist(%player.getTransform(), "0 0 0")/130000;
-		%detector = %player.detector+%detectorOffset;
+		%detector = %player.detectorDisplay+%detectorOffset;
 
 		if(!$Pref::Server::RenderDisableDetectorText)
 		{
 			// The line breaks are to prevent the status bar from jumping a line.
 			// May not display correctly if the client has a modified bottom print margin.
-			if(%detector < 0.2)
+			if(%detector <= 0.2)
 				%text = "No glitch energy detected.<br>";
-			else if(%detector < 2)
+			else if(%detector <= 2)
 				%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
-			else if(%detector < 3)
+			else if(%detector <= 3)
 				%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
-			else if(%detector < 4)
+			else if(%detector <= 4)
 				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
-			else if(%detector < 5)
+			else if(%detector <= 5)
 				%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
 			else if(%detector)
 				%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
@@ -193,14 +193,24 @@ package Render
 		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:impact:19>" @ %str,1,1);
 		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
 
-		// After displaying the value, we'll reduce it. (Only applies to values set via detectorDecay)
-		if(getSimTime() >= %player.startDetectorDecay)
-		{
-			%decay = %player.detectorDecay/20;
+		// The detector has two values;
+		// The 'real value' (%player.detector) and the 'display value' (%player.detectorDisplay)
+		// %detector is set by other scripts, and %detectorDisplay smoothly eases to whatever value %detector is set to.
 
-			%player.detectorDecay = %player.detectorDecay-%decay;
-			%player.detector = %player.detector-%decay;
+		// TODO: Account for time since detector was last equipped
+		// TODO: Auto-remove decay timer when detector value is 0.
+		if(%player.detector != %player.detectorDisplay)
+		{
+			%display = (%player.detectorDisplay-%player.detector)*0.08;
+			%player.detectorDisplay = %player.detectorDisplay-%display;
 		}
+
+		if(%client.detectorDebug)
+			%client.centerPrint(%client.player.detector NL %client.player.detectorDisplay NL %display NL %client.player.detectorDecay,0,1);
+
+		// After displaying the value, we'll reduce it.
+		if(getSimTime() >= %player.startDetectorDecay)
+			%player.detector = 0;
 
 		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
