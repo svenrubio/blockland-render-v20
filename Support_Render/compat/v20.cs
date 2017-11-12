@@ -13,7 +13,7 @@ package RenderCompatPackage
   // It is disabled to prevent errors.
   function GameConnection::doRenderDeath(%client)
   {
-    reurn -1;
+    return -1;
   }
 
   // TODO: See if setJumping and setCrouching can be fixed?
