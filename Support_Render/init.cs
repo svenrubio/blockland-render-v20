@@ -482,7 +482,8 @@ datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
 	cameraMaxDist = 20;
 	cameraVerticalOffset = 15;
 
-	drag = 2;
+	// Setting drag higher than 0.3 seems to cause the mount to go crazy in water
+	drag = 0.3;
 
 	isInvincible = 1;
 
