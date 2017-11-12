@@ -2,11 +2,11 @@
 
 package RenderCompatPackage
 {
-  function Render_DoMount(%death,%p)
+  function RenderDeathArmor::onAdd(%datablock,%obj)
   {
     // TODO: Fix the 'giant' bug still being briefly visible on mount
-    %death.setScale("1 1 1"); // This fixes frozen players becoming giants.
-    Parent::Render_DoMount(%death,%p);
+    %obj.setScale("1 1 1"); // This fixes frozen players becoming giants.
+    Parent::onAdd(%datablock,%obj);
   }
 
   // Death board is not compatible with maps currently.
