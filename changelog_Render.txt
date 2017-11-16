@@ -4,6 +4,7 @@
 		<li>Improved compatibility with v20.</li>
 		<li>Fixed detector 'snapping' to values rather than gradually changing.</li>
 		<li>Fixed frozen players bouncing in water.</li>
+		<li>Fixed frozen player sliding on sloped surfaces.</li>
 		<li>Fixed minigame points not being awarded for killing Render in tag mode.</li>
 	</ul>
 </version>

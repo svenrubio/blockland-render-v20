@@ -487,8 +487,7 @@ datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
 
 	isInvincible = 1;
 
-	jumpForce = 0;
-	runForce = 0;
+	runForce = 10000;
 
 	uiName = "";
 };
