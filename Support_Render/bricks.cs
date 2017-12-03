@@ -298,5 +298,5 @@ function Render_DoDetectorBrickEffect(%target, %br, %r)
 {
 	// Detected! Fire relay on the brick.
 	if(%target.isRender && %target.isAttacking && vectorDist(%target.position,%br.position) <= %r)
-		%br.fireRelay();
+		%br.fireRelay(%r);
 }
