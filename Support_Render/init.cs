@@ -88,8 +88,6 @@ datablock ParticleEmitterData(GlitchDetectorEmitter)
    thetaMin         = 0.0;
    thetaMax         = 0.0;
 
-	 uiName = "_GDEmitter";
-
    particles = GlitchDetectorParticle;
 };
 

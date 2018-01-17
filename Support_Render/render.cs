@@ -524,6 +524,7 @@ function Render_Spawn_Loop()
 }
 
 ////// # De-spawn
+// TODO: Move this to the onRemove function in package.cs?
 function Render_DeleteR(%render)
 {
 	//backtrace();
@@ -815,33 +816,52 @@ function deathCameraLoop(%client)
 function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 {
 	GlitchEnergyGunEffect(%this,%obj,%slot);
-	return serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
 }
 
+// %this: Glitch gun image
+// %obj: Player object
+// %slot: Item slot
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
 	Render_DoLightFlicker(%obj.position, 3000);
 
-	%obj.setWhiteOut(0.4);
-	%obj.spawnExplosion(RenderDmg6Projectile, 1);
-	InitContainerRadiusSearch(%obj.getPosition(),20,$TypeMasks::PlayerObjectType);
-	while(%p=containerSearchNext())
+	// Force the detector to do a loop, then check its value.
+	%obj.detectorLoop(1);
+	if(%obj.detector == 0)
 	{
-		//%p.setWhiteOut(1);
-		if(%p.isRender)
-		{
-			//Render_Spawn_GetNewDirection(%p);
-			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
-			Render_DeleteR(%p);
-		}
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy detected nearby. Find a source to use.",1,1);
+		messageClient(%obj.client,'MsgItemPickup','');
 	}
+	else if(%obj.detector > 0 && %obj.detector < 3.55)
+	{
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>Glitch energy detected. Move closer to source.",1,1);
+		messageClient(%obj.client,'MsgItemPickup','');
+	}
+	else if(%obj.detector >= 3.55)
+	{
+		%obj.setWhiteOut(0.4);
+		%obj.spawnExplosion(RenderDmg6Projectile, 1);
+		serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
 
-	%currSlot = %obj.currTool;
-	%obj.tool[%currSlot] = 0;
-	%obj.weaponCount--;
+		InitContainerRadiusSearch(%obj.getPosition(),32,$TypeMasks::PlayerObjectType);
+		while(%p=containerSearchNext())
+		{
+			//%p.setWhiteOut(1);
+			if(%p.isRender)
+			{
+				//Render_Spawn_GetNewDirection(%p);
+				//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
+				Render_DeleteR(%p);
+			}
+		}
 
-	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
-	%obj.unMountImage(0);
+		%currSlot = %obj.currTool;
+		%obj.tool[%currSlot] = 0;
+		%obj.weaponCount--;
+
+		messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
+		%obj.unMountImage(0);
+	}
 }
 
 // # LIGHT FLICKER FUNCTION

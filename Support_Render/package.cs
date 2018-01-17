@@ -137,16 +137,24 @@ package Render
 		Parent::onMount(%this,%obj,%slot);
 	}
 
-	// The detetector is controlled by setting %player.detector to a desired value from 0 to 5.
+	// The detector is controlled by setting %player.detector to a desired value from 0 to 5.
 	// To lower the detector value, set %player.detectorDecay to the amount that you want to subtract. The specified value will be gradually subtracted.
 	// You can control the timing by setting %player.startDetectorDecay. This specifies the simTime when decay will begin.
 	function GlitchDetectorImage::DetectorLoop(%this,%client)
 	{
-		// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
-		%player = %client.player;
+		%client.player.detectorLoop();
+	}
 
-		// Cancel if no detector or no player
-		if(!isObject(%player) || %player.getMountedImage(0) != GlitchDetectorImage.getID())
+	// Player::detectorLoop
+	// %override: Updates the detector values without displaying any messages or looping.
+	//						Used by the glitch gun.
+	function Player::DetectorLoop(%player, %override)
+	{
+		// This should be compatible with Chrisbot's mod, however the mods will try to override each other. Beware: untested
+		%client = %player.client;
+
+		// Cancel if no detector or no player (%override lets us continue even if there's no detector)
+		if(!isObject(%player) || (!%override && %player.getMountedImage(0) != GlitchDetectorImage.getID()))
 			return;
 
 		// Prevent detector from going negative. Beware: does not apply to detectorDecay
@@ -162,43 +170,45 @@ package Render
 		%detectorOffset = vectorDist(%player.getTransform(), "0 0 0")/130000;
 		%detector = %player.detectorDisplay+%detectorOffset;
 
-		if(!$Pref::Server::RenderDisableDetectorText)
+		// No text in override mode.
+		if(!%override)
 		{
-			// The line breaks are to prevent the status bar from jumping a line.
-			// May not display correctly if the client has a modified bottom print margin.
-			if(%detector <= 0.2)
-				%text = "No glitch energy detected.<br>";
-			else if(%detector <= 2)
-				%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
-			else if(%detector <= 3)
-				%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
-			else if(%detector <= 4)
-				%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
-			else if(%detector <= 5)
-				%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
-			else if(%detector)
-				%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
+			if(!$Pref::Server::RenderDisableDetectorText)
+			{
+				// The line breaks are to prevent the status bar from jumping a line.
+				// May not display correctly if the client has a modified bottom print margin.
+				if(%detector <= 0.2)
+					%text = "No glitch energy detected.<br>";
+				else if(%detector <= 2)
+					%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
+				else if(%detector <= 3)
+					%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
+				else if(%detector <= 4)
+					%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
+				else if(%detector <= 5)
+					%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
+				else if(%detector)
+					%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
+			}
+
+			// Change the color when we reach the bar that corresponnds with the value.
+			// The values are randomized to simulate noise.
+			// **Beware of the character limit to prevent flickering/cutoff!**
+
+			for(%i = 1; %i <= 71; %i++)
+			{
+				%divider = (%i%14 == 1)?"l":"-";
+				%str = %str @ ((%detector*13.8)+getRandom(-1,1)+3 <= %i?"\c7" @ %divider:%divider);
+			}
+
+			%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:impact:19>" @ %str,1,1);
+			// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
+
+			// The detector has two values;
+			// The 'real value' (%player.detector) and the 'display value' (%player.detectorDisplay)
+			// %detector is set by other scripts, and %detectorDisplay smoothly eases to whatever value %detector is set to.
 		}
 
-		// Change the color when we reach the bar that corresponnds with the value.
-		// The values are randomized to simulate noise.
-		// **Beware of the character limit to prevent flickering/cutoff!**
-
-		for(%i = 1; %i <= 71; %i++)
-		{
-			%divider = (%i%14 == 1)?"l":"-";
-	    %str = %str @ ((%detector*13.8)+getRandom(-1,1)+3 <= %i?"\c7" @ %divider:%divider);
-		}
-
-		%client.bottomPrint("<just:center><color:FFFFFF>" @ %text @ "<br><font:impact:19>" @ %str,1,1);
-		// Using "<color:FFFFFF>" instead of "\c6" fixes the text being red when it wraps.
-
-		// The detector has two values;
-		// The 'real value' (%player.detector) and the 'display value' (%player.detectorDisplay)
-		// %detector is set by other scripts, and %detectorDisplay smoothly eases to whatever value %detector is set to.
-
-		// TODO: Account for time since detector was last equipped
-		// TODO: Auto-remove decay timer when detector value is 0.
 		if(%player.detector != %player.detectorDisplay)
 		{
 			%display = (%player.detectorDisplay-%player.detector)*0.08;
@@ -212,7 +222,9 @@ package Render
 		if(getSimTime() >= %player.startDetectorDecay)
 			%player.detector = 0;
 
-		%this.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
+		// Continue the loop if not in override mode
+		if(!%override)
+			%player.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
 	}
 
 	function serverCmdDropCameraAtPlayer(%client)
