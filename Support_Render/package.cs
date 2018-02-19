@@ -224,7 +224,7 @@ package Render
 
 		// Continue the loop if not in override mode
 		if(!%override)
-			%player.schedule($Render::C_DetectorTimer,DetectorLoop,%client);
+			%player.schedule($Render::C_DetectorTimer,DetectorLoop);
 	}
 
 	function serverCmdDropCameraAtPlayer(%client)
