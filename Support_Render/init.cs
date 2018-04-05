@@ -684,6 +684,8 @@ function Render_CreateDeathBoard()
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
+registerOutputEvent(fxDTSBrick, "setRDetectorLevel", "int 0 5 3", 1);
+
 
 ////// # MISC # //////
 new simGroup(RenderBotGroup) {}; // Render bot group

@@ -1,4 +1,4 @@
-// See init.cs for registration
+// **See init.cs for registration**
 
 function MiniGameSO::setRenderMode(%this, %rate, %client)
 {
@@ -52,4 +52,9 @@ function MiniGameSO::setRenderInvincibility(%this, %rate, %client)
     return;
 
   %minigame.rInvincible = %rate;
+}
+
+function FxDTSBrick::setRDetectorLevel(%this, %level)
+{
+  %this.rDetectorLevel = %level;
 }

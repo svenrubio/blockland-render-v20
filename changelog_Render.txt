@@ -1,9 +1,14 @@
 <version:2.1>
+	<b>Additions</b>
 	<ul>
 		<li>Updated the Glitch Detector's display text and coloring.</li>
 		<li>Glitch gun no-longer fires unless there is a target nearby.</li>
+		<li>Added 'setRDetectorLevel', an output event for detector bricks that changes the detection range.</li>
 		<li>Increased the glitch gun's range.</li>
 		<li>Improved compatibility with v20.</li>
+	</ul>
+	<b>Fixes</b>
+	<ul>
 		<li>Fixed detector 'snapping' to values rather than gradually changing.</li>
 		<li>Fixed frozen players bouncing in water.</li>
 		<li>Fixed frozen player sliding on sloped surfaces.</li>
