@@ -278,22 +278,13 @@ function Render_DoDetectorBrickCheck(%br)
 		if(%br.rDetectorLevel == 0 && %br.rDetectorLevel !$= "") {
 			continue; // Brick is disabled, move on
 		}
-		else {
+		else if(!%br.rDetectorLevel) {
 			// Adjust distance based on detector level (default 60)
-			switch(%br.rDetectorLevel) {
-				case 1:
-					%r = 20;
-				case 2:
-					%r = 40;
-				case 3:
-					%r = 60;
-				case 4:
-					%r = 80;
-				case 5:
-					%r = 100;
-				default:
-					%r = 60;
-			}
+			%r = 60;
+		}
+		else {
+			// Adjust distance based on detector level (default 6)
+			%r = %br.rDetectorLevel*10;
 		}
 
 		if(%br.position $= "") // Error if one is missing.
