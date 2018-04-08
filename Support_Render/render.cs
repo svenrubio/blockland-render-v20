@@ -823,8 +823,6 @@ function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 // %slot: Item slot
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
-	Render_DoLightFlicker(%obj.position, 3000);
-
 	// Force the detector to do a loop, then check its value.
 	%obj.detectorLoop(1);
 	if(%obj.detector == 0)
@@ -839,6 +837,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	}
 	else if(%obj.detector >= 3.55)
 	{
+		Render_DoLightFlicker(%obj.position, 3000);
 		%obj.setWhiteOut(0.4);
 		%obj.spawnExplosion(RenderDmg6Projectile, 1);
 		serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
