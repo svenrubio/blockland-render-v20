@@ -54,12 +54,12 @@ You can configure Render's behavior in a mini-game using events! The events only
 - MiniGame -> setRenderSpawnRate
 
 # Update History
-v2.0 - The Halloween 2017 Update
-v1.4 - Events and Interactivity
-v1.3 - The Slayer Update
-v1.2.1 - Mystery Update Reveal
-v1.2 - The Mystery Update
-v1.1 - Glitch Guns
+- v2.0 - The Halloween 2017 Update
+- v1.4 - Events and Interactivity
+- v1.3 - The Slayer Update
+- v1.2.1 - Mystery Update Reveal
+- v1.2 - The Mystery Update
+- v1.1 - Glitch Guns
 
 # See also
 - Flickering Player Light (Direct download): http://blockland.us/files/Light_Flickering_Player_Light.zip
