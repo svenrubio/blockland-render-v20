@@ -248,7 +248,7 @@ function Render_DetectorBrickRemove(%br,%id)
 
 	if(%id)
 	{
-		$R_Det[%id] = $R_Det[$R_Shr_t];
+		$R_Det[%id] = $R_Det[$R_Det_t];
 		$R_Det_t--;
 
 		$R_Det_G[%id].rDetectorBricks--;

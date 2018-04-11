@@ -77,6 +77,75 @@ package RenderCompatPackage
   {
     return -1;
   }
+
+  // Death board is not compatible with maps currently.
+  // It is disabled to prevent errors.
+  function GameConnection::doRenderDeath(%client)
+  {
+    return -1;
+  }
+
+  // TODO: See if setJumping and setCrouching can be fixed?
+  function Player::SetJumping(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetCrouching(%x)
+  {
+    return -1;
+  }
+
+  function Player::clearMoveDestination()
+  {
+    return -1;
+  }
+
+  // TODO: If speed is set to 0, freeze the player
+  function Player::SetMaxForwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxBackwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxSideSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxCrouchForwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxCrouchBackwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxCrouchSideSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxUnderwaterForwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxUnderwaterBackwardSpeed(%x)
+  {
+    return -1;
+  }
+
+  function Player::SetMaxUnderwaterSideSpeed(%x)
+  {
+    return -1;
+  }
 };
 
 deactivatePackage(RenderCompatPackage);
