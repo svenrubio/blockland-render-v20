@@ -685,7 +685,8 @@ registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Norm
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 registerOutputEvent(fxDTSBrick, "setRDetectorLevel", "int 0 10 6", 1);
-
+registerOutputEvent(fxDTSBrick, "incRDetectorLevel", "int 0 10 1", 1);
+registerOutputEvent(fxDTSBrick, "decRDetectorLevel", "int 0 10 1", 1);
 
 ////// # MISC # //////
 new simGroup(RenderBotGroup) {}; // Render bot group
