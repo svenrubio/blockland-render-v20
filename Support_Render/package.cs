@@ -154,7 +154,8 @@ package Render
 		%client = %player.client;
 
 		// Cancel if no detector or no player (%override lets us continue even if there's no detector)
-		if(!isObject(%player) || (!%override && %player.getMountedImage(0) != GlitchDetectorImage.getID()))
+		// If client does not exist, player is dead, missing, or has left the game.
+		if(!isObject(%client) || (!%override && %player.getMountedImage(0) != GlitchDetectorImage.getID()))
 			return;
 
 		// Prevent detector from going negative. Beware: does not apply to detectorDecay
