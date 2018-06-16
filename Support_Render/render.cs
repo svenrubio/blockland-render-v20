@@ -15,16 +15,17 @@ function Render_ApplyAppearance(%this)
 {
 	hideAllNodes(%this);
 
+	%this.unhidenode("chest");
+	%this.unhidenode("pants");
+	%this.unhidenode("LShoe");
+	%this.unhidenode("RShoe");
+	%this.unhidenode("LArm");
+	%this.unhidenode("RArm");
+	%this.unhidenode("LHand");
+	%this.unhidenode("RHand");
+
 	if(getRandom(1, 384) == 1)
 	{
-		%this.unhidenode("chest");
-		%this.unhidenode("pants");
-		%this.unhidenode("LShoe");
-		%this.unhidenode("RShoe");
-		%this.unhidenode("LArm");
-		%this.unhidenode("RArm");
-		%this.unhidenode("LHand");
-		%this.unhidenode("RHand");
 		%this.unhidenode("scoutHat");
 		%this.setnodecolor("scoutHat", "0.078 0.078 0.078 1");
 		%this.setnodecolor("chest", "0.105 0.458 0.768 1");
@@ -41,14 +42,6 @@ function Render_ApplyAppearance(%this)
 	}
 	else
 	{
-		%this.unhidenode("chest");
-		%this.unhidenode("pants");
-		%this.unhidenode("LShoe");
-		%this.unhidenode("RShoe");
-		%this.unhidenode("LArm");
-		%this.unhidenode("RArm");
-		%this.unhidenode("LHand");
-		%this.unhidenode("RHand");
 		%this.setnodecolor("chest", "0 0 0 1");
 		%this.setnodecolor("headskin", "0 0 0 1");
 		%this.setnodecolor("pants", "0 0 0 1");
