@@ -820,12 +820,12 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	%obj.detectorLoop(1);
 	if(%obj.detector == 0)
 	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy detected nearby. Find a source to use.",1,1);
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy. Find a source to use.",2,1);
 		messageClient(%obj.client,'MsgItemPickup','');
 	}
 	else if(%obj.detector > 0 && %obj.detector < 3.55)
 	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>Glitch energy detected. Move closer to source.",1,1);
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer to source, or find another.",2,1);
 		messageClient(%obj.client,'MsgItemPickup','');
 	}
 	else if(%obj.detector >= 3.55)
