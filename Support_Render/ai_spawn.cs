@@ -156,8 +156,18 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 		{
 			%pos1 = %this.pos1[%dir];
 			%pos2 = %this.pos2[%dir];
-			%randA = getRandom(%pos1*100, %pos2*100);
-			%randB = %randA/100;
+
+			// Multiplier; this lets us randomize the position
+			// Things start getting really messy at distances of 10,000,000 and higher.
+			if(%pos1 > 10000 || %pos2 > 10000) {
+				%mult = 0.1; // Special handling for high distances. (Not perfect but it works)
+			}
+			else {
+				%mult = 100;
+			}
+
+			%randA = getRandom(%pos1*%mult, %pos2*%mult);
+			%randB = %randA/%mult;
 
 			if(%i == 1 || %i == 2)
 				%pos3 = %randB SPC getWord(%this.hit[%dir], 1)+%add SPC getWord(%plpos, 2);
@@ -188,18 +198,20 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 				%hit = posFromRaycast(%rayForward);
 
 			if(%i == 1) //north
-				%randC = getRandom(getWord(%pos3,1)*100,(getWord(%hit,1)+1)*100);
+				%randC = getRandom(getWord(%pos3,1)*%mult,(getWord(%hit,1)+1)*%mult);
 			if(%i == 2) //south
-				%randC = getRandom(getWord(%pos3,1)*100,(getWord(%hit,1)-1)*100);
+				%randC = getRandom(getWord(%pos3,1)*%mult,(getWord(%hit,1)-1)*%mult);
 			if(%i == 3) //east
-				%randC = getRandom(getWord(%pos3,0)*100,(getWord(%hit,0)+1)*100);
+				%randC = getRandom(getWord(%pos3,0)*%mult,(getWord(%hit,0)+1)*%mult);
 			if(%i == 4) //west
-				%randC = getRandom(getWord(%pos3,0)*100,(getWord(%hit,0)-1)*100);
+				%randC = getRandom(getWord(%pos3,0)*%mult,(getWord(%hit,0)-1)*%mult);
 
-			if(%i == 1 || %i == 2)
-				%pos = %randB SPC %randC/100 SPC getWord(%plpos,2);
-			if(%i == 3 || %i == 4)
-				%pos = %randC/100 SPC %randB SPC getWord(%plpos,2);
+			if(%i == 1 || %i == 2) {
+				%pos = %randB SPC %randC/%mult SPC getWord(%plpos,2);
+			}
+			if(%i == 3 || %i == 4) {
+				%pos = %randC/%mult SPC %randB SPC getWord(%plpos,2);
+			}
 
 			if($Pref::Server::RenderCreateLines == 1)
 			{
