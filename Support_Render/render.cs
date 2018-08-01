@@ -24,7 +24,21 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("LHand");
 	%this.unhidenode("RHand");
 
-	if(getRandom(1, 384) == 1)
+	if(%this.rType $= "a")
+	{
+		%this.setnodecolor("chest", "0 0 0 1");
+		%this.setnodecolor("headskin", "0 0 0 1");
+		%this.setnodecolor("pants", "0 0 0 1");
+		%this.setnodecolor("LShoe", "0 0 0 1");
+		%this.setnodecolor("RShoe", "0 0 0 1");
+		%this.setnodecolor("LArm", "0 0 0 1");
+		%this.setnodecolor("RArm", "0 0 0 1");
+		%this.setnodecolor("LHand", "0 0 0 1");
+		%this.setnodecolor("RHand", "0 0 0 1");
+		%this.setdecalname("AAA-None");
+		%this.setfacename("asciiTerror");
+	}
+	if(%this.rType $= "ts")
 	{
 		%this.unhidenode("scoutHat");
 		%this.setnodecolor("scoutHat", "0.078 0.078 0.078 1");
@@ -40,23 +54,9 @@ function Render_ApplyAppearance(%this)
 		%this.setdecalname("Alyx");
 		%this.setfacename("asciiTerror");
 	}
-	else
-	{
-		%this.setnodecolor("chest", "0 0 0 1");
-		%this.setnodecolor("headskin", "0 0 0 1");
-		%this.setnodecolor("pants", "0 0 0 1");
-		%this.setnodecolor("LShoe", "0 0 0 1");
-		%this.setnodecolor("RShoe", "0 0 0 1");
-		%this.setnodecolor("LArm", "0 0 0 1");
-		%this.setnodecolor("RArm", "0 0 0 1");
-		%this.setnodecolor("LHand", "0 0 0 1");
-		%this.setnodecolor("RHand", "0 0 0 1");
-		%this.setdecalname("AAA-None");
-		%this.setfacename("asciiTerror");
+	else if(%this.type $= "g") {
+		%this.setfacename("memeGrinMan");
 	}
-
-		if(getRandom(1,92) == 1)
-			%this.setfacename("memeGrinMan");
 }
 
 ////// # Bot Creation Function
@@ -84,9 +84,19 @@ function Render_CreateBot(%pos,%client)
 		%render.invincible = $Pref::Server::RenderIsInvincible;
 
 	// ## Bot Setup
-
-	if(%render.mode == 2)
+	if(%render.mode == 2) {
 		%render.changeDatablock(PlayerRenderTagArmor);
+	}
+
+	if(getRandom(1,384) == 1) { //384
+		%render.rType = "ts";
+	}
+	else if(getRandom(1,64) == 1) {
+		%render.rType = "g";
+	}
+	else {
+		%render.rType = "a";
+	}
 
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
 	%render.setTransform(%pos);
