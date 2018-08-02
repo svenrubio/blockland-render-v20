@@ -88,7 +88,7 @@ function Render_CreateBot(%pos,%client)
 		%render.changeDatablock(PlayerRenderTagArmor);
 	}
 
-	if(getRandom(1,384) == 1) { //384
+	if(getRandom(1,384) == 1) {
 		%render.rType = "ts";
 	}
 	else if(getRandom(1,64) == 1) {
@@ -603,11 +603,19 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(%p.client.staticDebugImmune)
 		return;
 
-	if(%p.rDmg >= 100) // If damage is ≥ 100, rip
+	// If damage is ≥ 100, rip
+	// SEE ALSO: GameConnection::doRenderDeath
+	if(%p.rDmg >= 100)
 	{
 		%client = %p.client;
 
 		%client.doRenderDeath = 1;
+
+		if(%render.rType $= "ts")
+		{
+			%p.spawnExplosion(vehicleFinalExplosionProjectile, 1);
+		}
+
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
@@ -755,6 +763,7 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 
 // # DEATH CAMERA
 // Uses code from Event_Camera_Control
+// SEE ALSO: Render_InflictDamage
 function GameConnection::doRenderDeath(%client)
 {
 	%camera = %client.camera;
