@@ -24,20 +24,6 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("LHand");
 	%this.unhidenode("RHand");
 
-	if(%this.rType $= "a")
-	{
-		%this.setnodecolor("chest", "0 0 0 1");
-		%this.setnodecolor("headskin", "0 0 0 1");
-		%this.setnodecolor("pants", "0 0 0 1");
-		%this.setnodecolor("LShoe", "0 0 0 1");
-		%this.setnodecolor("RShoe", "0 0 0 1");
-		%this.setnodecolor("LArm", "0 0 0 1");
-		%this.setnodecolor("RArm", "0 0 0 1");
-		%this.setnodecolor("LHand", "0 0 0 1");
-		%this.setnodecolor("RHand", "0 0 0 1");
-		%this.setdecalname("AAA-None");
-		%this.setfacename("asciiTerror");
-	}
 	if(%this.rType $= "ts")
 	{
 		%this.unhidenode("scoutHat");
@@ -54,7 +40,23 @@ function Render_ApplyAppearance(%this)
 		%this.setdecalname("Alyx");
 		%this.setfacename("asciiTerror");
 	}
-	else if(%this.type $= "g") {
+	else
+	{
+		%this.setnodecolor("chest", "0 0 0 1");
+		%this.setnodecolor("headskin", "0 0 0 1");
+		%this.setnodecolor("pants", "0 0 0 1");
+		%this.setnodecolor("LShoe", "0 0 0 1");
+		%this.setnodecolor("RShoe", "0 0 0 1");
+		%this.setnodecolor("LArm", "0 0 0 1");
+		%this.setnodecolor("RArm", "0 0 0 1");
+		%this.setnodecolor("LHand", "0 0 0 1");
+		%this.setnodecolor("RHand", "0 0 0 1");
+		%this.setdecalname("AAA-None");
+		%this.setfacename("asciiTerror");
+	}
+
+	if(%this.rType $= "g")
+	{
 		%this.setfacename("memeGrinMan");
 	}
 }
@@ -341,7 +343,7 @@ function Render_Loop_Local(%render)
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
 							{
 								%target.client.playSound(rAttackC);
-								%target.client.doRenderDeath = 1;
+								%doRenderDeath = 1;
 								%render.targetKilled = 1;
 							}
 
@@ -355,7 +357,10 @@ function Render_Loop_Local(%render)
 								%render.audioNext = getSimTime()+200;
 							}
 
-							%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
+							if(%doRenderDeath)
+								%target.client.doRenderDeath(%render);
+							else
+								%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
 						} // Damage type 2 doesn't need this.
 					}
 				}
@@ -609,22 +614,12 @@ function Render_InflictDamage(%p,%render,%distance)
 	{
 		%client = %p.client;
 
-		%client.doRenderDeath = 1;
-
 		if(%render.rType $= "ts")
 		{
 			%p.spawnExplosion(vehicleFinalExplosionProjectile, 1);
 		}
 
-		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
-
-		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
-
-		if(isObject(%client))
-		{
-			%client.camera.setDamageFlash(0.75);
-			%client.playSound(rAttackC);
-		}
+		%client.doRenderDeath(%render);
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
@@ -657,8 +652,7 @@ function Render_FreezePlayer(%p,%r)
 	if(%r.mode == 2)
 	{
 		%p.client.playSound(rAttackC);
-		%p.client.doRenderDeath = 1;
-		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
+		%p.client.doRenderDeath(%r);
 		return;
 	}
 
@@ -764,11 +758,26 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 // # DEATH CAMERA
 // Uses code from Event_Camera_Control
 // SEE ALSO: Render_InflictDamage
-function GameConnection::doRenderDeath(%client)
+function GameConnection::doRenderDeath(%client, %render)
 {
 	%camera = %client.camera;
   if(!isObject(%camera))
 		return;
+
+	// If the player exists, kill them.
+	if(isObject(%client.player))
+	{
+		%p = %client.player;
+		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
+		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
+	}
+
+	// Cancel if the player survives
+	if(isObject(%client.player))
+		return;
+
+	%client.camera.setDamageFlash(0.75);
+	%client.playSound(rAttackC);
 
   %pos = "-2.6 0 -666.05";
   %deltaX = 1;
