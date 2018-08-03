@@ -17,7 +17,7 @@ if(!$RTB::RTBR_ServerControl_Hook && isFile("Add-Ons/System_ReturnToBlockland/ho
 if(isFunction("RTB_registerPref"))
 {
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "Support_Render", $Pref::Server::RenderDifficulty, 0, 0);
-	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Health 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
+	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Damage 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "Support_Render", 4, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "Support_Render", 28, 0, 0);
 	RTB_registerPref("Affect bricks and lights", "Render", "$Pref::Server::RenderAllowBrickEffects", "bool", "Support_Render", 1, 0, 0);
@@ -681,7 +681,7 @@ function Render_CreateDeathBoard()
 }
 
 ////// # EVENTS # //////
-registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Health 1 Tag 2 Haunt 3", 1);
+registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Damage 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
 registerOutputEvent(fxDTSBrick, "setRDetectorLevel", "int 0 10 6", 1);
