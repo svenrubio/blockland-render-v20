@@ -24,7 +24,7 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("LHand");
 	%this.unhidenode("RHand");
 
-	if(%this.rType $= "ts")
+	if(%this.type $= "ts")
 	{
 		%this.unhidenode("scoutHat");
 		%this.setnodecolor("scoutHat", "0.078 0.078 0.078 1");
@@ -55,7 +55,7 @@ function Render_ApplyAppearance(%this)
 		%this.setfacename("asciiTerror");
 	}
 
-	if(%this.rType $= "g")
+	if(%this.type $= "g")
 	{
 		%this.setfacename("memeGrinMan");
 	}
@@ -91,13 +91,13 @@ function Render_CreateBot(%pos,%client)
 	}
 
 	if(getRandom(1,384) == 1) {
-		%render.rType = "ts";
+		%render.type = "ts";
 	}
 	else if(getRandom(1,64) == 1) {
-		%render.rType = "g";
+		%render.type = "g";
 	}
 	else {
-		%render.rType = "a";
+		%render.type = "a";
 	}
 
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
@@ -609,17 +609,9 @@ function Render_InflictDamage(%p,%render,%distance)
 		return;
 
 	// If damage is ≥ 100, rip
-	// SEE ALSO: GameConnection::doRenderDeath
 	if(%p.rDmg >= 100)
 	{
-		%client = %p.client;
-
-		if(%render.rType $= "ts")
-		{
-			%p.spawnExplosion(vehicleFinalExplosionProjectile, 1);
-		}
-
-		%client.doRenderDeath(%render);
+		%p.client.doRenderDeath(%render);
 	}
 	else
 	if(%p.rDmg > 0) // Otherwise, play sounds.
@@ -767,6 +759,11 @@ function GameConnection::doRenderDeath(%client, %render)
 	// If the player exists, kill them.
 	if(isObject(%client.player))
 	{
+		if(%render.type $= "ts")
+		{
+			%p.spawnExplosion(vehicleFinalExplosionProjectile, 1);
+		}
+
 		%p = %client.player;
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
