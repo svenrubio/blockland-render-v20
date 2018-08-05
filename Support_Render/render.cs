@@ -605,7 +605,7 @@ function Render_InflictDamage(%p,%render,%distance)
 
 	%p.spawnExplosion(%proj, 1);
 
-	if(%p.client.staticDebugImmune)
+	if(%p.client.staticDebugImmune || %render.type $= "gg")
 		return;
 
 	// If damage is ≥ 100, rip
@@ -759,12 +759,23 @@ function GameConnection::doRenderDeath(%client, %render)
 	// If the player exists, kill them.
 	if(isObject(%client.player))
 	{
+		%p = %client.player;
+
 		if(%render.type $= "ts")
 		{
 			%p.spawnExplosion(vehicleFinalExplosionProjectile, 1);
 		}
+		else if(%render.type $= "g")
+		{
+			%render.type = "gg";
+			%client.playSound(rAttackG);
+			%client.schedule(2000,doRenderDeath,%render);
 
-		%p = %client.player;
+			Render_FreezePlayer(%p);
+			Render_FreezeRender(%render);
+			return;
+		}
+
 		%p.damage(%p, %p.getposition(), 1000, $DamageType::RenderDeath);
 		%p.rDmg = 200; // Prevents a flickering effect if the player is invincible.
 	}

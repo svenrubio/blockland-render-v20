@@ -379,6 +379,13 @@ datablock AudioProfile(rAttackC)
    preload = true;
 };
 
+datablock AudioProfile(rAttackG)
+{
+   filename    = "./sound/g.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 datablock AudioProfile(rGlitch)
 {
    filename    = "./sound/glitch.wav";
