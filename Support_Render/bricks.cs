@@ -177,6 +177,7 @@ function brickGlitchDetectorData::onPlant(%a,%br) // Planted
 
 	%br.addEvent(1, 0, "OnRelay", "self", "setColorFX", 3);
 	%br.addEvent(1, 256, "OnRelay", "self", "setColorFX", 0);
+	%br.addEvent(1, 0, "OnActivate", "self", "setRDetectorLevel", 6);
 }
 
 function brickGlitchDetectorData::onLoadPlant(%a,%br) // Planted (load)
