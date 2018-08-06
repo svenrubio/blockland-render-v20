@@ -868,7 +868,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	}
 	else if(%obj.detector > 0 && %obj.detector < 3.55)
 	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer to source, or find another.",2,1);
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer or find a stronger source.",2,1);
 		messageClient(%obj.client,'MsgItemPickup','');
 	}
 	else if(%obj.detector >= 3.55)
