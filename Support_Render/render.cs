@@ -431,6 +431,27 @@ function Render_Loop_Local(%render)
 		%render.loopViewNext = %render.loopViewNext+2;
 }
 
+function Render_SunlightCheck()
+{
+	// Returns 1 if it's daylight. Checks for sun color if daycycle is inactive.
+
+	if(env_getDayCycleEnabled()) {
+		%time = getPartOfDaycycle();
+
+		if(%time == 0 || %time == 1) { // Morning or daytime
+			return 1;
+		}
+	}
+	else {
+		%light = Sun.color;
+		if(getWord(%light,0) > 0.4 && getWord(%light,1) > 0.4 && getWord(%light,2) > 0.4) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 ////// # Target picking function
 //This will determine the targets for the attacker and start the spawning code
 function Render_Spawn_Loop()
@@ -455,7 +476,7 @@ function Render_Spawn_Loop()
 	{
 		// Play ambient sound effects
 
-		if(!$Pref::Server::RenderDisableAmbientSounds)
+		if(!$Pref::Server::RenderDisableAmbientSounds && !Render_SunlightCheck())
 			if(getRandom(1,12) <= $Pref::Server::RenderSpawnRate) // Bleh
 				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
