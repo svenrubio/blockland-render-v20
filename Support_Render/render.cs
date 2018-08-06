@@ -770,6 +770,14 @@ function GameConnection::doRenderDeath(%client, %render)
 		else if(%render.type $= "g")
 		{
 			%render.type = "gg";
+
+			Render_UnfreezePlayer(%p);
+
+			%rPos = %render.getTransform();
+			%pPos = %p.getTransform();
+			%render.setTransform(getWord(%rPos,0)+2000000 SPC getWords(%rPos,1,6));
+			%p.setTransform(getWord(%pPos,0)+2000000 SPC getWords(%pPos,1,6));
+
 			%client.playSound(rAttackG);
 			%client.schedule(2000,doRenderDeath,%render);
 
