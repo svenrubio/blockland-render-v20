@@ -323,13 +323,6 @@ datablock ProjectileData(RenderDmg6Projectile : RenderDmg1Projectile)
 };
 
 ////// # SOUNDS # //////
-datablock AudioProfile(renderGrowl)
-{
-   filename    = "./sound/indoorgrowl.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
 datablock AudioProfile(renderAmb1)
 {
    filename    = "./sound/rendercycle1.wav";

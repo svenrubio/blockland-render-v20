@@ -665,7 +665,7 @@ function Render_FreezePlayer(%p,%r)
 
 		%p.dismount(); // We have to do this before we set the mount's position, otherwise it'll end up inside the vehicle.
 		%death.setTransform(%p.getTransform());
-		%death.playAudio(0,renderGrowl);
+		//%death.playAudio(0,renderGrowl);
 		renderMiscGroup.add(%death);
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
