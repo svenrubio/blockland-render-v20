@@ -596,7 +596,9 @@ function Render_InflictDamage(%p,%render,%distance)
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 	%stage = mCeil(0.06*%p.rDmg);
 
-	%p.setWhiteOut(%p.rDmg/100);
+	if(%render.type !$= "gg") {
+		%p.setWhiteOut(%p.rDmg/100);
+	}
 
 	%proj = "RenderDmg" @ %stage @ "Projectile";
 
@@ -771,6 +773,8 @@ function GameConnection::doRenderDeath(%client, %render)
 			%client.playSound(rAttackG);
 			%client.schedule(2000,doRenderDeath,%render);
 
+			%p.setWhiteOut(0);
+
 			Render_FreezePlayer(%p);
 			Render_FreezeRender(%render);
 			return;
@@ -784,7 +788,10 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(isObject(%client.player))
 		return;
 
-	%client.camera.setDamageFlash(0.75);
+	if(%render.type !$= "gg") {
+		%client.camera.setDamageFlash(0.75);
+	}
+
 	%client.playSound(rAttackC);
 
   %pos = "-2.6 0 -666.05";
