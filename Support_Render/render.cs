@@ -819,6 +819,8 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(isObject(%client.player))
 		return;
 
+	%p.setTransform(getWords(%p.position,0,1) SPC "-1000");
+
 	if(%render.type !$= "gg") {
 		%client.camera.setDamageFlash(0.75);
 	}
