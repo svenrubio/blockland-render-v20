@@ -563,7 +563,9 @@ function Render_DeleteR(%render)
 		return;
 	}
 
-	ServerPlay3D(renderMove, %render.position);
+	if(%render.isAttacking) {
+		ServerPlay3D(renderMove, %render.position);
+	}
 
 	if(%render.isRenderPlayer)
 	{
