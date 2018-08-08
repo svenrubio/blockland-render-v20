@@ -249,7 +249,11 @@ function Render_Loop_Local(%render)
 	}
 
 	%render.players = 0;
-	%render.playersViewing = 0;
+
+	if(%render.playersViewing $= "") {
+		%render.playersViewing = 0;
+	}
+
 	%render.loopCount++;
 
 	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
@@ -294,6 +298,10 @@ function Render_Loop_Local(%render)
 
 			Render_UnfreezeRender(%render);
 		}
+	}
+
+	if(%render.loopCount == %render.loopViewNext) {
+		%render.playersViewing = 0;
 	}
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
