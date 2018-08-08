@@ -117,9 +117,19 @@ function Render_AI_Control_Loop(%render)
 	}
 
 	////// # OBSERVER DESPAWN # //////
+	// If someone saw us and looked away, de-spawn immediately.
+	if(%render.aiSpotted && !%render.playersViewing)
+	{
+		Render_RequestDespawn(%render);
+		return;
+	}
+
 	// If we aren't planning on attacking, we want to do a timed de-spawn when the player looks at us.
 	if(!%render.aiWillAttack && %render.playersViewing && !%render.aiLoopObserverDespawn)
-		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(250,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
+	{
+		%render.aiSpotted = 1;
+		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(500,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
+	}
 	else if(%render.aiLoopObserverDespawn !$= "" && %render.loopCount >= %render.aiLoopObserverDespawn)
 	{
 		Render_RequestDespawn(%render);
