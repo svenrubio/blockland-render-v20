@@ -313,9 +313,9 @@ function Render_Loop_Local(%render)
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
 			{
-				%isViewing = %target.rFOVCheck(%render, 1); // Check if they're in Render's line of sight.
+				// Check if they're in Render's line of sight. This only accounts for obstacles if the bot is attacking.
+				%isViewing = %target.rFOVCheck(%render, %render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
-
 				// Detectors
 				if(%render.isAttacking)
 				{
