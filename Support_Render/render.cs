@@ -784,8 +784,7 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 // SEE ALSO: Render_InflictDamage
 function GameConnection::doRenderDeath(%client, %render)
 {
-	%camera = %client.camera;
-  if(!isObject(%camera))
+  if(!isObject(%client.camera))
 		return;
 
 	// If the player exists, kill them.
@@ -826,34 +825,41 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(isObject(%client.player))
 		return;
 
-	%p.setTransform(getWords(%p.position,0,1) SPC "-1000");
-
 	if(%render.type !$= "gg") {
 		%client.camera.setDamageFlash(0.75);
 	}
 
 	%client.playSound(rAttackC);
+	%client.doRenderDeathCamera();
+}
 
-  %pos = "-2.6 0 -666.05";
-  %deltaX = 1;
-  %deltaY = 0;
-  %deltaZ = 0;
-  %deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
+function GameConnection::doRenderDeathCamera(%client) {
+	if(isObject(%client.player)) {
+		%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-1000");
+	}
 
-  %rotZ = mAtan(%deltaX, %deltaY) * -1;
-  %rotX = mAtan(%deltaZ, %deltaXYHyp);
+	%camera = %client.camera;
 
-  %aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
+	%pos = "-2.6 0 -666.05";
+	%deltaX = 1;
+	%deltaY = 0;
+	%deltaZ = 0;
+	%deltaXYHyp = vectorLen(%deltaX SPC %deltaY SPC 0);
 
-  %camera.setTransform(%pos SPC %aa);
-  %camera.setFlyMode();
-  %camera.mode = "Observer";
+	%rotZ = mAtan(%deltaX, %deltaY) * -1;
+	%rotX = mAtan(%deltaZ, %deltaXYHyp);
 
-  %client.setControlObject(%camera);
+	%aa = eulerRadToMatrix(%rotX SPC 0 SPC %rotZ);
 
-  %player = %client.player;
+	%camera.setTransform(%pos SPC %aa);
+	%camera.setFlyMode();
+	%camera.mode = "Observer";
 
-  %camera.setControlObject(%client.dummyCamera);
+	%client.setControlObject(%camera);
+
+	%player = %client.player;
+
+	%camera.setControlObject(%client.dummyCamera);
 
 	%client.cameraTime = getSimTime()+2400;
 

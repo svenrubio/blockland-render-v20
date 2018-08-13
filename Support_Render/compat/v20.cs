@@ -11,7 +11,7 @@ package RenderCompatPackage
 
   // Death board is not compatible with maps currently.
   // It is disabled to prevent errors.
-  function GameConnection::doRenderDeath(%client)
+  function GameConnection::doRenderDeathCamera(%client)
   {
     return -1;
   }
