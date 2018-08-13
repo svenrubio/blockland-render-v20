@@ -78,13 +78,6 @@ package RenderCompatPackage
     return -1;
   }
 
-  // Death board is not compatible with maps currently.
-  // It is disabled to prevent errors.
-  function GameConnection::doRenderDeath(%client)
-  {
-    return -1;
-  }
-
   // TODO: See if setJumping and setCrouching can be fixed?
   function Player::SetJumping(%x)
   {
