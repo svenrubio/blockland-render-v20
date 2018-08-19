@@ -344,6 +344,13 @@ datablock AudioProfile(renderAmb3)
    preload = true;
 };
 
+datablock AudioProfile(renderAmb4)
+{
+   filename    = "./sound/distant.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 datablock AudioProfile(renderMove)
 {
    filename    = "./sound/entityMove.wav";

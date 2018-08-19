@@ -93,7 +93,7 @@ function Render_CreateBot(%pos,%client)
 	if(getRandom(1,384) == 1) {
 		%render.type = "ts";
 	}
-	else if(getRandom(1,32) == 1) {
+	else if(getRandom(1,1) == 1) {
 		%render.type = "g";
 	}
 	else {
@@ -572,6 +572,10 @@ function Render_DeleteR(%render)
 
 	if(%render.isAttacking) {
 		ServerPlay3D(renderMove, %render.position);
+
+		if(%render.type $= "g") {
+			ServerPlay3D(renderAmb4, %render.position);
+		}
 	}
 
 	if(%render.isRenderPlayer)
