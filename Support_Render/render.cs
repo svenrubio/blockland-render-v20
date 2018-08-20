@@ -326,10 +326,15 @@ function Render_Loop_Local(%render)
 				// If the bot isn't attacking, this check will ignore obstacles and assume the player is in third person.
 				%isViewing = %target.rFOVCheck(%render, %render.isAttacking, !%render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
+
 				// Detectors
-				if(%render.isAttacking)
-				{
+				if(%render.isAttacking) {
 					%detectorVal = 5.15-(%distance/20); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
+					%target.detector = %detectorVal;
+					%target.detectorDecay = %detectorVal;
+					%target.startDetectorDecay = getSimTime()+750; // ?????
+				} else if(%isViewing) {
+					%detectorVal = 1.15-(%distance/100);
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750; // ?????
