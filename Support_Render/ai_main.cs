@@ -128,6 +128,7 @@ function Render_AI_Control_Loop(%render)
 	if(!%render.aiWillAttack && %render.playersViewing && !%render.aiLoopObserverDespawn)
 	{
 		%render.aiSpotted = 1;
+		%render.setAimObject(%render.targetCamera);
 		%render.aiLoopObserverDespawn = %render.loopCount+(getRandom(500,3000)/$Render::C_LoopTimer); // 0.25-3 sec. Should be based on how close the player(s) are
 	}
 	else if(%render.aiLoopObserverDespawn !$= "" && %render.loopCount >= %render.aiLoopObserverDespawn)

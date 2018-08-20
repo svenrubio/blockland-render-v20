@@ -145,7 +145,7 @@ function Render_CreateBot(%pos,%client)
 
 ////// # FOV Check
 // This borrows from Bot_Hole. Optimized for Render's spooky biddings.
-function Player::rFOVCheck(%observer, %object, %checkRaycast, %thirdPerson)
+function rFOVCheck(%observer, %object, %checkRaycast, %thirdPerson)
 {
 	%posObserver = %observer.getPosition();
 	%posObject = %object.getPosition();
@@ -322,9 +322,16 @@ function Render_Loop_Local(%render)
 			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
 			if(%render.loopCount == %render.loopViewNext)
 			{
-				// Check if they're in Render's line of sight.
+				// Check if they're in Render's line of sight. Conditions vary by whether we're attacking.
 				// If the bot isn't attacking, this check will ignore obstacles and assume the player is in third person.
-				%isViewing = %target.rFOVCheck(%render, %render.isAttacking, !%render.isAttacking);
+				%render.targetCamera = %target;
+
+				// Passive attackers can detect cameras
+				if(!%render.isAttacking && %target.client.getControlObject().getClassName() $= "Camera") {
+					%render.targetCamera = %target.client.camera;
+				}
+
+				%isViewing = rFOVCheck(%render.targetCamera, %render, %render.isAttacking, !%render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
 				// Detectors
