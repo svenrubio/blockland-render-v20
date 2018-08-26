@@ -633,6 +633,10 @@ function Render_InflictDamage(%p,%render,%distance)
 	if(!%distance)
 		%distance = vectorDist(%render.position,%p.position);
 
+	// Damage decay doesn't count at close range.
+	if(%distance < 4)
+		%dif = 0;
+
 	%dmgOld = %p.rDmg;
 	%p.rDmg = ( %p.rDmg+( $Render::C_DamageRate/%distance ) )-%dif;
 
