@@ -8,8 +8,12 @@ function brickGlitchShrineData::onPlant(%a,%br) // Planted
 	Parent::onPlant(%a,%br);
 	%br.shrineSched = schedule(15, 0, Render_ShrinePlant, %br);
 
-	if($Pref::Server::RenderShrineRange == -1)
+	if($Pref::Server::RenderShrineRange == -1) {
 		%br.client.chatMessage("Shrines are currently disabled on this server.");
+	}
+	else if($Pref::Server::RenderAdminShrines && !%br.client.isAdmin) {
+		%br.client.chatMessage("Shrines are currently admin-only on this server.");
+	}
 
 	// Using a schedule prevents us from returning the host's brick group instead of the actual owner's group
 	// (This may only be necessary for onLoadPlant)
@@ -134,6 +138,37 @@ function Render_DoShrineCheck(%br)
 
 		%r = $Pref::Server::RenderShrineRange;
 
+		// Admin Check //
+		if($Pref::Server::RenderAdminShrines)
+		{
+			if(isObject(%br.client))
+			{
+				if(!%br.client.isAdmin) {
+					continue;
+				}
+			}
+			else
+			{
+				// If they aren't on the server, things are a bit more difficult.
+				%targetId = %br.getGroup().bl_id;
+
+				// Check if they're the host first. If they aren't, check auto-admin list.
+				if(%targetID != getNumKeyId())
+				{
+					for(%iB = 0; %iB < getWordCount($Pref::Server::AutoAdminList); %iB++) {
+						%id = getWord($Pref::Server::AutoAdminList, %iB);
+
+						if(%targetId == %id)
+							%foundId = 1;
+					}
+
+					// They definitely aren't an admin, skip this brick.
+					if(!%foundId)
+						continue;
+				}
+			}
+		}
+
 		if(%br.position $= "") // Error if one is missing.
 		{
 			error("Support_Render - Shrine " @ $R_Shr[%i] @ " (" @ %i @ ") does not exist! Shrine will be force-removed.");
@@ -142,9 +177,9 @@ function Render_DoShrineCheck(%br)
 		else if(%r != -1 && %br.isRayCasting())
 		{
 			// Start a box search. If a Render bot is nearby, delete it immediately.
-			for(%iB = 0; %iB < RenderBotGroup.getCount(); %iB++)
+			for(%iC = 0; %iC < RenderBotGroup.getCount(); %iC++)
 			{
-				%target = RenderBotGroup.getObject(%iB);
+				%target = RenderBotGroup.getObject(%iC);
 
 				// A seperate function on a schedule is used to reduce performance impacts.
 				schedule(0, 0, Render_DoShrineEffect, %target, %br, %r);
