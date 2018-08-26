@@ -1,6 +1,11 @@
 ////// # Prefs and Initialization
 RTB_registerPref("Transform chance at spawn", "Render|Render Players", "$Pref::Server::RenderPlSpawnChance", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6 Always 24", "Support_Render", 0, 0, 0);
 
+// Re-register to override the RTB legacy icon. (see init.cs)
+if(isFunction("registerPreferenceAddon")) {
+  registerPreferenceAddon("Support_Render", "Render", "skull_old");
+}
+
 ////// # Do Render Transition
 function Render_DoRenderTransition(%rClient, %debug)
 {

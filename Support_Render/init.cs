@@ -16,6 +16,10 @@ if(!$RTB::RTBR_ServerControl_Hook && isFile("Add-Ons/System_ReturnToBlockland/ho
 
 if(isFunction("RTB_registerPref"))
 {
+	// We're still using the RTB_registerPref function for the sake reverse-compatibility with v20.
+	// Normally you wouldn't want to register prefs this way, please avoid using this as an example.
+	// See here for the proper way to do this: https://forum.blockland.us/index.php?topic=320521
+
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "Support_Render", $Pref::Server::RenderDifficulty, 0, 0);
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Damage 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "Support_Render", 4, 0, 0);
@@ -26,6 +30,12 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Invincible", "Render", "$Pref::Server::RenderIsInvincible", "bool", "Support_Render", 0, 0, 0);
+
+	// Blockland Glass/Support_Preferences hook
+	// Bit of a hack. This re-registers the category so we can use a custom icon.
+	if(isFunction("registerPreferenceAddon")) {
+		registerPreferenceAddon("Support_Render", "Render", "skull_old");
+	}
 }
 else
 {
