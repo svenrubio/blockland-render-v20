@@ -10,6 +10,9 @@ $Render::C_DamageDecay = $Render::C_DamageRate/100;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
 
+////// # STATS
+$Render::Stat::SpawnCount = 0;
+
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
@@ -79,6 +82,11 @@ function Render_CreateBot(%pos,%client)
 		%render.mode = %client.minigame.rMode;
 	else
 		%render.mode = $Pref::Server::RenderDamageType;
+
+	// Auto haunt mode
+	if($Render::Stat::SpawnCount < 4) {
+		%render.mode = 3;
+	}
 
 	if(%client.minigame.rInvincible !$= "" && %client.minigame.rInvincible != -1)
 		%render.invincible = %client.minigame.rInvincible;
@@ -246,7 +254,7 @@ function Render_Loop_Local(%render)
 	if(!%render.loopCount)
 	{
 		%render.loopViewNext = 2;
-		%render.loopEnergyTimeout = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode==3?2.5:1); // 40 seconds between pay times
+		%render.loopEnergyTimeout = $Render::C_EnergyTimer/$Render::C_LoopTimer/(%render.mode == 3?2.5:1); // 40 seconds between pay times
 	}
 
 	%render.players = 0;
@@ -553,6 +561,8 @@ function Render_Spawn_Loop()
 				//echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
 				%render = Render_CreateBot("0 0 -10000",%client);
+
+				$Render::Stat::SpawnCount++;
 
 				%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
 				%pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
