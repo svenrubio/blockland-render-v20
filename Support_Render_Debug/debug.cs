@@ -89,6 +89,8 @@ package renderDebugPackage
 			return;
 		}
 
+		$Render::Stat::SpawnCount++;
+
 		%rendy.setTransform(%pos);
 		%client.lastSpawnedRender = %rendy;
 
