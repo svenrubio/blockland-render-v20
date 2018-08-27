@@ -814,6 +814,8 @@ function GameConnection::doRenderDeath(%client, %render)
   if(!isObject(%client.camera))
 		return;
 
+	%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-10000");
+
 	// If the player exists, kill them.
 	if(isObject(%client.player))
 	{
@@ -862,10 +864,6 @@ function GameConnection::doRenderDeath(%client, %render)
 }
 
 function GameConnection::doRenderDeathCamera(%client) {
-	if(isObject(%client.player)) {
-		%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-1000");
-	}
-
 	%camera = %client.camera;
 
 	%pos = "-2.6 0 -666.05";
