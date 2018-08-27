@@ -10,9 +10,6 @@ $Render::C_DamageDecay = $Render::C_DamageRate/100;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
 
-////// # STATS
-$Render::Stat::SpawnCount = 0;
-
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {

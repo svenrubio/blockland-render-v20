@@ -1,6 +1,9 @@
 // This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
 $Render::C_ShrineLimit = 32;
 
+////// # STATS
+$Render::Stat::SpawnCount = 0;
+
 ////// # PREFERENCES # //////
 
 //$Pref::Server::RenderMinSpawnDistance = 32; //huge open spaces/outdoors
