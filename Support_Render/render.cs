@@ -98,7 +98,7 @@ function Render_CreateBot(%pos,%client)
 	if(getRandom(1,384) == 1) {
 		%render.type = "ts";
 	}
-	else if(getRandom(1,16) == 1) {
+	else if(getRandom(1,24) == 1) {
 		%render.type = "g";
 	}
 	else {
@@ -833,6 +833,7 @@ function GameConnection::doRenderDeath(%client, %render)
 			%pPos = %p.getTransform();
 			%render.setTransform(getWord(%rPos,0)+2000000 SPC getWords(%rPos,1,6));
 			%p.setTransform(getWord(%pPos,0)+2000000 SPC getWords(%pPos,1,6));
+			%p.g = 1;
 
 			%client.playSound(rAttackG);
 			%client.schedule(2000,doRenderDeath,%render);
@@ -933,6 +934,11 @@ function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
 	// Force the detector to do a loop, then check its value.
+	if(%obj.g) {
+		%obj.client.bottomPrint("<just:center>%$^Y@&*#%$^Y@&*# NO ESCAPE ^$%@(^%$^$%@(^%$",2,1);
+		return;
+	}
+
 	%obj.detectorLoop(1);
 	if(%obj.detector == 0)
 	{
