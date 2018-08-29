@@ -8,7 +8,7 @@ $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
 $Render::C_DamageRate = 256;
 $Render::C_DamageDecay = $Render::C_DamageRate/100;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
-$Render::C_PlayerCheckInterval = 1000; // (NOT IMPLEMENTED) Time between player checks (in ms)
+$Render::C_FreezeCheckInterval = 800; // Time between player checks (in ms)
 
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
@@ -201,7 +201,7 @@ function Render_Loop()
 	{
 		%render = renderBotGroup.getObject(%i);
 
-		if((%render.fxScale) && !$Pref::Server::RenderDisableScaleEffect) // Scale effect applies when we're frozen or freezing a player
+		if((%render.fxScale) && !$Pref::Server::RenderDisableScaleEffect)
 			%render.setPlayerScale(%scale); // Apply the scale effect
 
 		Render_Loop_Local(%render); // Run the local loop
@@ -362,7 +362,9 @@ function Render_Loop_Local(%render)
 					if(%render.isAttacking)
 					{
 						if(%render.mode == 0) // Normal Damage
+						{
 							Render_InflictDamage(%target,%render,%distance);
+						}
 						else if(%render.mode == 1) // Health damage
 						{
 							%renderDamage = %target.dataBlock.maxDamage*0.8/%distance;
@@ -427,10 +429,19 @@ function Render_Loop_Local(%render)
 					Render_UnfreezeRender(%render);
 				}
 
-				if(%target.isFrozen && %target.frozenPosition !$= "") // Extra precaution to make sure frozen targets stay in place. This will likely cause problems on ramp bricks.
+				%mount = %target.getObjectMount();
+				if(%target.isFrozen && isObject(%mount))
 				{
-					%target.setTransform(getWords(%target.frozenPosition,0,1) SPC getWord(%player.position,2));
-					%target.setVelocity("0 0" SPC getWord(%target.getVelocity(),2));
+					%simTime = getSimTime();
+					// Freeze look check
+					if(%simTime > %render.frzNext)
+					{
+						%target.spawnExplosion("RenderDmg1Projectile", 1);
+						%render.frzNext = %simTime+$Render::C_FreezeCheckInterval;
+
+						%transform = %mount.getTransform();
+						%mount.setTransform(setWord(%transform, 6, getWord(%transform,6)+0.3));
+					}
 				}
 			}
 
