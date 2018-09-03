@@ -117,6 +117,19 @@ function Render_Spawn_FindNewPositions(%from, %return, %skipNorth, %skipSouth, %
 	return %validDirections;
 }
 
+// Simple method of checking if a player is outdoors or not.
+// This check is not very accurate on its own.
+function Render_PosIsOutdoors(%pos)
+{
+	%up = setWord(%pos, 2, getWord(%pos, 2)+100);
+	%ray = containerRaycast(%pos, %up, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
+
+	if(%ray == 0)
+		return 1;
+	else
+		return 0;
+}
+
 // Here's another crucial spawning function. It picks a direction and randomizes the bot's position. Returns current position if out of directions.
 // %sameDirection: Find a spot in the same direction (***NOT IMPLEMENTED***)
 // %disableUsedMark: Don't mark directions as "used"
@@ -134,6 +147,14 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 		// Get a random value between 0 and the total distance of all lines.
 		%distTotal = %this.dist["North"]+%this.dist["South"]+%this.dist["East"]+%this.dist["West"];
 		%choice = getRandom(0, %distTotal);
+	}
+
+	if($Pref::Server::RenderDisableIndoorSpawn)
+	{
+		%avg = (%this.distNorth+%this.distSouth+%this.distEast+%this.distWest)/4;
+
+		if(%avg < 30 && !Render_PosIsOutdoors(%plpos))
+			return 0;
 	}
 
 	for(%i = 1; %i <= 4; %i++)

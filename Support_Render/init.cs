@@ -30,10 +30,10 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Shrines admin only", "Render", "$Pref::Server::RenderAdminShrines", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Affect bricks and lights", "Render", "$Pref::Server::RenderAllowBrickEffects", "bool", "Support_Render", 1, 0, 0);
 	RTB_registerPref("Daytime spawning", "Render", "$Pref::Server::RenderDisableEnvSpawn", "bool", "Support_Render", 0, 0, 0);
+	RTB_registerPref("Only spawn outdoors", "Render", "$Pref::Server::RenderDisableIndoorSpawn", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Invincible", "Render", "$Pref::Server::RenderIsInvincible", "bool", "Support_Render", 0, 0, 0);
-
 	// Blockland Glass/Support_Preferences hook
 	// Bit of a hack. This re-registers the category so we can use a custom icon.
 	if(isFunction("registerPreferenceAddon")) {
