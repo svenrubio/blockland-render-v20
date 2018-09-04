@@ -430,7 +430,7 @@ function Render_Loop_Local(%render)
 				}
 
 				%mount = %target.getObjectMount();
-				if(%target.isFrozen && isObject(%mount))
+				if(%target.isFrozen && isObject(%mount) && %render.type !$= "gg")
 				{
 					%simTime = getSimTime();
 					// Freeze look check
