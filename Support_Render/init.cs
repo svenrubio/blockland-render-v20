@@ -25,7 +25,7 @@ if(isFunction("RTB_registerPref"))
 
 	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "Support_Render", $Pref::Server::RenderDifficulty, 0, 0);
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Damage 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
-	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 2 Below_Normal 3 Normal 4 Above_Normal 5 High 6", "Support_Render", 4, 0, 0);
+	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 5 Normal 7 Above_Normal 12 High 14", "Support_Render", 4, 0, 0);
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "Support_Render", 28, 0, 0);
 	RTB_registerPref("Shrines admin only", "Render", "$Pref::Server::RenderAdminShrines", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Affect bricks and lights", "Render", "$Pref::Server::RenderAllowBrickEffects", "bool", "Support_Render", 1, 0, 0);
@@ -47,6 +47,14 @@ else
 	$Pref::Server::RenderSpawnRate = 4;
 	$Pref::Server::RenderShrineRange = 28;
 	$Pref::Server::RenderAllowBrickEffects = 1;
+}
+
+// Spawnrate pref reverse compatibility
+// This prevents the pref from working incorrectly if updating from an old version.
+%rate = $Pref::Server::RenderSpawnRate;
+if(%rate == 2 || %rate == 3 || %rate == 4 || %rate == 6)
+{
+	$Pref::Server::RenderSpawnRate = 7;
 }
 
 // Extra load check; these are the things that REALLY shouldn't run twice.

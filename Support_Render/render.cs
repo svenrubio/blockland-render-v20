@@ -491,7 +491,7 @@ function Render_SunlightCheck()
 }
 
 ////// # Target picking function
-//This will determine the targets for the attacker and start the spawning code
+// This will determine the targets for the attacker and start the spawning code
 function Render_Spawn_Loop()
 {
 	if(isEventPending($Render::LoopSpawner))
@@ -510,9 +510,8 @@ function Render_Spawn_Loop()
 	if(!%skipSpawn)
 	{
 		// Play ambient sound effects
-
 		if(!$Pref::Server::RenderDisableAmbientSounds && !Render_SunlightCheck())
-			if(getRandom(1,12) <= $Pref::Server::RenderSpawnRate) // Bleh
+			if(getRandom(1,24) <= $Pref::Server::RenderSpawnRate) // Bleh
 				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
@@ -559,8 +558,8 @@ function Render_Spawn_Loop()
 			//echo("RENDER: Average spawnrate is " @ %avgSpawnrate);
 
 			// Now, we choose if we want to spawn for this group.
-			// TODO: Re-balance this
-			%random = getRandom(1,6);
+			%random = getRandom(1,18);
+//			talk(%random SPC %avgSpawnrate);
 			if(%random <= %avgSpawnrate)
 			{
 				// If yes, we'll pick a random player in the group to start with.
