@@ -336,7 +336,7 @@ function Render_Loop_Local(%render)
 					%render.targetCamera = %target.client.camera;
 				}
 
-				%isViewing = rFOVCheck(%render.targetCamera, %render, %render.isAttacking, !%render.isAttacking);
+				%isViewing = rFOVCheck(%render.targetCamera, %render, 1, !%render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
 				// Detectors
