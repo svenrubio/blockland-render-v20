@@ -70,48 +70,48 @@ if(!$Render::LoadedB)
 ////// # PARTICLES # //////
 
 // ## Detector Blink FX ## //
-datablock ParticleData(GlitchDetectorParticle)
-{
-	dragCoefficient		= 0.0;
-	windCoefficient		= 0.0;
-	gravityCoefficient	= 0.0;
-	inheritedVelFactor	= 0.0;
-	constantAcceleration	= 0.0;
-	lifetimeMS		= 200;
-	lifetimeVarianceMS	= 0;
-	spinSpeed		= 0.0;
-	spinRandomMin		= 0.0;
-	spinRandomMax		= 0.0;
-	useInvAlpha		= false;
-	animateTexture		= false;
-
-	textureName		= "base/data/particles/thinRing.png";
-
-	colors[0]	= "1 1 1 1";
-	colors[1]	= "1 1 1 0.0";
-
-	sizes[0]	= 0;
-	sizes[1]	= 0.5;
-
-	times[0]	= 0.0;
-	times[1]	= 1.0;
-};
-
-datablock ParticleEmitterData(GlitchDetectorEmitter)
-{
-   ejectionPeriodMS = 500;
-   periodVarianceMS = 0;
-
-   ejectionVelocity = 0.2;
-   velocityVariance = 0;
-
-   ejectionOffset = 0;
-
-   thetaMin         = 0.0;
-   thetaMax         = 0.0;
-
-   particles = GlitchDetectorParticle;
-};
+//datablock ParticleData(GlitchDetectorParticle)
+//{
+//	dragCoefficient		= 0.0;
+//	windCoefficient		= 0.0;
+//	gravityCoefficient	= 0.0;
+//	inheritedVelFactor	= 0.0;
+//	constantAcceleration	= 0.0;
+//	lifetimeMS		= 200;
+//	lifetimeVarianceMS	= 0;
+//	spinSpeed		= 0.0;
+//	spinRandomMin		= 0.0;
+//	spinRandomMax		= 0.0;
+//	useInvAlpha		= false;
+//	animateTexture		= false;
+//
+//	textureName		= "base/data/particles/thinRing.png";
+//
+//	colors[0]	= "1 1 1 1";
+//	colors[1]	= "1 1 1 0.0";
+//
+//	sizes[0]	= 0;
+//	sizes[1]	= 0.5;
+//
+//	times[0]	= 0.0;
+//	times[1]	= 1.0;
+//};
+//
+//datablock ParticleEmitterData(GlitchDetectorEmitter)
+//{
+//   ejectionPeriodMS = 500;
+//   periodVarianceMS = 0;
+//
+//   ejectionVelocity = 0.2;
+//   velocityVariance = 0;
+//
+//   ejectionOffset = 0;
+//
+//   thetaMin         = 0.0;
+//   thetaMax         = 0.0;
+//
+//   particles = GlitchDetectorParticle;
+//};
 
 // ## Face ## //
 datablock ParticleData(RenderBoardParticle)
