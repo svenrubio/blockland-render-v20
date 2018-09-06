@@ -265,7 +265,7 @@ function Render_Loop_Local(%render)
 	if(%render.loopCount >= %render.loopEnergyTimeout) // This determines when Render needs to use more energy to continue. Timing is based on loop count.
 	{
 		if(getRandom(1,4))
-			Render_DoLightFlicker(%render.position, 4000);
+			Render_DoLightFlicker(%render.position, 8000);
 
 		//echo("RENDER: De-spawning, out of time");
 		Render_DeleteR(%render);
@@ -413,7 +413,7 @@ function Render_Loop_Local(%render)
 								Render_FreezeRender(%render);
 
 								if(getRandom(1,6))
-									Render_DoLightFlicker(%render.position, 4000);
+									Render_DoLightFlicker(%render.position, 6000);
 							}
 
 							%render.freezeTarget = %target;
@@ -960,7 +960,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	}
 	else if(%obj.detector >= 3.55)
 	{
-		Render_DoLightFlicker(%obj.position, 3000);
+		Render_DoLightFlicker(%obj.position, 5000);
 		%obj.setWhiteOut(0.4);
 		%obj.spawnExplosion(RenderDmg6Projectile, 1);
 		serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
