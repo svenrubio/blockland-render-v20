@@ -341,15 +341,17 @@ function Render_Loop_Local(%render)
 
 				// Detectors
 				if(%render.isAttacking) {
+					// Distance-based values when attacking
 					%detectorVal = 5.15-(%distance/20); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
-					%target.startDetectorDecay = getSimTime()+750; // ?????
-				} else if(%isViewing) {
+					%target.startDetectorDecay = getSimTime()+750;
+				} else if(%isViewing || %render.loopAttackStart) {
+					// Slight energy when about to attack OR passive attacker is being looked at (energy only shows to player that is looking)
 					%detectorVal = 1.15-(%distance/100);
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
-					%target.startDetectorDecay = getSimTime()+750; // ?????
+					%target.startDetectorDecay = getSimTime()+750;
 				}
 
 				////// ## DAMAGE TARGET
@@ -943,7 +945,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
 	// Force the detector to do a loop, then check its value.
 	if(%obj.g) {
-		%obj.client.bottomPrint("<just:center>%$^Y@&*#%$^Y@&*# NO ESCAPE ^$%@(^%$^$%@(^%$",2,1);
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>%$^Y@&*#%$^Y@&*# NO ESCAPE ^$%@(^%$^$%@(^%$",2,1);
 		return;
 	}
 
