@@ -342,7 +342,7 @@ function Render_Loop_Local(%render)
 				// Detectors
 				if(%render.isAttacking) {
 					// Distance-based values when attacking
-					%detectorVal = 5.15-(%distance/20); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
+					%detectorVal = 5.15-(%distance/30); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750;
@@ -534,7 +534,7 @@ function Render_Spawn_Loop()
 			%groups++;
 
 			// For all players in the area...
-			initContainerRadiusSearch(%client.player.position,100,$TypeMasks::PlayerObjectType);
+			initContainerRadiusSearch(%client.player.position,150,$TypeMasks::PlayerObjectType);
 			while(%target=containerSearchNext())
 			{
 				// Make sure they aren't a bot or a Render player.
