@@ -878,7 +878,7 @@ function GameConnection::doRenderDeath(%client, %render)
 function GameConnection::doRenderDeathCamera(%client) {
 	%camera = %client.camera;
 
-	%pos = "-2.6 0 -666.05";
+	%pos = "-2.6 -3 -666.05";
 	%deltaX = 1;
 	%deltaY = 0;
 	%deltaZ = 0;
@@ -901,8 +901,7 @@ function GameConnection::doRenderDeathCamera(%client) {
 
 	%client.cameraTime = getSimTime()+2400;
 
-	%client.playSound("rGlitch");
-	deathCameraLoop(%client);
+	schedule(300,0,deathCameraLoop,%client);
 }
 
 function deathCameraLoop(%client)
