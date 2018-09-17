@@ -357,7 +357,7 @@ function Render_Loop_Local(%render)
 				////// ## DAMAGE TARGET
 				//%render.playerIsViewing[%render.players] = %isViewing; // Mark them as "viewing"
 				%render.playerViewing = %target;
-				if(%isViewing && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile")
+				if(%isViewing && %target.getMountedImage(0).Projectile !$= "AdminWandProjectile" && %distance < 130)
 				{
 					%render.playersViewing++;
 
