@@ -1,3 +1,7 @@
+// Sources:
+// https://forum.blockland.us/index.php?topic=27230
+// https://forum.blockland.us/index.php?topic=298443
+
 function eulerToAxis(%euler)
 {
 	%euler = VectorScale(%euler,$pi / 180);
@@ -31,3 +35,29 @@ function axisToEuler(%axis)
 	%m33 = 2.0 * %q0q0 - 1.0 + 2.0 * %q3q3;
 	return mRadToDeg(mAsin(%m23)) SPC mRadToDeg(mAtan(-%m13, %m33)) SPC mRadToDeg(mAtan(-%m21, %m22));
 }
+
+function rotatePlayerRelative(%player,%val)
+{
+   if(-360 > %val > 360)
+      return;
+
+   if(%val > 179)
+   {
+      %val = %val / 2;
+      %count = 2;
+   }
+   else %count = 1;
+
+   for(%i=0; %i<%count; %i++)
+   {
+      %pos = getWords(%player.getTransform(),0,2);
+      %euler = axisToEuler(getWords(%player.getTransform(),3,6));
+      %rot = getWords(%euler,0,1);
+      %newAngleTwo = getWord(%euler,2) + %val;
+      if(%newAngle < 0)
+         %newAngleTwo = (%newAngle)-%val;
+      %newRot = %rot SPC %newAngleTwo;
+      %player.setTransform(%pos SPC eulerToAxis(%newRot));
+   }
+}
+
