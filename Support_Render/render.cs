@@ -1032,3 +1032,32 @@ function Render_LightFlickerRestore(%brick)
 	%brick.setColorFX(%brick.rFX);
 	%brick.setEmitter(%brick.rEmitter);
 }
+
+// Target must be on the ground for brick to plant properly
+function Render_BrickEffect(%player)
+{
+	%brick = new FxDTSBrick()
+	{
+		datablock = brickPumpkinAsciiData;
+		isPlanted = true;
+		client = -1;
+
+		position = setWord(%player.position, 2, getWord(%player.position,2)+0.5);
+		rotation = "1 0 0 0";
+		angleID = 1;
+
+		colorID = 5;
+		colorFxID = 0;
+		shapeFxID = 0;
+
+		printID = 0;
+	};
+
+	BrickGroup_666.add(%brick);
+	%brick.isMagicShrine = 1;
+
+	%error = %brick.plant();
+
+	if(%error)
+		%brick.delete();
+}

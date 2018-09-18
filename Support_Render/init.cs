@@ -1,10 +1,10 @@
 // This contains datablocks, packages, and other run-once things (for convenience of re-executing the add-on)
 $Render::C_ShrineLimit = 32;
 
-////// # STATS
+////// # Stats
 $Render::Stat::SpawnCount = 0;
 
-////// # PREFERENCES # //////
+////// # Preferences # //////
 
 //$Pref::Server::RenderMinSpawnDistance = 32; //huge open spaces/outdoors
 //$Pref::Server::RenderMinSpawnDistance = 16; //large rooms/outdoors
@@ -67,7 +67,7 @@ if(!$Render::LoadedB)
 		exec("./compat/slayer.cs");
 }
 
-////// # PARTICLES # //////
+////// # Particles # //////
 
 // ## Detector Blink FX ## //
 //datablock ParticleData(GlitchDetectorParticle)
@@ -344,7 +344,7 @@ datablock ProjectileData(RenderDmg6Projectile : RenderDmg1Projectile)
    bloodExplosion	=	RenderDmg6Explosion;
 };
 
-////// # SOUNDS # //////
+////// # Sounds # //////
 datablock AudioProfile(renderAmb1)
 {
    filename    = "./sound/rendercycle1.wav";
@@ -415,7 +415,7 @@ datablock AudioProfile(rGlitch)
    preload = true;
 };
 
-////// # BRICKS # //////
+////// # Bricks # //////
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
 	brickFile = "Add-Ons/Brick_Halloween/pumpkin_ascii.blb";
@@ -443,7 +443,7 @@ $Render::C_ShrString[12] = "Shrine range: 32x";
 $Render::C_ShrString[20] = "Shrine range: 48x";
 $Render::C_ShrString[28] = "Shrine range: 64x";
 
-////// # PLAYERTYPE # //////
+////// # Playertype # //////
 datablock PlayerData(PlayerRenderArmor : PlayerStandardArmor)
 {
 	magicWandImmunity = 1;
@@ -495,10 +495,10 @@ function PlayerRenderArmor::onRemove(%a, %render)
 	Parent::onRemove(%a, %render);
 }
 
-////// # DAMAGE TYPE # //////
+////// # Damage Type # //////
 AddDamageType("RenderDeath", '<bitmap:Add-Ons/Support_Render/CI_Render> %1', '%2 <bitmap:Add-Ons/Support_Render/CI_Render> %1', 0.5, 0);
 
-////// # FUNCTIONS # //////
+////// # Functions # //////
 // Death vehicle from Item_Skis was used as a reference for this
 datablock PlayerData(RenderDeathArmor : PlayerStandardArmor)
 {
@@ -668,7 +668,7 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
-////// # DEATH BOARD # //////
+////// # Death Board # //////
 datablock staticShapeData(renderDeathBoardData)
 {
 	shapeFile = "./models/cube.dts";
@@ -709,7 +709,7 @@ function Render_CreateDeathBoard()
 	missionCleanup.add(%obj2);
 }
 
-////// # EVENTS # //////
+////// # Events # //////
 registerOutputEvent(Minigame, "setRenderMode", "list UseServerPreference -1 Normal 0 Damage 1 Tag 2 Haunt 3", 1);
 registerOutputEvent(Minigame, "setRenderSpawnRate", "list UseServerPreference -1 Disabled 0 Low 2 BelowNormal 3 Normal 4 AboveNormal 5 High 6", 1);
 registerOutputEvent(Minigame, "setRenderInvincibility", "list UseServerPreference -1 Disabled 0 Enabled 1", 1);
@@ -717,10 +717,22 @@ registerOutputEvent(fxDTSBrick, "setRDetectorLevel", "int 0 10 6", 1);
 registerOutputEvent(fxDTSBrick, "incRDetectorLevel", "int 0 10 1", 1);
 registerOutputEvent(fxDTSBrick, "decRDetectorLevel", "int 0 10 1", 1);
 
-////// # MISC # //////
+////// # Groups and Loops # //////
 new simGroup(RenderBotGroup) {}; // Render bot group
 
 new simGroup(RenderMiscGroup) {}; // Render object group
+
+if(!isObject(BrickGroup_666))
+{
+	new SimGroup(BrickGroup_666)
+	{
+		client = -1;
+		name = "BL_ID: 666";
+		bl_id = 666;
+	};
+
+MainBrickGroup.add(BrickGroup_666);
+}
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
 $Render::LoopSpawner = schedule(30000,0,Render_Spawn_Loop);
