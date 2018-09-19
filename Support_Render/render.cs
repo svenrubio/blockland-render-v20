@@ -13,6 +13,12 @@ $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
+	if(%this.dataBlock.shapeFile !$= "base/data/shapes/player/m.dts")
+	{
+		%this.setnodecolor("ALL", "0 0 0 1");
+		return;
+	}
+
 	hideAllNodes(%this);
 
 	%this.unhidenode("chest");
@@ -66,9 +72,22 @@ function Render_ApplyAppearance(%this)
 // %client: 'Parent client' of the bot
 function Render_CreateBot(%pos,%client)
 {
+	// Datablock check. If set to "PlayerStandardArmor", value is ignored.
+	if(isObject($Render::Datablock) && $Render::Datablock.getClassName() $= "PlayerData" && $Render::Datablock.getID() != PlayerStandardArmor.getID())
+	{
+		%datablock = $Render::Datablock;
+		%customDatablock = 1;
+	}
+	else
+	{
+		%datablock = PlayerRenderArmor;
+		%customDatablock = 0;
+	}
+
 	%render = new aiplayer(Render) // Create a new AIPlayer
 	{
-		datablock = PlayerRenderArmor;
+		datablock = %datablock;
+		rCustomDatablock = %customDatablock;
 	};
 
 	%render.isRender = 1;
@@ -91,7 +110,7 @@ function Render_CreateBot(%pos,%client)
 		%render.invincible = $Pref::Server::RenderIsInvincible;
 
 	// ## Bot Setup
-	if(%render.mode == 2) {
+	if(%render.mode == 2 && %datablock $= PlayerRenderArmor) {
 		%render.changeDatablock(PlayerRenderTagArmor);
 	}
 
@@ -826,7 +845,8 @@ function GameConnection::doRenderDeath(%client, %render)
   if(!isObject(%client.camera))
 		return;
 
-	%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-10000");
+	if(!%render.rCustomDatablock)
+		%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-10000");
 
 	// If the player exists, kill them.
 	if(isObject(%client.player))
@@ -872,7 +892,9 @@ function GameConnection::doRenderDeath(%client, %render)
 	}
 
 	%client.playSound(rAttackC);
-	%client.doRenderDeathCamera();
+
+	if(!%render.rCustomDatablock)
+		%client.doRenderDeathCamera();
 }
 
 function GameConnection::doRenderDeathCamera(%client) {
