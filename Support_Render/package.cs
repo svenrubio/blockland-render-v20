@@ -155,6 +155,14 @@ package Render
 			%player.detectorDecay = 0;
 		}
 
+		// If it's been a while, cut straight to 0 with no decay transition.
+		// This fixes the detector retaining its old levels over a long period of time if the user doesn't equip it.
+		if(getSimTime() >= %player.startDetectorDecay+8000)
+		{
+			%player.detector = 0;
+			%player.detectorDisplay = 0;
+		}
+
 		%str = ""; // Start out with red
 
 		// Farlands offset (Display only - does not affect actual values)
