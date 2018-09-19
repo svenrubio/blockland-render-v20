@@ -91,7 +91,7 @@ function Render_ShrinePlant(%br, %loadPlant)
 
 		// Do a shrine check on this brick when we place it for the first time.
 		// This fixes the shrine check threshold being noticeable when you place a shrine by an attacker.
-		Render_DoShrineCheck(%br);
+		Render_DoShrineCheck(%br, 1);
 	}
 }
 
@@ -119,9 +119,8 @@ function Render_ShrineRemove(%br,%id)
 //// ## Shrine Check
 // %br: if specified, shrine check only applies to brick %br.
 // Otherwise runs a global shrine check.
-function Render_DoShrineCheck(%br)
+function Render_DoShrineCheck(%br, %first)
 {
-
 	// If no brick specified, apply to all bricks on server.
 	if(!%br)
 		%total = $R_Shr_t;
@@ -182,16 +181,27 @@ function Render_DoShrineCheck(%br)
 				%target = RenderBotGroup.getObject(%iC);
 
 				// A seperate function on a schedule is used to reduce performance impacts.
-				schedule(0, 0, Render_DoShrineEffect, %target, %br, %r);
+				schedule(0, 0, Render_DoShrineEffect, %target, %br, %r, %first);
 			}
 		}
 	}
 }
 
-function Render_DoShrineEffect(%target, %br, %r)
+function Render_DoShrineEffect(%target, %br, %r, %first)
 {
 	if(%target.isRender && vectorDist(%target.position,%br.position) <= %r)
 	{
+		// Attacker is immune during the "g" effect
+		if(%target.type $= "gg")
+		{
+			// If the player tries to place a shrine during the "g" effect, destroy the shrine.
+			// Only applies if they *just* placed the brick so we don't accidentally destroy shrines from a build.
+			if(%first)
+				%br.schedule(200, killBrick);
+
+			return;
+		}
+
 		//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
 		Render_DeleteR(%target);
 
