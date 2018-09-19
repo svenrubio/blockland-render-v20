@@ -117,7 +117,7 @@ function Render_CreateBot(%pos,%client)
 	if(getRandom(1,384) == 1) {
 		%render.type = "ts";
 	}
-	else if(getRandom(1,32) == 1) {
+	else if(getRandom(1,24) == 1) {
 		%render.type = "g";
 	}
 	else {
@@ -845,7 +845,7 @@ function GameConnection::doRenderDeath(%client, %render)
   if(!isObject(%client.camera))
 		return;
 
-	if(!%render.rCustomDatablock)
+	if(!%render.rCustomDatablock && %render.type !$= "g")
 		%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-10000");
 
 	// If the player exists, kill them.
