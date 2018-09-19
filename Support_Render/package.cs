@@ -210,7 +210,7 @@ package Render
 
 		if(%player.detector != %player.detectorDisplay)
 		{
-			%display = (%player.detectorDisplay-%player.detector)*0.08;
+			%display = (%player.detectorDisplay-%player.detector)*0.04;
 			%player.detectorDisplay = %player.detectorDisplay-%display;
 		}
 
