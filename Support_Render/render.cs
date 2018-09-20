@@ -981,18 +981,13 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 	{
 		%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy. Find a source to use.",2,1);
 		messageClient(%obj.client,'MsgItemPickup','');
+		return;
 	}
 	else if(%obj.detector > 0 && %obj.detector < 3.55)
-	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer or find a stronger source.",2,1);
-		messageClient(%obj.client,'MsgItemPickup','');
-	}
+		%fireFailed = 1;
 	else if(%obj.detector >= 3.55)
 	{
-		Render_DoLightFlicker(%obj.position, 5000);
-		%obj.setWhiteOut(0.4);
-		%obj.spawnExplosion(RenderDmg6Projectile, 1);
-		serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
+		// Attempt to delete any nearby attackers. If it fails, fall back to the "not enough energy" message
 
 		InitContainerRadiusSearch(%obj.getPosition(),32,$TypeMasks::PlayerObjectType);
 		while(%p=containerSearchNext())
@@ -1003,16 +998,31 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 				//Render_Spawn_GetNewDirection(%p);
 				//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
 				Render_DeleteR(%p);
+				%deletedCount++;
 			}
 		}
-
-		%currSlot = %obj.currTool;
-		%obj.tool[%currSlot] = 0;
-		%obj.weaponCount--;
-
-		messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
-		%obj.unMountImage(0);
 	}
+
+	if(%fireFailed || !%deletedCount)
+	{
+		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer or find a stronger source.",2,1);
+		messageClient(%obj.client,'MsgItemPickup','');
+		return;
+	}
+
+	// Visual FX
+	Render_DoLightFlicker(%obj.position, 5000);
+	%obj.setWhiteOut(0.4);
+	%obj.spawnExplosion(RenderDmg6Projectile, 1);
+	serverPlay3D(glitchFire, getWords(%obj.getTransform(), 0, 2));
+
+	// Slot modifier
+	%currSlot = %obj.currTool;
+	%obj.tool[%currSlot] = 0;
+	%obj.weaponCount--;
+
+	messageClient(%obj.client,'MsgItemPickup','',%currSlot,0);
+	%obj.unMountImage(0);
 }
 
 // # LIGHT FLICKER FUNCTION
