@@ -998,7 +998,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		while(%p=containerSearchNext())
 		{
 			//%p.setWhiteOut(1);
-			if(%p.isRender)
+			if(%p.isRender && %p.isAttacking)
 			{
 				//Render_Spawn_GetNewDirection(%p);
 				//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
