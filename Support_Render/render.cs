@@ -9,6 +9,7 @@ $Render::C_DamageRate = 256;
 $Render::C_DamageDecay = $Render::C_DamageRate/100;
 $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
+$Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
@@ -841,6 +842,26 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 	Render_DeleteR(%render);
 	//else
 	//	warn("Support_Render - Attempting to delete nonexistent bot!");
+}
+
+// AI requests to re-teleport the attacker
+function Render_RequestTeleport(%render, %target)
+{
+	// TODO: fix it using the old position rather than the player's CURRENT pos
+	if(%render.lastTeleportTime !$= "" && %render.lastTeleportTime+$Render::C_TeleCooldown >= getSimTime())
+		return;
+
+	%render.lastTeleportTime = getSimTime();
+
+	if(!isObject(%target))
+		return 0;
+
+	%pos = Render_Spawn_GetNewDirection(%render, %target.getEyePoint(), 0, 1);
+
+	if(%pos == 0)
+		return 0;
+	else
+		%render.setTransform(%pos);
 }
 
 // # DEATH CAMERA
