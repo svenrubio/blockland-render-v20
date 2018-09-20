@@ -105,14 +105,14 @@ package renderDebugPackage
 		return %rendy;
 	}
 
-	function serverCmdMoveR(%client, %resetUsed)
+	function serverCmdMoveR(%client)
 	{
 		if(!%client.isSuperAdmin)
 			return;
 
 		%rendy = %client.lastSpawnedRender;
 
-		%rendy.setTransform(Render_Spawn_GetNewDirection(%rendy, %client.player.position, 0, %resetUsed));
+		%rendy.setTransform(Render_Spawn_GetNewDirection(%rendy, %client.player.getEyePoint(), 0, 1));
 
 		echo("Moved bot " @ %rendy @ " to " @ %rendy.getTransform());
 	}
