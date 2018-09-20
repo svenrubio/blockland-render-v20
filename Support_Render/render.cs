@@ -342,7 +342,7 @@ function Render_Loop_Local(%render)
 		//}
 
 		// Count how many other attackers are nearby.
-		if(%target.isRender)
+		if(%target.isRender && %target.getID() != %render.getID())
 			%nearbyRenders++;
 
 		// MUST be an actual player or testing bot
