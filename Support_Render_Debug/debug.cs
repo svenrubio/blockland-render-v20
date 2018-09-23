@@ -84,7 +84,7 @@ package renderDebugPackage
 
 		if(!%pos)
 		{
-			talk("RENDER: Spawn failed for " @ %client);
+			talk("RENDER: Spawn failed for " @ %client @ "; Error: \"" @ %rendy.rSpawnErr @ "\"");
 			Render_DeleteR(%rendy);
 			return;
 		}

@@ -154,7 +154,10 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 		%avg = (%this.distNorth+%this.distSouth+%this.distEast+%this.distWest)/4;
 
 		if(%avg < 30 && !Render_PosIsOutdoors(%plpos))
+		{
+			%this.rSpawnErr = "INDOOR";
 			return 0;
+		}
 	}
 
 	for(%i = 1; %i <= 4; %i++)
@@ -210,6 +213,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 
 			//echo("i " @ %i @ "; to " @ %to);
 
+			// ## rayForward ##
 			// We're going to do another check to randomize our position.
 			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
@@ -218,6 +222,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			else
 				%hit = posFromRaycast(%rayForward);
 
+			// ## Direction Check ##
 			if(%i == 1) //north
 				%randC = getRandom(getWord(%pos3,1)*%mult,(getWord(%hit,1)+1)*%mult);
 			if(%i == 2) //south
@@ -243,6 +248,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			if(getWord(%pos,0) == %this)
 			{
 				error("Render_Spawn_GetNewDirection - Something happened.");
+				%this.rSpawnErr = "BAD_POS";
 				return 0;
 			}
 
@@ -257,5 +263,6 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 		}
 	}
 	error("Render_Spawn_GetNewDirection - Spawn failed.");
+	%this.rSpawnErr = "NO_VALID_DIRS";
 	return 0;
 }
