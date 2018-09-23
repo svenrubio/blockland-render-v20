@@ -465,12 +465,18 @@ function Render_Loop_Local(%render)
 					// Freeze look check
 					if(%simTime > %render.frzNext)
 					{
+						if(%render.frzTick > 2)
+						{
+							rotatePlayerRelative(%mount, -25*getRandom(0,1));
+						}
+
 						%target.spawnExplosion("RenderDmg1Projectile", 1);
 						%render.frzNext = %simTime+$Render::C_FreezeCheckInterval;
-
-						rotatePlayerRelative(%mount, -25*getRandom(0,1));
+						%render.frzTick++;
 					}
 				}
+				else
+					%render.frzTick = 0;
 			}
 
 			%render.player[%render.players] = %target;
