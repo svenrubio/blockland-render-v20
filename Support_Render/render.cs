@@ -1101,6 +1101,9 @@ function Render_LightFlickerRestore(%brick)
 // Target must be on the ground for brick to plant properly
 function Render_BrickEffect(%player)
 {
+	if(BrickGroup_666.getGroup != MainBrickGroup.getId())
+		MainBrickGroup.add(BrickGroup_666);
+
 	%brick = new FxDTSBrick()
 	{
 		datablock = brickPumpkinAsciiData;

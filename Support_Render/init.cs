@@ -730,8 +730,6 @@ if(!isObject(BrickGroup_666))
 		name = "BL_ID: 666";
 		bl_id = 666;
 	};
-
-MainBrickGroup.add(BrickGroup_666);
 }
 
 $Render::LoopBot = schedule(50,0,Render_Loop);
