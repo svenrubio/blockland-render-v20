@@ -118,7 +118,7 @@ function Render_CreateBot(%pos,%client)
 	if(getRandom(1,384) == 1) {
 		%render.type = "ts";
 	}
-	else if(getRandom(1,24) == 1) {
+	else if(getRandom(1,20) == 1) {
 		%render.type = "g";
 	}
 	else {
@@ -905,6 +905,8 @@ function GameConnection::doRenderDeath(%client, %render)
 			%client.playSound(rAttackG);
 			%client.schedule(2000,doRenderDeath,%render);
 
+			schedule(1800,0,Render_BrickEffect,%render);
+
 			%p.setWhiteOut(0);
 
 			Render_FreezePlayer(%p);
@@ -1101,8 +1103,23 @@ function Render_LightFlickerRestore(%brick)
 // Target must be on the ground for brick to plant properly
 function Render_BrickEffect(%player)
 {
+	if(!$Pref::Server::RenderAllowBrickEffects)
+		return;
+
 	if(BrickGroup_666.getGroup() != MainBrickGroup.getId())
 		MainBrickGroup.add(BrickGroup_666);
+
+	// There can only be one of this brick at a time.
+	// Performance impact should be minimal since we're only looping through bricks placed by Render.
+	for(%i = 0; %i < BrickGroup_666.getCount(); %i++)
+	{
+		if(BrickGroup_666.getObject(%i).isMagicShrine)
+			return;
+	}
+
+	%position = %player.position;
+	%position = setWord(%position, 2, getWord(%position,2)+0.5); // Vertical offset
+	%position = setWord(%position, 1, getWord(%position,1)+3); // Horizontal offset
 
 	%brick = new FxDTSBrick()
 	{
@@ -1110,7 +1127,7 @@ function Render_BrickEffect(%player)
 		isPlanted = true;
 		client = -1;
 
-		position = setWord(%player.position, 2, getWord(%player.position,2)+0.5);
+		position = %position;
 		rotation = "1 0 0 0";
 		angleID = 1;
 
@@ -1128,4 +1145,6 @@ function Render_BrickEffect(%player)
 
 	if(%error)
 		%brick.delete();
+	else
+		%brick.schedule(120000,killBrick);
 }
