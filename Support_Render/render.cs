@@ -118,7 +118,7 @@ function Render_CreateBot(%pos,%client)
 	if(getRandom(1,384) == 1) {
 		%render.type = "ts";
 	}
-	else if(getRandom(1,20) == 1) {
+	else if(getRandom(1,1) == 1) {
 		%render.type = "g";
 	}
 	else {
@@ -898,8 +898,8 @@ function GameConnection::doRenderDeath(%client, %render)
 
 			%rPos = %render.getTransform();
 			%pPos = %p.getTransform();
-			%render.setTransform(getWord(%rPos,0)+2000000 SPC getWords(%rPos,1,6));
-			%p.setTransform(getWord(%pPos,0)+2000000 SPC getWords(%pPos,1,6));
+			%render.setTransform(getWord(%rPos,0)+1000000 SPC getWords(%rPos,1,6));
+			%p.setTransform(getWord(%pPos,0)+1000000 SPC getWords(%pPos,1,6));
 			%p.g = 1;
 
 			%client.playSound(rAttackG);
