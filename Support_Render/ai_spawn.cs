@@ -213,7 +213,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 
 			//echo("i " @ %i @ "; to " @ %to);
 
-			// ## rayForward ##
+			// ## rayForward ## //
 			// We're going to do another check to randomize our position.
 			%rayForward = containerRaycast(%from, %to, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
 
@@ -222,7 +222,6 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			else
 				%hit = posFromRaycast(%rayForward);
 
-			// ## Direction Check ##
 			if(%i == 1) //north
 				%randC = getRandom(getWord(%pos3,1)*%mult,(getWord(%hit,1)+1)*%mult);
 			if(%i == 2) //south
@@ -252,6 +251,26 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 				return 0;
 			}
 
+			// ## rayDownward ## //
+			// Check below the chosen position to make sure we're on the ground.
+			// This is less complicated than rayForward because we don't have to mess with the horizontal position.
+			%toDownward = setWord(%pos, 2, getWord(%pos, 2)-150);
+			%rayDownward = containerRaycast(%pos, %toDownward, $TypeMasks::StaticShapeObjectType | $TypeMasks::VehicleObjectType | $TypeMasks::FxBrickObjectType | $TypeMasks::StaticTSObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType);
+
+			if(!%rayDownward)
+				%hitDownward = %to;
+			else
+				%hitDownward = posFromRaycast(%rayDownward);
+
+			if($Pref::Server::RenderCreateLines == 1)
+			{
+				%lineC = createLine(%pos,%hitDownward,"","1 0 0 1");
+				renderMiscGroup.add(%lineC);
+			}
+
+			%pos = %hitDownward;
+
+			// ## Finalize ## //
 			if(!%disableUsedMark) // Mark position as "used" unless disabled
 			{
 				%this.used[%dir] = 1;
