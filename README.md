@@ -3,6 +3,10 @@
 # Render
 Renderman is a mysterious entity that haunts Blockland. Over the years, this entity has become increasingly intelligent... and increasingly deadly.
 
+
+[View on Blockland Glass](https://blocklandglass.com/addons/addon.php?id=592) | [Download](https://blocklandglass.com/addons/download.php?id=592) 
+------------ | ------------- |
+
 ## What's New in the Halloween Update
 - Visual effects have been overhauled
 - New and improved sound effects
