@@ -121,6 +121,9 @@ function Render_CreateBot(%pos,%client)
 	else if(getRandom(1,20) == 1) {
 		%render.type = "g";
 	}
+	else if(getRandom(1,10) == 1) {
+		%render.type = "a2";
+	}
 	else {
 		%render.type = "a";
 	}
@@ -467,7 +470,12 @@ function Render_Loop_Local(%render)
 					{
 						if(%render.frzTick > 2)
 						{
-							rotatePlayerRelative(%mount, -25*getRandom(0,1));
+							if(%render.type $= "a2")
+								%mult = -1;
+							else
+								%mult = 1;
+
+							rotatePlayerRelative(%mount, (-25*getRandom(0,1))*%mult);
 						}
 
 						%target.spawnExplosion("RenderDmg1Projectile", 1);
