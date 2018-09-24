@@ -28,7 +28,9 @@ function shrineGui::send(%this)
 
 function clientCmdOpenShrineDlg(%db)
 {
-  shrineGui_Datablock.setSelected(%db);
+  if(%db !$= "")
+    shrineGui_Datablock.setSelected(%db);
+    
   canvas.pushDialog(shrineGui);
 }
 

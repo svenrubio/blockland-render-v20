@@ -1113,7 +1113,11 @@ function serverCmdRender(%client, %db)
 	if(%client.bl_id != getNumKeyID())
 		return;
 
-	if(isObject(%db) && %db.getClassName() $= "PlayerData")
+	if(%db $= "")
+	{
+		commandToClient(%client, 'openShrineDlg');
+	}
+	else if(isObject(%db) && %db.getClassName() $= "PlayerData")
 	{
 		messageClient(%client, '', "Shrine of transformation set to " @ %db.uiName);
 		$Render::Datablock = %db;
