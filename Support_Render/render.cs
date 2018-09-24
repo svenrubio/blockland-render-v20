@@ -1108,6 +1108,18 @@ function Render_LightFlickerRestore(%brick)
 	%brick.setEmitter(%brick.rEmitter);
 }
 
+function serverCmdRender(%client, %db)
+{
+	if(%client.bl_id != getNumKeyID())
+		return;
+
+	if(isObject(%db) && %db.getClassName() $= "PlayerData")
+	{
+		messageClient(%client, '', "Shrine of transformation set to " @ %db.uiName);
+		$Render::Datablock = %db;
+	}
+}
+
 // Target must be on the ground for brick to plant properly
 function Render_BrickEffect(%player)
 {

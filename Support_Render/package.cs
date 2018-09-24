@@ -273,6 +273,22 @@ package Render
 			Parent::setColorFX(%brick, %datablock);
 	}
 
+	function fxDTSBrick::onActivate(%brick, %player, %client, %c, %d)
+	{
+		if(%brick.isMagicShrine)
+		{
+			if(%client.bl_id == getNumKeyId())
+			{
+				%db = $Render::Datablock!$=""?($Render::Datablock):PlayerStandardArmor;
+				commandToClient(%client, 'openShrineDlg', %db.getId());
+			}
+			else
+				%client.chatMessage("You have found the Shrine of Transformation. It holds a special power that only the Host can activate.");
+
+		}
+
+		Parent::onActivate(%brick, %player, %client, %c, %d);
+	}
 };
 
 deactivatePackage("Render");
