@@ -1110,7 +1110,7 @@ function Render_LightFlickerRestore(%brick)
 
 function serverCmdRender(%client, %db)
 {
-	if(%client.bl_id != getNumKeyID())
+	if(%client.bl_id != getNumKeyID() || !$Pref::Server::RenderShrineUnlocked)
 		return;
 
 	if(%db $= "")

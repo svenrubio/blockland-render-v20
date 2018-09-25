@@ -279,6 +279,7 @@ package Render
 		{
 			if(%client.bl_id == getNumKeyId())
 			{
+				$Pref::Server::RenderShrineUnlocked = 1;
 				%db = $Render::Datablock!$=""?($Render::Datablock):PlayerStandardArmor;
 				commandToClient(%client, 'openShrineDlg', %db.getId());
 			}

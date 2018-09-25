@@ -92,7 +92,7 @@ new GuiControl(shrineGui) {
          profile = "GuiTextProfile";
          horizSizing = "right";
          vertSizing = "bottom";
-         position = "135 278";
+         position = "131 279";
          extent = "91 18";
          minExtent = "8 2";
          enabled = "1";
