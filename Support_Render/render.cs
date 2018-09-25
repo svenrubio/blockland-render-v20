@@ -870,6 +870,8 @@ function Render_RequestTeleport(%render, %target)
 	if(!isObject(%target))
 		return 0;
 
+	// Generate new paths
+	Render_Spawn_FindNewPositions(%target.getEyePoint(), %render);
 	%pos = Render_Spawn_GetNewDirection(%render, %target.getEyePoint(), 0, 1);
 
 	if(%pos == 0)
