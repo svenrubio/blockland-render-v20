@@ -901,6 +901,7 @@ function GameConnection::doRenderDeath(%client, %render)
 		else if(%render.type $= "g")
 		{
 			%render.type = "gg";
+			%client.player.type = "gg";
 
 			Render_UnfreezePlayer(%p);
 
@@ -1119,7 +1120,6 @@ function serverCmdRender(%client, %db)
 	}
 	else if(isObject(%db) && %db.getClassName() $= "PlayerData")
 	{
-		messageClient(%client, '', "Shrine of transformation set to " @ %db.uiName);
 		$Render::Datablock = %db;
 	}
 }

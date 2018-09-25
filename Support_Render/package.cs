@@ -275,7 +275,7 @@ package Render
 
 	function fxDTSBrick::onActivate(%brick, %player, %client, %c, %d)
 	{
-		if(%brick.isMagicShrine)
+		if(%brick.isMagicShrine && %brick.dataBlock $= "brickPumpkinAsciiData")
 		{
 			if(%client.bl_id == getNumKeyId())
 			{
@@ -284,11 +284,34 @@ package Render
 				commandToClient(%client, 'openShrineDlg', %db.getId());
 			}
 			else
-				%client.chatMessage("You have found the Shrine of Transformation. It holds a special power that only the Host can activate.");
+				%client.chatMessage("You have found the Shrine of Transformation. It holds a special power. Only the Host can activate it.");
 
 		}
 
 		Parent::onActivate(%brick, %player, %client, %c, %d);
+	}
+
+	function brickTeledoorData::onPlant(%a,%br)
+	{
+		Parent::onPlant(%a, %br);
+
+		%player = %br.client.player;
+		if(isObject(%br.client.player))
+		{
+			if(%player.type $= "gg")
+				%br.isMagicDoor = 1;
+		}
+	}
+
+	function fxDTSBrick::onTeledoorEnter(%obj, %player)
+	{
+		Parent::onTeledoorEnter(%obj, %player);
+
+		if(%obj.isMagicDoor)
+		{
+			// This is a hack fix for teledoors bugging out when teleporting to the farlands.
+			%obj.disappear(1);
+		}
 	}
 };
 
