@@ -7,13 +7,6 @@ Renderman is a mysterious entity that haunts Blockland. Over the years, this ent
 [View on Blockland Glass](https://blocklandglass.com/addons/addon.php?id=592) | [Download](https://blocklandglass.com/addons/download.php?id=592) 
 ------------ | ------------- |
 
-## What's New in the Halloween Update
-- Visual effects have been overhauled
-- New and improved sound effects
-- (Experimental) You can now play as Render. Controllable Render spawns can be enabled in preferences.
-- Partial compatibility with v20
-- Tons of minor tweaks and bugfixes
-
 ## The Glitch Detector
 ![DetectorImg](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/Icon_detector.png)
 This is the Glitch Detector. This tool will alert you to the presence of Render by measuring glitch energy. It has one weakness, however; Render can passively observe you without being detected.
