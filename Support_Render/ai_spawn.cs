@@ -227,15 +227,15 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			if(%i == 2) //south
 				%randC = getRandom(getWord(%pos3,1)*%mult,(getWord(%hit,1)-1)*%mult);
 			if(%i == 3) //east
-				%randC = getRandom(getWord(%pos3,0)*%mult,(getWord(%hit,0)+1)*%mult);
+				%randC = getRandom(getWord(%pos3,0)/%mult,(getWord(%hit,0)+1)/%mult);
 			if(%i == 4) //west
-				%randC = getRandom(getWord(%pos3,0)*%mult,(getWord(%hit,0)-1)*%mult);
+				%randC = getRandom(getWord(%pos3,0)/%mult,(getWord(%hit,0)-1)/%mult);
 
 			if(%i == 1 || %i == 2) {
-				%pos = %randB SPC %randC/%mult SPC getWord(%plpos,2)-1;
+				%pos = %randB SPC %randC*%mult SPC getWord(%plpos,2)-1;
 			}
 			if(%i == 3 || %i == 4) {
-				%pos = %randC/%mult SPC %randB SPC getWord(%plpos,2)-1;
+				%pos = %randC*%mult SPC %randB SPC getWord(%plpos,2)-1;
 			}
 
 			if($Pref::Server::RenderCreateLines == 1)
