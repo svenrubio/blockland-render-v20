@@ -935,10 +935,11 @@ function GameConnection::doRenderDeath(%client, %render)
 		%client.camera.setDamageFlash(0.75);
 	}
 
-	%client.playSound(rAttackC);
-
 	if(!%render.rCustomDatablock)
+	{
+		%client.playSound(rAttackC);
 		%client.doRenderDeathCamera();
+	}
 }
 
 function GameConnection::doRenderDeathCamera(%client) {
