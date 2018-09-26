@@ -313,6 +313,23 @@ package Render
 			%obj.disappear(1);
 		}
 	}
+
+	function fxDTSBrick::onPlant(%a,%br)
+	{
+		Parent::onPlant(%a, %br);
+
+		%player = %br.client.player;
+		if(isObject(%br.client.player))
+		{
+			if(%br.client.player.type $= "gg" && !$Pref::Server::RenderAllowBrickEffects)
+			{
+				// Don't let the player place ANY bricks during the effect if brick effects are disabled.
+				// This allows hosts to prevent players from cheating if hosting a game that does not
+				// permit building and/or freeroam.
+				%br.killBrick();
+			}
+		}
+	}
 };
 
 deactivatePackage("Render");
