@@ -335,7 +335,6 @@ function Render_Loop_Local(%render)
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
 
-	%nearbyRenders = 0;
 	while(%target=containerSearchNext()) // For all players in the area...
 	{
 		// Delete other Render bots nearby
@@ -344,10 +343,6 @@ function Render_Loop_Local(%render)
 		//	%target.delete();
 		//	continue;
 		//}
-
-		// Count how many other attackers are nearby.
-		if(%target.isRender && %target.getID() != %render.getID())
-			%nearbyRenders++;
 
 		// MUST be an actual player or testing bot
 		if(!%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
@@ -375,7 +370,7 @@ function Render_Loop_Local(%render)
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750;
-				} else if(!%nearbyRenders && (%isViewing || %render.loopAttackStart)) {
+				} else if(%isViewing || %render.loopAttackStart) {
 					// Slight energy when about to attack OR passive attacker is being looked at (energy only shows to player that is looking)
 					%detectorVal = 1.15-(%distance/100);
 					%target.detector = %detectorVal;
