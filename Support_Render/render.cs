@@ -334,6 +334,9 @@ function Render_Loop_Local(%render)
 	if(%render.loopCount == %render.loopViewNext) {
 		%render.playersViewing = 0;
 	}
+	else {
+		%render.nearbyRenders = 0;
+	}
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
 
@@ -346,11 +349,11 @@ function Render_Loop_Local(%render)
 		//	continue;
 		//}
 
-		// MUST be an actual player or testing bot
-		if(!%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
+		// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
+		if(%render.loopCount == %render.loopViewNext)
 		{
-			// Do a "view check" on players. This is where we apply damage, freeze players, and set detector levels.
-			if(%render.loopCount == %render.loopViewNext)
+			// MUST be an actual player or testing bot
+			if(!%target.isRenderPlayer && (%target.getClassName() $= "Player" || %target.getClassName() $= "AIPlayer" && %target.rIsTestBot))
 			{
 				// Check if they're in Render's line of sight. Conditions vary by whether we're attacking.
 				// If the bot isn't attacking, this check will ignore obstacles and assume the player is in third person.
@@ -482,6 +485,18 @@ function Render_Loop_Local(%render)
 				}
 				else
 					%render.frzTick = 0;
+			}
+		}
+		else
+		{
+			// When we aren't in a view loop, keep track of how many attackers are nearby.
+			// This is a simple solution to tracking nearby attackers before the view loop
+			// without nesting another loop.
+
+			// Count how many other attackers are nearby.
+			if(%target.isRender && %target.getID() != %render.getID()) {
+				// Record the distance of other Renders to our target.
+				%render.nearbyDist[%render.nearbyRenders++] = vectorDist(%targer, %render.target);
 			}
 
 			%render.player[%render.players] = %target;
