@@ -88,7 +88,7 @@ function Render_CreateBot(%pos,%client)
 	%render = new aiplayer(Render) // Create a new AIPlayer
 	{
 		datablock = %datablock;
-		rCustomDatablock = %customDatablock;
+		rCustomDatablock = %customDatablock; // bool
 	};
 
 	%render.isRender = 1;
@@ -115,17 +115,19 @@ function Render_CreateBot(%pos,%client)
 		%render.changeDatablock(PlayerRenderTagArmor);
 	}
 
-	if(getRandom(1,384) == 1) {
-		%render.type = "ts";
-	}
-	else if(getRandom(1,20) == 1) {
-		%render.type = "g";
-	}
-	else if(getRandom(1,10) == 1) {
-		%render.type = "a2";
-	}
-	else {
-		%render.type = "a";
+	// Set the Render type.
+	%render.type = "a";
+
+	if(!%customDatablock) {
+		if(getRandom(1,384) == 1) {
+			%render.type = "ts";
+		}
+		else if(getRandom(1,20) == 1) {
+			%render.type = "g";
+		}
+		else if(getRandom(1,10) == 1) {
+			%render.type = "a2";
+		}
 	}
 
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
