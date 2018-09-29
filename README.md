@@ -9,6 +9,7 @@ Renderman is a mysterious entity that haunts Blockland. Over the years, this ent
 
 ## The Glitch Detector
 ![DetectorImg](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/Icon_detector.png)
+
 This is the Glitch Detector. This tool will alert you to the presence of Render by measuring glitch energy. It has one weakness, however; Render can passively observe you without being detected.
 
 ## The Glitch Gun
@@ -16,12 +17,14 @@ This state-of-the-art device was invented during an experiment with glitch energ
 
 ## Glitch Shrines
 ![Shrine Brick Image](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/Glitch%20Shrine.png)
+
 The Glitch Shrine is a brick that you can place in your builds to passively repel Render. Glitch Shrines have the appearance of a Jack-o-lantern.
 
 You can turn a shrine off by hitting it with the wrench and unchecking "Raycasting" in the menu. You can also do this automatically with events!
 
 ## Detector Bricks
 ![Detector Brick Image](https://raw.githubusercontent.com/LakeYS/blockland-render/master/1x1F.png)
+
 These are special bricks that trigger **onRelay** when Render is nearby. You can use these to make automated alarm systems and other things for your builds.
 
 ## Preferences
