@@ -277,6 +277,14 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 				%this.validDirections--;
 			}
 
+			// Final check. We need to make sure the position is near the player.
+			// If it's more than 300 units away, it's almost guaranteed that something went wrong.
+			if(vectorDist(%plpos, %pos) > 300)
+			{
+				%this.rSpawnErr = "POS_TOO_FAR";
+				return 0;
+			}
+
 			%this.currentDirection = %dir;
 			return %pos;
 		}
