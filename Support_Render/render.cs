@@ -631,7 +631,7 @@ function Render_Spawn_Loop()
 				%hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
 				%pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
 
-				if(!%pos)
+				if(%pos == 0)
 				{
 					//warn("RENDER: Spawn failed for " @ %client);
 					Render_DeleteR(%render);

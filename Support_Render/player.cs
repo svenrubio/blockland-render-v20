@@ -64,7 +64,7 @@ function Render_DoRenderTransition(%rClient, %debug)
   }
 
   // TODO: Try another client rather than cancelling the check
-  if(!%pos)
+  if(!%pos == 0)
   {
     //warn("RENDER: Spawn failed for " @ %client);
     Render_DeleteR(%render);
