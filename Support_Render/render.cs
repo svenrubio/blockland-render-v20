@@ -498,7 +498,8 @@ function Render_Loop_Local(%render)
 			// Count how many other attackers are nearby.
 			if(%target.isRender && %target.getID() != %render.getID()) {
 				// Record the distance of other Renders to our target.
-				%render.nearbyDist[%render.nearbyRenders++] = vectorDist(%target.getPosition(), %render.target.getPosition());
+				%render.nearbyRenders++;
+				//%render.nearbyDist[%render.nearbyRenders] = vectorDist(%target.getPosition(), %render.target.getPosition());
 			}
 
 			%render.player[%render.players] = %target;
