@@ -51,29 +51,29 @@ package Render
 		Parent::onHitObject(%a, %b, %c, %obj, %e, %f);
 	}
 
-	function Armor::onTrigger(%armor, %player, %slot, %bool)
-	{
-		if(%slot == 0) // mouseFire
-			%player.isClicking = %bool;
+	//function Armor::onTrigger(%armor, %player, %slot, %bool)
+	//{
+	//	if(%slot == 0) // mouseFire
+	//		%player.isClicking = %bool;
 
-		// Source: https://forum.blockland.us/index.php?topic=161324.msg3934040#msg3934040
-		//if(%slot == 1) // altTrigger
-		//	%player.isAltClicking = %bool;
+	//	// Source: https://forum.blockland.us/index.php?topic=161324.msg3934040#msg3934040
+	//	//if(%slot == 1) // altTrigger
+	//	//	%player.isAltClicking = %bool;
 
-		if(%slot == 2) // jump
-			%player.isJumping = %bool;
+	//	if(%slot == 2) // jump
+	//		%player.isJumping = %bool;
 
-		if(%slot == 3) // crouch
-			%player.isCrouching = %bool;
+	//	if(%slot == 3) // crouch
+	//		%player.isCrouching = %bool;
 
-		if(%slot == 4) // jet
-		{
-			if(%player.dataBlock.canJet)
-				%player.isJetting = %bool;
-		}
+	//	if(%slot == 4) // jet
+	//	{
+	//		if(%player.dataBlock.canJet)
+	//			%player.isJetting = %bool;
+	//	}
 
-		Parent::onTrigger(%armor, %player, %slot, %bool);
-	}
+	//	Parent::onTrigger(%armor, %player, %slot, %bool);
+	//}
 
 	function Armor::onDisabled(%a, %p, %e)
 	{
