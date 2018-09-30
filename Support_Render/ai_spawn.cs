@@ -183,7 +183,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 
 			// Multiplier; this lets us randomize the position
 			// Things start getting really messy at distances of 10,000,000 and higher.
-			if(%pos1 > 10000 || %pos2 > 10000) {
+			if(vectorDist(%plpos, "0 0 0")  > 10000) {
 				%mult = 0.1; // Special handling for high distances. (Not perfect but it works)
 			}
 			else {
