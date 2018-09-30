@@ -1134,7 +1134,11 @@ function serverCmdRender(%client, %db)
 
 	if(%db $= "")
 	{
-		commandToClient(%client, 'openShrineDlg');
+		%send = $Render::Datablock;
+		if($Render::Datablock $= "")
+			%send = PlayerStandardArmor;
+			
+		commandToClient(%client, 'openShrineDlg', %send);
 	}
 	else if(isObject(%db) && %db.getClassName() $= "PlayerData")
 	{

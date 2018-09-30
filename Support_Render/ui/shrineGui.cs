@@ -5,8 +5,6 @@ function shrineGui::loadDatablocks()
   %oldDB = shrineGui_Datablock.getText();
   shrineGui_Datablock.clear();
 
-  shrineGui_Datablock.setSelected(0);
-
   %dbCount = getDataBlockGroupSize();
   for(%i = 0; %i < %dbCount; %i++)
   {
@@ -29,8 +27,8 @@ function shrineGui::send(%this)
 function clientCmdOpenShrineDlg(%db)
 {
   if(%db !$= "")
-    shrineGui_Datablock.setSelected(%db);
-    
+    shrineGui_Datablock.setSelected(%db.getId());
+
   canvas.pushDialog(shrineGui);
 }
 
@@ -42,4 +40,5 @@ package renderClientPackage
     shrineGui.loadDatablocks();
   }
 };
+
 activatePackage("renderClientPackage");
