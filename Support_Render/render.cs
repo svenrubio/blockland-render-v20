@@ -335,7 +335,7 @@ function Render_Loop_Local(%render)
 		%render.playersViewing = 0;
 	}
 	else {
-		%render.nearbyRenders = 0;
+
 	}
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
@@ -489,6 +489,8 @@ function Render_Loop_Local(%render)
 		}
 		else
 		{
+			%render.nearbyRenders = 0;
+
 			// When we aren't in a view loop, keep track of how many attackers are nearby.
 			// This is a simple solution to tracking nearby attackers before the view loop
 			// without nesting another loop.
@@ -717,7 +719,7 @@ function Render_InflictDamage(%p,%render,%distance)
 	%p.rLastDmg = $Sim::Time; // Set last look time for decay
 	%stage = mCeil(0.06*%p.rDmg);
 
-	if(%render.type !$= "gg") {
+	if(!%p.client.staticDebugImmune && %render.type !$= "gg") {
 		%p.setWhiteOut(%p.rDmg/100);
 	}
 
