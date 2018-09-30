@@ -210,7 +210,16 @@ package Render
 
 		if(%player.detector != %player.detectorDisplay)
 		{
-			%display = (%player.detectorDisplay-%player.detector)*0.04;
+			// Decay rate is higher if the detector level is going up
+			if(%player.detector > %player.detectorDisplay)
+				%mult = 0.08;
+			else
+				%mult = 0.04;
+
+			if($Pref::Server::RenderInstantDetectorHack == 1)
+				%mult = 1;
+
+			%display = (%player.detectorDisplay-%player.detector)*%mult;
 			%player.detectorDisplay = %player.detectorDisplay-%display;
 		}
 
