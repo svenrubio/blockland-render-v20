@@ -1032,37 +1032,28 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		return;
 	}
 
-	%obj.detectorLoop(1);
-	if(%obj.detector == 0)
-	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy. Find a source to use.",2,1);
-		messageClient(%obj.client,'MsgItemPickup','');
-		return;
-	}
-	else if(%obj.detector > 0 && %obj.detector < 3.55)
-		%fireFailed = 1;
-	else if(%obj.detector >= 3.55)
-	{
-		// Attempt to delete any nearby attackers. If it fails, fall back to the "not enough energy" message
-
-		InitContainerRadiusSearch(%obj.getPosition(),32,$TypeMasks::PlayerObjectType);
-		while(%p=containerSearchNext())
-		{
-			//%p.setWhiteOut(1);
-			if(%p.isRender && %p.isAttacking)
-			{
-				//Render_Spawn_GetNewDirection(%p);
-				//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
-				Render_DeleteR(%p);
-				%deletedCount++;
-			}
+	// Attempt to delete any nearby attackers.
+	InitContainerRadiusSearch(%obj.getPosition(),32,$TypeMasks::PlayerObjectType);
+	while(%p=containerSearchNext()) {
+		if(%p.isRender && %p.isAttacking) {
+			//Render_Spawn_GetNewDirection(%p);
+			//%p.setTransform(Render_Spawn_GetNewDirection(%p, %p.target.getEyePoint(), 0, 1));
+			Render_DeleteR(%p);
+			%deletedCount++;
 		}
 	}
 
-	if(%fireFailed || !%deletedCount)
-	{
-		%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer or find a stronger source.",2,1);
-		messageClient(%obj.client,'MsgItemPickup','');
+	if(!%deletedCount) {
+		%obj.detectorLoop(1);
+		if(%obj.detector == 0) {
+			%obj.client.bottomPrint("<just:center><color:FFFFFF>No glitch energy. Find a source to use.",2,1);
+			messageClient(%obj.client,'MsgItemPickup','');
+		}
+		else {
+			%obj.client.bottomPrint("<just:center><color:FFFFFF>Not enough energy. Move closer or find a stronger source.",2,1);
+			messageClient(%obj.client,'MsgItemPickup','');
+		}
+
 		return;
 	}
 
@@ -1137,7 +1128,7 @@ function serverCmdRender(%client, %db)
 		%send = $Render::Datablock;
 		if($Render::Datablock $= "")
 			%send = PlayerStandardArmor;
-			
+
 		commandToClient(%client, 'openShrineDlg', %send);
 	}
 	else if(isObject(%db) && %db.getClassName() $= "PlayerData")
