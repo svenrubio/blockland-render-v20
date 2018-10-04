@@ -139,6 +139,28 @@ package RenderCompatPackage
   {
     return -1;
   }
+
+  function RenderCompatInit() {
+    // Sunlight check compatibility
+    // The sun is not named in many v20 maps by default, so we'll need to define the sun.
+    for(%i = 0; %i < 10; %i++) {
+      if(isObject(MissionGroup)) {
+        %obj = MissionGroup.getObject(%i);
+
+        if(%obj.getClassName() $= "Sun") {
+          $Render::SunObj = %obj;
+          break;
+        }
+      }
+    }
+  }
+
+  function onMissionLoaded()
+  {
+    parent::onMissionLoaded();
+    RenderCompatInit();
+  }
+
 };
 
 deactivatePackage(RenderCompatPackage);

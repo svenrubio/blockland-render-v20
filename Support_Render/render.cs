@@ -11,6 +11,11 @@ $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
+// Create our own reference to the sun.
+// This makes things a bit easier if the sun gets renamed for some reason.
+if($Render::SunObj $= "")
+	$Render::SunObj = Sun;
+
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
@@ -538,7 +543,13 @@ function Render_SunlightCheck()
 		}
 	}
 	else {
-		%light = Sun.color;
+		if(!isObject($Render::SunObj)) {
+			error("Support_Render - Unable to find the sun! Daylight spawning check cancelled.");
+			$Render::SunObj = Sun; // Attempt to reset it next check.
+			return 1; // Default to "daytime" response
+		}
+
+		%light = $Render::SunObj.color;
 		if(getWord(%light,0) > 0.4 && getWord(%light,1) > 0.4 && getWord(%light,2) > 0.4) {
 			return 1;
 		}
@@ -560,14 +571,16 @@ function Render_Spawn_Loop()
 	//echo("RENDER: Spawn loop");
 
 	// If we're only supposed to spawn at night, we'll need to do some extra checks.
-	if(!$Pref::Server::RenderDisableEnvSpawn && Render_SunlightCheck()) {
+	%isDaytime = Render_SunlightCheck();
+
+	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime) {
 			%skipSpawn = 1;
 	}
 
 	if(!%skipSpawn)
 	{
 		// Play ambient sound effects
-		if(!$Pref::Server::RenderDisableAmbientSounds && !Render_SunlightCheck())
+		if(!$Pref::Server::RenderDisableAmbientSounds && !%isDaytime)
 			if(getRandom(1,24) <= $Pref::Server::RenderSpawnRate) // Bleh
 				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
