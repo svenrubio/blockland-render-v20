@@ -1,6 +1,6 @@
 // This script allows Support_Render to be partially compatible with older versions of Blockland.
 
-package RenderCompatPackage
+package RenderCompat
 {
   function RenderDeathArmor::onAdd(%datablock,%obj)
   {
@@ -163,5 +163,5 @@ package RenderCompatPackage
 
 };
 
-deactivatePackage(RenderCompatPackage);
-activatePackage(RenderCompatPackage);
+deactivatePackage(RenderCompat);
+activatePackage(RenderCompat);

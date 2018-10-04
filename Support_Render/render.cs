@@ -170,6 +170,12 @@ function Render_CreateBot(%pos,%client)
 		warn("Support_Render - Bot group is missing! Creating a new one...");
 	}
 
+	if(!isObject(RenderMiscGroup))
+	{
+		new simGroup(RenderMiscGroup) {};
+		warn("Support_Render - Object group is missing! Creating a new one...");
+	}
+
 	RenderBotGroup.add(%render);
 
 	if(!$Render::LoopBot) // If the loop isn't running, we need to restart it.
