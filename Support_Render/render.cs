@@ -915,8 +915,11 @@ function Render_RequestTeleport(%render, %target)
 }
 
 // # DEATH CAMERA
-function GameConnection::doRenderDeathSpecial(%client, %render)
+function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound)
 {
+	if(%offset $= "")
+		%offset = 1000000;
+
 	%p = %client.player;
 	%render.type = "gg";
 	%client.player.type = "gg";
@@ -925,11 +928,13 @@ function GameConnection::doRenderDeathSpecial(%client, %render)
 
 	%rPos = %render.getTransform();
 	%pPos = %p.getTransform();
-	%render.setTransform(getWord(%rPos,0)+1000000 SPC getWords(%rPos,1,6));
-	%p.setTransform(getWord(%pPos,0)+1000000 SPC getWords(%pPos,1,6));
+	%render.setTransform(getWord(%rPos,0)+%offset SPC getWords(%rPos,1,6));
+	%p.setTransform(getWord(%pPos,0)+%offset SPC getWords(%pPos,1,6));
 	%p.g = 1;
 
-	%client.playSound(rAttackG);
+	if(!%nosound)
+		%client.playSound(rAttackG);
+
 	%client.schedule(2000,doRenderDeath,%render);
 
 	schedule(1800,0,Render_BrickEffect,%render);
