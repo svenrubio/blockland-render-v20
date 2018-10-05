@@ -161,6 +161,11 @@ package RenderCompat
     RenderCompatInit();
   }
 
+  function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound)
+  {
+    // The sound bugs out in v20, so it is disabled for now.
+    Parent::doRenderDeathSpecial(%client, %render, %offset, 1);
+  }
 };
 
 deactivatePackage(RenderCompat);
