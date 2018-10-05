@@ -140,9 +140,6 @@ function Render_CreateBot(%pos,%client)
 
 	// TEMPORARY: Should try to adjust this so Render is a *little* easier to escape. 0 makes the bot unrealistically accurate.
 	//%render.setMoveSlowdown(0);
-	//%render.setMaxForwardSpeed(6); // Default: 7
-	//%render.setMaxBackwardSpeed(3); // Default: 4
-	//%render.setMaxSideSpeed(5); // Default: 5
 
 	// Bot hole stuff
 	%render.hMelee = 1;
