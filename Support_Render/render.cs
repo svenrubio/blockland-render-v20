@@ -915,6 +915,31 @@ function Render_RequestTeleport(%render, %target)
 }
 
 // # DEATH CAMERA
+function GameConnection::doRenderDeathSpecial(%client, %render)
+{
+	%p = %client.player;
+	%render.type = "gg";
+	%client.player.type = "gg";
+
+	Render_UnfreezePlayer(%p);
+
+	%rPos = %render.getTransform();
+	%pPos = %p.getTransform();
+	%render.setTransform(getWord(%rPos,0)+1000000 SPC getWords(%rPos,1,6));
+	%p.setTransform(getWord(%pPos,0)+1000000 SPC getWords(%pPos,1,6));
+	%p.g = 1;
+
+	%client.playSound(rAttackG);
+	%client.schedule(2000,doRenderDeath,%render);
+
+	schedule(1800,0,Render_BrickEffect,%render);
+
+	%p.setWhiteOut(0);
+
+	Render_FreezePlayer(%p);
+	Render_FreezeRender(%render);
+}
+
 // Uses code from Event_Camera_Control
 // SEE ALSO: Render_InflictDamage
 function GameConnection::doRenderDeath(%client, %render)
@@ -936,26 +961,7 @@ function GameConnection::doRenderDeath(%client, %render)
 		}
 		else if(%render.type $= "g")
 		{
-			%render.type = "gg";
-			%client.player.type = "gg";
-
-			Render_UnfreezePlayer(%p);
-
-			%rPos = %render.getTransform();
-			%pPos = %p.getTransform();
-			%render.setTransform(getWord(%rPos,0)+1000000 SPC getWords(%rPos,1,6));
-			%p.setTransform(getWord(%pPos,0)+1000000 SPC getWords(%pPos,1,6));
-			%p.g = 1;
-
-			%client.playSound(rAttackG);
-			%client.schedule(2000,doRenderDeath,%render);
-
-			schedule(1800,0,Render_BrickEffect,%render);
-
-			%p.setWhiteOut(0);
-
-			Render_FreezePlayer(%p);
-			Render_FreezeRender(%render);
+			%client.doRenderDeathSpecial(%render);
 			return;
 		}
 
