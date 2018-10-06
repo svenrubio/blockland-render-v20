@@ -126,10 +126,68 @@ package RenderCompat
     RenderCompatInit();
   }
 
-  function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound)
+  function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound, %nodelay)
   {
     // The sound bugs out in v20, so it is disabled for now.
-    Parent::doRenderDeathSpecial(%client, %render, %offset, 1);
+    // The brick placement delay is also disabled.
+    %death = Parent::doRenderDeathSpecial(%client, %render, %offset, 1, 1);
+
+    // For reasons unknown, we want players to be able to build while frozen during the effect.
+    // Due to the "giant players" patch, this isn't possible unless we make some tweaks to the scaling.
+    if(isObject(%death)) {
+      %death.setScale("0.75 0.75 0.75");
+      %render.setScale("1.5 1.5 1.5"); // Re-scale the attacker as well so this fix isn't as noticeable.
+    }
+    // Because of wacky bugs in v20, these two scales will look the same when in-game.
+  }
+
+  // Patch for the special brick effect.
+  // In order to accomodate v20 maps (Slate included), we have to use an invisible baseplate.
+  function Render_BrickEffectFix(%player)
+  {
+  	%position = %player.position;
+  	%position = setWord(%position, 2, getWord(%position,2)-0.3); // Vertical offset
+  	%position = setWord(%position, 1, getWord(%position,1)+3); // Horizontal offset
+
+  	%brick = new FxDTSBrick()
+  	{
+  		datablock = brick64x64fData;
+  		isPlanted = true;
+  		client = -1;
+
+  		position = %position;
+  		rotation = "1 0 0 0";
+  		angleID = 1;
+
+  		colorID = 5;
+  		colorFxID = 0;
+  		shapeFxID = 0;
+
+  		printID = 0;
+  	};
+
+  	BrickGroup_666.add(%brick);
+
+    %brick.setRendering(0);
+
+  	%error = %brick.plant();
+
+		if(!%error || %error == 2) // If it's a float error, ignore and plant anyway.
+			%brick.schedule(120000,killBrick);
+		else
+			// Other error, delete thr brick.
+			%brick.delete();
+  }
+
+  function Render_BrickEffect(%player, %override) {
+    // Set %override to tell the function to ignore float errors.
+    %schedule = Parent::Render_BrickEffect(%player, 1);
+
+    // If the schedule is running, we know the first brick planted successfully.
+    // This means we can proceed with the plate.
+    if(isEventPending(%schedule)) {
+      Render_BrickEffectFix(%player);
+    }
   }
 };
 

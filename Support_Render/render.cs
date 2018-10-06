@@ -912,7 +912,7 @@ function Render_RequestTeleport(%render, %target)
 }
 
 // # DEATH CAMERA
-function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound)
+function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosound, %nodelay)
 {
 	if(%offset $= "")
 		%offset = 1000000;
@@ -934,12 +934,17 @@ function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosoun
 
 	%client.schedule(2000,doRenderDeath,%render);
 
-	schedule(1800,0,Render_BrickEffect,%render);
+	if(%nodelay)
+		%sched = 0;
+	else
+		%sched = 1800;
+
+	schedule(%sched,0,Render_BrickEffect,%render);
 
 	%p.setWhiteOut(0);
 
-	Render_FreezePlayer(%p);
 	Render_FreezeRender(%render);
+	return Render_FreezePlayer(%p);
 }
 
 // Uses code from Event_Camera_Control
@@ -1165,7 +1170,7 @@ function serverCmdRender(%client, %db)
 }
 
 // Target must be on the ground for brick to plant properly
-function Render_BrickEffect(%player)
+function Render_BrickEffect(%player, %override)
 {
 	if(!$Pref::Server::RenderAllowBrickEffects)
 		return;
@@ -1207,8 +1212,16 @@ function Render_BrickEffect(%player)
 
 	%error = %brick.plant();
 
-	if(%error)
+	if(%override) {
+		// If override is on, allow the plant if the brick is floating.
+		if(!%error || %error == 2) // If it's a float error, ignore and plant anyway.
+			return %brick.schedule(120000,killBrick);
+		else
+			// Other error, delete the brick.
+			%brick.delete();
+	}
+	else if(%error)
 		%brick.delete();
 	else
-		%brick.schedule(120000,killBrick);
+		return %brick.schedule(120000,killBrick);
 }
