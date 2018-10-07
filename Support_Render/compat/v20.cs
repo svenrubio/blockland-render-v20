@@ -122,6 +122,9 @@ package RenderCompat
 
   function onMissionLoaded()
   {
+    new simGroup(RenderBotGroup) {}; // Render bot group
+    new simGroup(RenderMiscGroup) {}; // Render object group
+
     parent::onMissionLoaded();
     RenderCompatInit();
   }
