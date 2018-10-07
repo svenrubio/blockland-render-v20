@@ -286,6 +286,10 @@ package Render
 	{
 		if(%brick.isMagicShrine && %brick.dataBlock $= "brickPumpkinAsciiData")
 		{
+			// No cheating. Clicking the shrine mid-death won't work unless override mode is on.
+			if(%player.type $= "gg" && !%brick.shrineOverride)
+				return;
+
 			if(%client.bl_id == getNumKeyId())
 			{
 				$Pref::Server::RenderShrineUnlocked = 1;

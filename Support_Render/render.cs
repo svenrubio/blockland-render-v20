@@ -1209,6 +1209,7 @@ function Render_BrickEffect(%player, %override)
 
 	BrickGroup_666.add(%brick);
 	%brick.isMagicShrine = 1;
+	%brick.shrineOverride = %override;
 
 	%error = %brick.plant();
 
