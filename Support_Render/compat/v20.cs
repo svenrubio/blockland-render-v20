@@ -59,6 +59,15 @@ package RenderCompat
     return -1;
   }
 
+  // isFunction check in case anyone manages to port bot holes to v20 (if it's even possible)
+  if(!isFunction(AIPlayer, hAvoidObstacle)) {
+    // Overwrite this function from bot holes so there aren't any console errors.
+    // Note that the without this function, the AI will not be able to move around obstacles as easily.
+    function AIPlayer::hAvoidObstacle() {
+      return -1;
+    }
+  }
+
   function RenderCompatInit() {
     // Sunlight check compatibility
     // The sun is not named in many v20 maps by default, so we'll need to define the sun.
