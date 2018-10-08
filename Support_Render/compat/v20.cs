@@ -59,52 +59,6 @@ package RenderCompat
     return -1;
   }
 
-  // TODO: If speed is set to 0, freeze the player
-  function Player::SetMaxForwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxBackwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxSideSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxCrouchForwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxCrouchBackwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxCrouchSideSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxUnderwaterForwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxUnderwaterBackwardSpeed(%x)
-  {
-    return -1;
-  }
-
-  function Player::SetMaxUnderwaterSideSpeed(%x)
-  {
-    return -1;
-  }
-
   function RenderCompatInit() {
     // Sunlight check compatibility
     // The sun is not named in many v20 maps by default, so we'll need to define the sun.
