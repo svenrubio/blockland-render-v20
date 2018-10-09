@@ -652,8 +652,10 @@ function Render_Spawn_Loop()
 					//warn("RENDER: Spawn failed for " @ %client);
 					Render_DeleteR(%render);
 				}
-				else
+				else {
 					%render.setTransform(%pos);
+					%rendy.setActionThread(root); // Fixes walk animation getting stuck
+				}
 			}
 		}
 	}

@@ -92,6 +92,8 @@ package renderDebugPackage
 		$Render::Stat::SpawnCount++;
 
 		%rendy.setTransform(%pos);
+		%rendy.setActionThread(root); // Fixes walk animation getting stuck
+
 		%client.lastSpawnedRender = %rendy;
 
 		echo(%client.name @ ": Spawned R bot " @ %rendy);
