@@ -24,21 +24,21 @@ function rVerifyEvent() {
 function MiniGameSO::setRenderMode(%this, %rate, %client)
 {
   if(rVerifyEvent()) {
-    %minigame.rMode = %rate;
+    %this.rMode = %rate;
   }
 }
 
 function MiniGameSO::setRenderSpawnRate(%this, %rate, %client)
 {
   if(rVerifyEvent()) {
-    %minigame.rSpawnRate = %rate;
+    %this.rSpawnRate = %rate;
   }
 }
 
 function MiniGameSO::setRenderInvincibility(%this, %rate, %client)
 {
   if(rVerifyEvent()) {
-    %minigame.rInvincible = %rate;
+    %this.rInvincible = %rate;
   }
 }
 
