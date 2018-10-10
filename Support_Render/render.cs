@@ -654,7 +654,7 @@ function Render_Spawn_Loop()
 				}
 				else {
 					%render.setTransform(%pos);
-					%rendy.setActionThread(root); // Fixes walk animation getting stuck
+					%render.setActionThread(root); // Fixes walk animation getting stuck
 				}
 			}
 		}
