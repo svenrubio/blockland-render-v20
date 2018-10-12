@@ -13,6 +13,12 @@ function rVerifyEvent(%client) {
     %minigameOwner = %minigame.creatorBLID;
   }
 
+  // Extra precaution in case something goes wrong. This is a catch-all for a few potential exploits.
+  if(%brickOwner $= "") {
+    console.log("Support_Render - Brick owner is blank for " @ %client @ "! Skipping event...");
+    return false;
+  }
+
   if(%brickOwner == %minigameOwner) {
     return true;
   }
