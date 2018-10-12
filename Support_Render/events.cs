@@ -1,6 +1,6 @@
 // **See init.cs for registration**
 
-function rVerifyEvent() {
+function rVerifyEvent(%client) {
   %brick = %client.lastEventBrick;
   %minigame = %client.minigame;
 
@@ -23,21 +23,21 @@ function rVerifyEvent() {
 
 function MiniGameSO::setRenderMode(%this, %rate, %client)
 {
-  if(rVerifyEvent()) {
+  if(rVerifyEvent(%client)) {
     %this.rMode = %rate;
   }
 }
 
 function MiniGameSO::setRenderSpawnRate(%this, %rate, %client)
 {
-  if(rVerifyEvent()) {
+  if(rVerifyEvent(%client)) {
     %this.rSpawnRate = %rate;
   }
 }
 
 function MiniGameSO::setRenderInvincibility(%this, %rate, %client)
 {
-  if(rVerifyEvent()) {
+  if(rVerifyEvent(%client)) {
     %this.rInvincible = %rate;
   }
 }
