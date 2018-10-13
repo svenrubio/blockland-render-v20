@@ -571,6 +571,9 @@ function Render_Spawn_Loop()
 		cancel($Render::LoopSpawner);
 	}
 
+	// TODO: Disable this loop if no mini-games with spawnrate enabled are active.
+	// if(MiniGameGroup.getCount() >= 1 || Slayer_MiniGameHandlerSG.getCount() >= 1)
+
 	//echo("RENDER: Spawn loop");
 
 	// If we're only supposed to spawn at night, we'll need to do some extra checks.
