@@ -19,12 +19,40 @@ function rVerifyEvent(%client) {
     return false;
   }
 
+  // No mini-game events if disabled by host
+  if($Pref::Server::RenderAdminMinigamePrefs && !%brick.client.isAdmin) {
+    if(!%brick.client.rDisabledMsg) {
+      messageClient(%brick.client, '', "WARNING: Renderman minigame config is currently admin only on this server.");
+      %brick.client.rDisabledMsg = 1;
+    }
+
+    return false;
+  }
+
   if(%brickOwner == %minigameOwner) {
     return true;
   }
   else {
     return false;
   }
+}
+
+// If the host disables minigame config, we have to make sure we clear existing options.
+// See init.cs and compat/slayer.cs for defaults.
+function Render_MinigameCheck(%minigame) {
+  if(%minigame.owner) {
+    %owner = findClientByBL_ID(%minigame.owner.bl_id);
+  }
+  else {
+    %owner = findClientByBL_ID(%minigame.creatorBLID);
+  }
+
+	if(!%owner.isAdmin && $Pref::Server::RenderAdminMinigamePrefs) {
+    %minigame.rMode = -1;
+    %minigame.rSpawnRate = -1;
+    %minigame.rInvincible = -1;
+    %minigame.rSpawnRatePlayer = -1;
+	}
 }
 
 function MiniGameSO::setRenderMode(%this, %rate, %client)
