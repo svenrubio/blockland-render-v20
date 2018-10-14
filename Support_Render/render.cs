@@ -589,7 +589,7 @@ function Render_Spawn_Loop()
 	{
 		// Play ambient sound effects
 		if(!$Pref::Server::RenderDisableAmbientSounds && !%isDaytime)
-			if(getRandom(1,24) <= $Pref::Server::RenderSpawnRate) // Bleh
+			if(getRandom(1,72) <= $Pref::Server::RenderSpawnRate) // Bleh
 				serverPlay2D("RenderAmb" @ getRandom(1,3));
 
 		// Render uses a 'group' spawning system to choose which players to target. This works by choosing between areas rather than individual players.
