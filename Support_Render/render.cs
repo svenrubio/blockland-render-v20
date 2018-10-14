@@ -617,6 +617,8 @@ function Render_Spawn_Loop()
 				if(%target.getClassName() !$= "Player" || %target.isRenderPlayer)
 					continue;
 
+				Render_MinigameCheck(%target.client.minigame);
+
 				// Get each player's spawnrate.
 				if(%target.client.minigame.rSpawnRate $= "" || %target.client.minigame.rSpawnRate == -1)
 					%spawnrate[%target] = $Pref::Server::RenderSpawnRate;
