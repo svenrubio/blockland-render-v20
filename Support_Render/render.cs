@@ -472,29 +472,29 @@ function Render_Loop_Local(%render)
 
 				%mount = %target.getObjectMount();
 
-				if(%target.isFrozen && %target == %render.freezeTarget && isObject(%mount) && %render.type !$= "gg")
-				{
-					%simTime = getSimTime();
-					// Freeze look check
-					if(%simTime > %render.frzNext)
-					{
-						if(%render.frzTick > 2)
-						{
-							if(%render.type $= "a2")
-								%mult = -1;
-							else
-								%mult = 1;
+				if(%target == %render.freezeTarget) {
+					if(%target.isFrozen && isObject(%mount) && %render.type !$= "gg") {
+						%simTime = getSimTime();
+						// Freeze look check
+						if(%simTime > %render.frzNext) {
+							if(%render.frzTick > 2) {
+								if(%render.type $= "a2")
+									%mult = -1;
+								else
+									%mult = 1;
 
-							rotatePlayerRelative(%mount, (-25*getRandom(0,1))*%mult);
+								rotatePlayerRelative(%mount, (-25*getRandom(0,1))*%mult);
+							}
+
+							%target.spawnExplosion("RenderDmg1Projectile", 1);
+							%render.frzNext = %simTime+$Render::C_FreezeCheckInterval;
+							%render.frzTick++;
 						}
-
-						%target.spawnExplosion("RenderDmg1Projectile", 1);
-						%render.frzNext = %simTime+$Render::C_FreezeCheckInterval;
-						%render.frzTick++;
+					}
+					else {
+						%render.frzTick = 0;
 					}
 				}
-				else
-					%render.frzTick = 0;
 			}
 		}
 		else
