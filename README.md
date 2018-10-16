@@ -1,5 +1,3 @@
-![Face](https://github.com/LakeYS/blockland-render/blob/master/asciiTerror.png)
-
 # Render
 Renderman is a mysterious entity that haunts Blockland. Over the years, this entity has become increasingly intelligent... and increasingly deadly.
 
