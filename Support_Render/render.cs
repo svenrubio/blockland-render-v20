@@ -350,6 +350,11 @@ function Render_Loop_Local(%render)
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
 
+	// Initialize values before starting the container search.
+	if(%render.loopCount != %render.loopViewNext) {
+		%render.nearbyRenders = 0;
+	}
+
 	while(%target=containerSearchNext()) // For all players in the area...
 	{
 		// Delete other Render bots nearby
@@ -503,8 +508,6 @@ function Render_Loop_Local(%render)
 		}
 		else
 		{
-			%render.nearbyRenders = 0;
-
 			// When we aren't in a view loop, keep track of how many attackers are nearby.
 			// This is a simple solution to tracking nearby attackers before the view loop
 			// without nesting another loop.
