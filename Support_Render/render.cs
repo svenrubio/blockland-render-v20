@@ -427,10 +427,14 @@ function Render_Loop_Local(%render)
 								%render.audioNext = getSimTime()+200;
 							}
 
-							if(%doRenderDeath)
-								%target.client.doRenderDeath(%render);
-							else
-								%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
+							if(%target.type !$= "gg") {
+								if(%doRenderDeath) {
+									%target.client.doRenderDeath(%render);
+								}
+								else {
+									%target.damage(%target, %target.getposition(), %renderDamage, $DamageType::RenderDeath);
+								}
+							}
 						} // Damage type 2 doesn't need this.
 					}
 				}
