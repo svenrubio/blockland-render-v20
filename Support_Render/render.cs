@@ -960,7 +960,7 @@ function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosoun
 // SEE ALSO: Render_InflictDamage
 function GameConnection::doRenderDeath(%client, %render)
 {
-  if(!isObject(%client.camera))
+  if(!isObject(%client.camera) || !isObject(%render))
 		return;
 
 	if(!%render.rCustomDatablock && %render.type !$= "g")
