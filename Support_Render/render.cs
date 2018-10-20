@@ -385,13 +385,19 @@ function Render_Loop_Local(%render)
 				// Detectors
 				if(%render.isAttacking) {
 					// Distance-based values when attacking
-					%detectorVal = 5.15-(%distance/30); // 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
+
+					// 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
+					%detectorVal = 5.15-(%distance/30);
+					// Detector value scales by 25% per additional Render nearby.
+					if(%render.nearbyRenders >= 1)
+						%detectorVal = %detectorVal*((%render.nearbyRenders*0.25)+1);
 
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750;
-				} else if(%isViewing || %render.loopAttackStart) {
-					// Slight energy when about to attack OR passive attacker is being looked at (energy only shows to player that is looking)
+				} else if(!%render.nearbyRenders && (%isViewing || %render.loopAttackStart)) {
+					// Slight energy when about to attack OR passive attacker is being looked at
+					// (Energy only shows to player that is looking. Does not apply if there are other active Renders)
 					%detectorVal = 1.15-(%distance/100);
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
@@ -513,10 +519,19 @@ function Render_Loop_Local(%render)
 			// without nesting another loop.
 
 			// Count how many other attackers are nearby.
-			if(%target.isRender && %target.getID() != %render.getID()) {
+			if(%target.isAttacking && %target.isRender && %target.getID() != %render.getID()) {
 				// Record the distance of other Renders to our target.
 				%render.nearbyRenders++;
-				//%render.nearbyDist[%render.nearbyRenders] = vectorDist(%target.getPosition(), %render.target.getPosition());
+
+				// If the target we found is closer to our target than us (and isn't passive), set a flag to skip changing detector value.
+				// This is to prevent the detector from flickering back and forth if there are multiple attackers.
+
+				%render.nearbySkip = 0;
+				if(isObject(%render.target) &&
+				vectorDist( %target.getPosition(), %render.target.getPosition() ) > vectorDist( %render.getPosition(), %render.target.getPosition() ))
+				{
+					%render.nearbySkip = 1;
+				}
 			}
 
 			%render.player[%render.players] = %target;
