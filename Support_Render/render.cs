@@ -923,7 +923,6 @@ function Render_RequestDespawn(%render) // AI requests to delete the bot
 // AI requests to re-teleport the attacker
 function Render_RequestTeleport(%render, %target)
 {
-	// TODO: fix it using the old position rather than the player's CURRENT pos
 	if(%render.lastTeleportTime !$= "" && %render.lastTeleportTime+$Render::C_TeleCooldown >= getSimTime())
 		return;
 

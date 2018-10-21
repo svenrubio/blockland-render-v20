@@ -4,7 +4,6 @@ package RenderCompat
 {
   function RenderDeathArmor::onAdd(%datablock,%obj)
   {
-    // TODO: Fix the 'giant' bug still being briefly visible on mount
     %obj.setScale("1 1 1"); // This fixes frozen players becoming giants.
     Parent::onAdd(%datablock,%obj);
   }
