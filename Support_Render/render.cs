@@ -935,6 +935,16 @@ function Render_RequestTeleport(%render, %target)
 	Render_Spawn_FindNewPositions(%target.getEyePoint(), %render);
 	%pos = Render_Spawn_GetNewDirection(%render, %target.getEyePoint(), 0, 1);
 
+	if(%render.rSpawnErr $= "NO_VALID_DIRS" || %render.rSpawnErr $= "INDOOR") {
+		return 0;
+	}
+	else if(%render.rSpawnErr !$= "") {
+		// Other errors, dump to console.
+		error("Support_Render - Failed to get new spawn with error '" @ %this.rSpawnErr @ "'.");
+		return 0;
+	}
+
+
 	if(%pos == 0)
 		return 0;
 	else

@@ -135,6 +135,11 @@ function Render_PosIsOutdoors(%pos)
 // %disableUsedMark: Don't mark directions as "used"
 // %useDistanceChance: Use the direction's distance as a factor in the choice, rather than keeping it purely random.
 // This relies on the outline that the previous function gives us.
+// Errors:
+// INDOOR
+// BAD_POS (Unexpected)
+// POS_TOO_FAR (Unexpected)
+// NO_VALID_DIRS
 function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUsedMark, %useDistanceChance)
 {
 	if(!%this.validDirections)
@@ -289,7 +294,7 @@ function Render_Spawn_GetNewDirection(%this, %plpos, %sameDirection, %disableUse
 			return %pos;
 		}
 	}
-	error("Render_Spawn_GetNewDirection - Spawn failed.");
+
 	%this.rSpawnErr = "NO_VALID_DIRS";
 	return 0;
 }
