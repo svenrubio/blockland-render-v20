@@ -50,8 +50,9 @@ function Render_DoRenderTransition(%rClient, %debug)
     }
 
     // If there are no available players, cancel.
-    if(!%groups || !%targets)
+    if(!%groups || !%targets) {
       return;
+    }
 
     // Unlike render.cs, which has a set chance per group, we're going to pick a random client in a random group.
     %group = getRandom(1,%groups);
@@ -64,7 +65,7 @@ function Render_DoRenderTransition(%rClient, %debug)
   }
 
   // TODO: Try another client rather than cancelling the check
-  if(!%pos == 0)
+  if(%pos == 0)
   {
     //warn("RENDER: Spawn failed for " @ %client);
     Render_DeleteR(%render);
