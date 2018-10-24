@@ -19,7 +19,7 @@ function R_Check()
   if(!mainMenuGui.isAwake())
     return;
 
-  %rand = getRandom(1,6);
+  %rand = getRandom(1,12);
 
   if(%rand == 1)
   {
