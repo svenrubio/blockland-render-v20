@@ -344,9 +344,6 @@ function Render_Loop_Local(%render)
 	if(%render.loopCount == %render.loopViewNext) {
 		%render.playersViewing = 0;
 	}
-	else {
-
-	}
 
 	initContainerRadiusSearch(%render.position,150,$TypeMasks::PlayerObjectType); // Start a radius search.
 
@@ -663,10 +660,10 @@ function Render_Spawn_Loop()
 			%random = getRandom(1,18);
 			if(%random <= %avgSpawnrate)
 			{
-				// °Д°
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
 
+				// °Д°
 				//echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
 				%render = Render_CreateBot("0 0 -10000",%client);
