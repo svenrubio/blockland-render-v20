@@ -661,9 +661,9 @@ function Render_Spawn_Loop()
 
 			// Now, we choose if we want to spawn for this group.
 			%random = getRandom(1,18);
-//			talk(%random SPC %avgSpawnrate);
 			if(%random <= %avgSpawnrate)
 			{
+				// °Д°
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
 
