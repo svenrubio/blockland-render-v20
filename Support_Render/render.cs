@@ -142,7 +142,7 @@ function Render_CreateBot(%pos,%client)
 		if(getRandom(1,384) == 1) {
 			%render.type = "ts";
 		}
-		else if(getRandom(1,28) == 1) {
+		else if(getRandom(1,24) == 1) {
 			%render.type = "g";
 		}
 		else if(getRandom(1,10) == 1) {
