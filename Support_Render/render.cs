@@ -11,6 +11,12 @@ $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
+// 12/15 - 12/31
+%date = getDateTime();
+if(getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) >= 15 && getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) <= 31) {
+  $Render::C_HolidayCheer = 1;
+}
+
 // Create our own reference to the sun.
 // This makes things a bit easier if the sun gets renamed for some reason.
 if($Render::SunObj $= "")
@@ -19,9 +25,16 @@ if($Render::SunObj $= "")
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
+	if($Render::C_HolidayCheer && getRandom(1,32) == 1) {
+		%c = "1 1 1 1";
+	}
+	else {
+		%c = "0 0 0 1";
+	}
+
 	if(%this.dataBlock.shapeFile !$= "base/data/shapes/player/m.dts")
 	{
-		%this.setnodecolor("ALL", "0 0 0 1");
+		%this.setnodecolor("ALL", %c);
 		return;
 	}
 
@@ -54,15 +67,15 @@ function Render_ApplyAppearance(%this)
 	}
 	else
 	{
-		%this.setnodecolor("chest", "0 0 0 1");
-		%this.setnodecolor("headskin", "0 0 0 1");
-		%this.setnodecolor("pants", "0 0 0 1");
-		%this.setnodecolor("LShoe", "0 0 0 1");
-		%this.setnodecolor("RShoe", "0 0 0 1");
-		%this.setnodecolor("LArm", "0 0 0 1");
-		%this.setnodecolor("RArm", "0 0 0 1");
-		%this.setnodecolor("LHand", "0 0 0 1");
-		%this.setnodecolor("RHand", "0 0 0 1");
+		%this.setnodecolor("chest",    %c);
+		%this.setnodecolor("headskin", %c);
+		%this.setnodecolor("pants",    %c);
+		%this.setnodecolor("LShoe",    %c);
+		%this.setnodecolor("RShoe",    %c);
+		%this.setnodecolor("LArm",     %c);
+		%this.setnodecolor("RArm",     %c);
+		%this.setnodecolor("LHand",    %c);
+		%this.setnodecolor("RHand",    %c);
 		%this.setdecalname("AAA-None");
 		%this.setfacename("asciiTerror");
 	}
