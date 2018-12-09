@@ -15,6 +15,16 @@ $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 %date = getDateTime();
 if(getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) >= 15 && getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) <= 31) {
   $Render::C_HolidayCheer = 1;
+
+  datablock ShapeBaseImageData(RSantaHatImage)
+  {
+     shapeFile = "add-ons/Gamemode_Blockheads_Ruin_Xmas/santahat.dts";
+     mountPoint = 5;
+     offset = "0 0 0.15";
+     eyeOffset = "0 -10 0";
+     doColorShift = 1;
+     colorShiftColor = "1 0.1 0.1 1";
+  };
 }
 
 // Create our own reference to the sun.
@@ -25,12 +35,7 @@ if($Render::SunObj $= "")
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
-	if($Render::C_HolidayCheer && getRandom(1,32) == 1) {
-		%c = "1 1 1 1";
-	}
-	else {
-		%c = "0 0 0 1";
-	}
+	%c = "0 0 0 1";
 
 	if(%this.dataBlock.shapeFile !$= "base/data/shapes/player/m.dts")
 	{
@@ -65,6 +70,30 @@ function Render_ApplyAppearance(%this)
 		%this.setdecalname("Alyx");
 		%this.setfacename("asciiTerror");
 	}
+  else if(%this.type $= "santa") {
+    %this.hidenode("ALL");
+    %this.unhidenode("headSkin");
+    %this.setnodecolor("headSkin", "0.9 0.75 0.6 1");
+    %this.unhidenode("lhand");
+    %this.setnodecolor("lhand", "0.9 0.75 0.6 1");
+    %this.unhidenode("rhand");
+    %this.setnodecolor("rhand", "0.9 0.75 0.6 1");
+    %this.unhidenode("chest");
+    %this.setnodecolor("chest", "1 0.1 0.1 1");
+    %this.unhidenode("larm");
+    %this.setnodecolor("larm", "1 0.1 0.1 1");
+    %this.unhidenode("rarm");
+    %this.setnodecolor("rarm", "1 0.1 0.1 1");
+    %this.unhidenode("pants");
+    %this.setnodecolor("pants", "0.9 0.9 0.9 1");
+    %this.unhidenode("lshoe");
+    %this.setnodecolor("lshoe", "0.1 0.1 0.1 1");
+    %this.unhidenode("rshoe");
+    %this.setnodecolor("rshoe", "0.1 0.1 0.1 1");
+    %this.setfacename("smileyEvil1");
+    %this.setscale("1.2 1.1 1");
+    %this.mountimage(rSantaHatImage, 2);
+  }
 	else
 	{
 		%this.setnodecolor("chest",    %c);
@@ -141,6 +170,9 @@ function Render_CreateBot(%pos,%client)
 	if(!%customDatablock) {
 		if(getRandom(1,384) == 1) {
 			%render.type = "ts";
+		}
+    if(getRandom(1,36) == 1) {
+			%render.type = "santa";
 		}
 		else if(getRandom(1,24) == 1) {
 			%render.type = "g";
