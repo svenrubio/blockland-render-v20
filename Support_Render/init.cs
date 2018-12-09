@@ -686,7 +686,8 @@ function Render_CreateDeathBoard()
 		scale = "0.05 24 16";
 	};
 
-	%light = new fxlight()
+	// Create a light so the emitter shows in dark environments
+	%light = new fxlight(RenderBoardLight)
 	{
 		dataBlock = playerLight;
 		enable = 1;
@@ -694,8 +695,17 @@ function Render_CreateDeathBoard()
 		position = "-4 0 -666";
 	};
 
+	// Create a large zone around the board so rain and snow aren't visible
+	%zone = new PhysicalZone(RenderBoardZone)
+	{
+		position = "-84 80 -746";
+		scale = "160 160 160";
+		polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+	};
+
 	missionCleanup.add(%obj);
 	missionCleanup.add(%light);
+	missionCleanup.add(%zone);
 	%obj.setNodeColor("ALL", "0 0 0 1");
 
 	$Render::DeathBoard = %obj;
