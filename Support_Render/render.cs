@@ -761,6 +761,12 @@ function Render_DeleteR(%render)
       ServerPlay3D(rCheer, %render.position);
     }
 	}
+  else {
+    // ❄Д❄
+    if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,4) == 1) {
+      %render.spawnProjectile(150, blankaBallProjectile, -3, 1);
+    }
+  }
 
 	if(%render.isRenderPlayer)
 	{
