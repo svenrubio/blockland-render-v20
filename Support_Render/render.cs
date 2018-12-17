@@ -424,6 +424,10 @@ function Render_Loop_Local(%render)
 				%isViewing = rFOVCheck(%render.targetCamera, %render, 1, !%render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
+        if(%render.type $= "santa") {
+          %target.detectorFestive = 1;
+        }
+
 				// Detectors
 				if(%render.isAttacking) {
 					// Distance-based values when attacking
@@ -437,6 +441,7 @@ function Render_Loop_Local(%render)
 					%target.detector = %detectorVal;
 					%target.detectorDecay = %detectorVal;
 					%target.startDetectorDecay = getSimTime()+750;
+
 				} else if(!%render.nearbyRenders && (%isViewing || %render.loopAttackStart)) {
 					// Slight energy when about to attack OR passive attacker is being looked at
 					// (Energy only shows to player that is looking. Does not apply if there are other active Renders)

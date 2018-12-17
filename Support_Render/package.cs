@@ -169,25 +169,59 @@ package Render
 		%detectorOffset = vectorDist(%player.getTransform(), "0 0 0")/130000;
 		%detector = %player.detectorDisplay+%detectorOffset;
 
+		// Determine how much to decay the value.
+		if(%player.detector != %player.detectorDisplay)
+		{
+			// Decay rate is higher if the detector level is going up
+			if(%player.detector > %player.detectorDisplay)
+				%mult = 0.08;
+			else
+				%mult = 0.04;
+
+			if($Pref::Server::RenderInstantDetectorHack == 1)
+				%mult = 1;
+
+			%display = (%player.detectorDisplay-%player.detector)*%mult;
+			%player.detectorDisplay = %player.detectorDisplay-%display;
+		}
+
 		// No text in override mode.
 		if(!%override)
 		{
-			if(!$Pref::Server::RenderDisableDetectorText)
-			{
+			// ❄Д❄
+			if(!$Pref::Server::RenderDisableDetectorText) {
 				// The line breaks are to prevent the status bar from jumping a line.
 				// May not display correctly if the client has a modified bottom print margin.
-				if(%detector <= 0.2)
-					%text = "No glitch energy detected.<br>";
-				else if(%detector <= 2)
-					%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
-				else if(%detector <= 3)
-					%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
-				else if(%detector <= 4)
-					%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
-				else if(%detector <= 5)
-					%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
-				else if(%detector)
-					%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
+				if(!%player.detectorFestive) {
+					if(%detector <= 0.2)
+						%text = "No glitch energy detected.<br>";
+					else if(%detector <= 2)
+						%text = "Slight glitch energy trace detected.<br><color:FFD5D5>";
+					else if(%detector <= 3)
+						%text = "Caution: Moderate glitch energy detected.<br><color:FFAAAA>";
+					else if(%detector <= 4)
+						%text = "Danger: High glitch energy blip detected nearby. Stay clear.<br><color:FF8080>";
+					else if(%detector <= 5)
+						%text = "Danger: Very high glitch energy reading detected. User advised to leave area.<color:FF5555>";
+					else if(%detector)
+						%text = "DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:FF2C2C>";
+				} else {
+					if(%player.detector == 0)
+						%player.detectorFestive = 0;
+
+					if(%detector <= 0.2)
+						%text = "No glitch energy detected.<br>";
+					else if(%detector <= 2)
+						%text = "<color:FF6464>You better watch out<br><color:00AA00>";
+					else if(%detector <= 3)
+						%text = "<color:FF6464>You better not cry<br><color:00AA00>";
+					else if(%detector <= 4)
+						%text = "<color:FF6464>Better not pout<br><color:00AA00>";
+					else if(%detector <= 5)
+						%text = "<color:FF6464>I'm telling you why<br><color:00AA00>";
+					else if(%detector)
+						%text = "<color:FF6464>DANGER: Potentially lethal levels of glitch energy detected. User advised to leave area immediately.<color:00AA00>";
+				}
 			}
 
 			// Change the color when we reach the bar that corresponnds with the value.
@@ -208,21 +242,6 @@ package Render
 			// %detector is set by other scripts, and %detectorDisplay smoothly eases to whatever value %detector is set to.
 		}
 
-		if(%player.detector != %player.detectorDisplay)
-		{
-			// Decay rate is higher if the detector level is going up
-			if(%player.detector > %player.detectorDisplay)
-				%mult = 0.08;
-			else
-				%mult = 0.04;
-
-			if($Pref::Server::RenderInstantDetectorHack == 1)
-				%mult = 1;
-
-			%display = (%player.detectorDisplay-%player.detector)*%mult;
-			%player.detectorDisplay = %player.detectorDisplay-%display;
-		}
-
 		if(%client.detectorDebug)
 			%client.centerPrint(%client.player.detector NL %client.player.detectorDisplay NL %display NL %client.player.detectorDecay,0,1);
 
@@ -232,7 +251,7 @@ package Render
 
 		// Continue the loop if not in override mode
 		if(!%override)
-			%player.schedule($Render::C_DetectorTimer,DetectorLoop);
+			%player.schedule($Render::C_DetectorTimer, DetectorLoop);
 	}
 
 	function serverCmdDropCameraAtPlayer(%client)
