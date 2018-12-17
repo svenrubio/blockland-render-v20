@@ -17,7 +17,7 @@ function Render_AI_Control_Loop(%render)
 			%render.aiStartAttacking = %render.debugOverride==1?1:getRandom(0,1);
 		}
 
-		if(%render.typs == "santa") {
+		if(%render.type $= "santa") {
 			%render.aiStartAttacking = 1;
 		}
 
