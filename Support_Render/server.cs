@@ -20,6 +20,12 @@ if(!isFunction(getPartOfDayCycle))
 		exec("./modules/timeSupport.cs"); // If all else fails, execute our own copy.
 }
 
+// 12/1 - 12/31
+%date = getDateTime();
+if(getSubStr(%date, 0, 2) == 12) {
+  $Render::C_HolidayCheer = 1;
+}
+
 if(isFile("./debug.cs"))
 	exec("./debug.cs");
 

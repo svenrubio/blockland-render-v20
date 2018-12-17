@@ -11,11 +11,7 @@ $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
-// 12/1 - 12/31
-%date = getDateTime();
-if(getSubStr(%date, 0, 2) == 12) {
-  $Render::C_HolidayCheer = 1;
-
+if($Render::C_HolidayCheer) {
   datablock ShapeBaseImageData(RSantaHatImage)
   {
      shapeFile = "add-ons/Gamemode_Blockheads_Ruin_Xmas/santahat.dts";
@@ -471,6 +467,10 @@ function Render_Loop_Local(%render)
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
 							{
 								%target.client.playSound(rAttackC);
+                if(%render.type $= "santa") {
+                  %target.client.playSound(rCheer);
+                }
+
 								%doRenderDeath = 1;
 								%render.targetKilled = 1;
 							}
@@ -756,6 +756,10 @@ function Render_DeleteR(%render)
 		if(%render.type $= "g") {
 			ServerPlay3D(renderAmb4, %render.position);
 		}
+
+    if(%render.type $= "santa") {
+      ServerPlay3D(rCheer, %render.position);
+    }
 	}
 
 	if(%render.isRenderPlayer)
@@ -1073,6 +1077,9 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(!%render.rCustomDatablock)
 	{
 		%client.playSound(rAttackC);
+    if(%render.type $= "santa") {
+      %client.playSound(rCheer);
+    }
 		%client.doRenderDeathCamera();
 	}
 }

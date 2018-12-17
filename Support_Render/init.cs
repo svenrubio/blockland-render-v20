@@ -417,6 +417,16 @@ datablock AudioProfile(rGlitch)
    preload = true;
 };
 
+// ❄Д❄
+if($Render::C_HolidayCheer) {
+	datablock AudioProfile(rCheer)
+	{
+	   filename    = "./sound/rendercheer.wav";
+	   description = AudioClose3d;
+	   preload = true;
+	};
+}
+
 ////// # Bricks # //////
 datablock fxDtsBrickData(brickGlitchShrineData)
 {
