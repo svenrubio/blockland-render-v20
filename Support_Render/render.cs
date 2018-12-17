@@ -11,9 +11,9 @@ $Render::C_ShrineCheckInterval = 750; // Shrine check interval (in ms)
 $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
-// 12/15 - 12/31
+// 12/1 - 12/31
 %date = getDateTime();
-if(getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) >= 15 && getSubStr(%date, 0, 2) == 12 && getSubStr(%date, 3, 2) <= 31) {
+if(getSubStr(%date, 0, 2) == 12) {
   $Render::C_HolidayCheer = 1;
 
   datablock ShapeBaseImageData(RSantaHatImage)
