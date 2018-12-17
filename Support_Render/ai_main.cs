@@ -15,10 +15,10 @@ function Render_AI_Control_Loop(%render)
 		}
 		else {
 			%render.aiStartAttacking = %render.debugOverride==1?1:getRandom(0,1);
-		}
 
-		if(%render.type $= "santa") {
-			%render.aiStartAttacking = 1;
+			if(%render.type $= "santa") {
+				%render.aiStartAttacking = 1;
+			}
 		}
 
 		%render.aiWillAttack = %render.aiStartAttacking; // AI flag; are we planning to attack? For now, this is always determined immediately.
