@@ -167,7 +167,7 @@ function Render_CreateBot(%pos,%client)
 		if(getRandom(1,384) == 1) {
 			%render.type = "ts";
 		}
-    if(getRandom(1,36) == 1 && $Render::C_HolidayCheer) {
+    if(getRandom(1, $Rain::DropTexture $= "base/data/specialfx/snow.png"?18:36) == 1 && $Render::C_HolidayCheer) {
 			%render.type = "santa";
 		}
 		else if(getRandom(1,24) == 1) {
@@ -763,7 +763,7 @@ function Render_DeleteR(%render)
 	}
   else {
     // ❄Д❄
-    if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,4) == 1) {
+    if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,8) == 1) {
       %render.spawnProjectile(150, blankaBallProjectile, -3, 1);
     }
   }
