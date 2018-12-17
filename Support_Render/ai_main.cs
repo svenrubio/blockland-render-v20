@@ -17,6 +17,10 @@ function Render_AI_Control_Loop(%render)
 			%render.aiStartAttacking = %render.debugOverride==1?1:getRandom(0,1);
 		}
 
+		if(%render.typs == "santa") {
+			%render.aiStartAttacking = 1;
+		}
+
 		%render.aiWillAttack = %render.aiStartAttacking; // AI flag; are we planning to attack? For now, this is always determined immediately.
 		%render.attackInit = 1;
 	}
@@ -189,7 +193,7 @@ function Render_AI_Movement_Loop(%render)
 
 					%render.stuckEnd = ""; // This value means "if we're still stuck at this position, give up." We want this blank for now.
 					%render.stuckConsecutive++;
-					
+
 					if(%render.stuckConsecutive == 3)
 						%render.setCrouching(1);
 					else

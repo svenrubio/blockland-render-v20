@@ -171,7 +171,7 @@ function Render_CreateBot(%pos,%client)
 		if(getRandom(1,384) == 1) {
 			%render.type = "ts";
 		}
-    if(getRandom(1,36) == 1) {
+    if(getRandom(1,36) == 1 && $Render::C_HolidayCheer) {
 			%render.type = "santa";
 		}
 		else if(getRandom(1,24) == 1) {
