@@ -420,13 +420,12 @@ function Render_Loop_Local(%render)
 				%isViewing = rFOVCheck(%render.targetCamera, %render, 1, !%render.isAttacking);
 				%distance = vectorDist(%render.getPosition(), %target.getPosition());
 
-        if(%render.type $= "santa") {
-          %target.detectorFestive = 1;
-        }
-
 				// Detectors
 				if(%render.isAttacking) {
 					// Distance-based values when attacking
+          if(%render.type $= "santa") {
+            %target.detectorFestive = 1;
+          }
 
 					// 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
 					%detectorVal = 5.15-(%distance/30);
