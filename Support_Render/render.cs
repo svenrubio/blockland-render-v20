@@ -14,7 +14,7 @@ $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 if($Render::C_HolidayCheer) {
   datablock ShapeBaseImageData(RSantaHatImage)
   {
-     shapeFile = "add-ons/Gamemode_Blockheads_Ruin_Xmas/santahat.dts";
+     shapeFile = "./models/santahat.dts";
      mountPoint = 5;
      offset = "0 0 0.15";
      eyeOffset = "0 -10 0";
