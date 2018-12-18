@@ -2,7 +2,7 @@
 
 ////// # CONSTANTS
 $Render::C_EnergyTimer = 30000; // Minimum: 5000
-$Render::C_SpawnTimer = 10000;
+$Render::C_SpawnTimer = 14000;
 $Render::C_LoopTimer = 50; // Schedule time for Render_Loop (in ms). Maximum: 250
 $Render::C_DetectorTimer = 50; // Schedule time for detectors (in ms)
 $Render::C_DamageRate = 256;
