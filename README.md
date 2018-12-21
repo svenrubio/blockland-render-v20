@@ -68,6 +68,7 @@ You can change Render's behavior in a mini-game using events. The events only wo
 - MiniGame -> setRenderSpawnRate
 
 # Update History
+- v2.2 - The Holiday Cheer Update
 - v2.1 - The Halloween 2018 Update
 - v2.0.1 - Detector Brick Hotfix
 - v2.0 - The Halloween 2017 Update
