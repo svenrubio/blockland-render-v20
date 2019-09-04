@@ -1,4 +1,4 @@
-//°Д°
+// °Д°
 
 ////// # CONSTANTS
 $Render::C_EnergyTimer = 30000; // Minimum: 5000
@@ -712,7 +712,6 @@ function Render_Spawn_Loop()
 				// If yes, we'll pick a random player in the group to start with.
 				%client = %groupList[%groups, getRandom(1, %groupCount[%groups]) ].client;
 
-				// °Д°
 				//echo("RENDER: Chance passed for" SPC %client.name @ " (group " @ %groups @ "); spawning");
 
 				%render = Render_CreateBot("0 0 -10000",%client);
@@ -739,7 +738,6 @@ function Render_Spawn_Loop()
 }
 
 ////// # De-spawn
-// TODO: Move this to the onRemove function in package.cs?
 function Render_DeleteR(%render)
 {
 	//backtrace();
