@@ -692,7 +692,7 @@ function Render_CreateDeathBoard()
 	%obj = new staticShape(RenderBoard)
 	{
 		datablock = renderDeathBoardData;
-		position = "0 0 -666";
+		position = "0 0 -1020";
 		scale = "0.05 24 16";
 	};
 
@@ -702,13 +702,13 @@ function Render_CreateDeathBoard()
 		dataBlock = playerLight;
 		enable = 1;
 		iconsize = 1;
-		position = "-4 0 -666";
+		position = "-4 0 -1020";
 	};
 
 	// Create a large zone around the board so rain and snow aren't visible
 	%zone = new PhysicalZone(RenderBoardZone)
 	{
-		position = "-84 80 -746";
+		position = "-84 80 -1100";
 		scale = "160 160 160";
 		polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
 	};
@@ -725,7 +725,7 @@ function Render_CreateDeathBoard()
 	{
 		datablock = GenericEmitterNode;
 		emitter = RenderBoardEmitter;
-		position = "-2 0 -666";
+		position = "-2 0 -1020";
 		scale = "0.05 0.05 0.05";
 	};
 	missionCleanup.add(%obj2);

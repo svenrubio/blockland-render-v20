@@ -257,7 +257,7 @@ package Render
 	function serverCmdDropCameraAtPlayer(%client)
 	{
 		// No orbing in death cam
-		if(%client.camera.position $= "-2.6 0 -666.05" || %client.camera.position $= "-2.6 -3 -666.05")
+		if(%client.camera.position $= "-2.6 0 -1020.05" || %client.camera.position $= "-2.6 -3 -1020.05")
 			return;
 
 		Parent::ServerCmdDropCameraAtPlayer(%client);
@@ -361,6 +361,18 @@ package Render
 				%br.killBrick();
 			}
 		}
+	}
+
+	function gameConnection::onClientEnterGame(%client)
+	{
+		parent::onClientEnterGame(%client);
+
+		// A small hack to fix the death board ghosting.
+		// This prevents players from seeing an empty skybox on first death.
+		RenderBoard.scopeToClient(%client);
+		RenderBoardLight.scopeToClient(%client);
+		RenderBoardNode.scopeToClient(%client);
+		RenderBoardZone.scopeToClient(%client);
 	}
 };
 

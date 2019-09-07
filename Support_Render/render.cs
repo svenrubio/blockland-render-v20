@@ -1090,7 +1090,7 @@ function GameConnection::doRenderDeath(%client, %render)
 function GameConnection::doRenderDeathCamera(%client) {
 	%camera = %client.camera;
 
-	%pos = "-2.6 -3 -666.05";
+	%pos = "-2.6 -3 -1020.05";
 	%deltaX = 1;
 	%deltaY = 0;
 	%deltaZ = 0;
@@ -1118,8 +1118,8 @@ function GameConnection::doRenderDeathCamera(%client) {
 
 function deathCameraLoop(%client)
 {
-	%posA = "-2.6 0 -666.05"; // Blank screen with face
-	%posB = "-2.6 -3 -666.05"; // Blank screen
+	%posA = "-2.6 0 -1020.05"; // Blank screen with face
+	%posB = "-2.6 -3 -1020.05"; // Blank screen
 
 	// Cancel if the camera has moved
 	if(%client.camera.position !$= %posA && %client.camera.position !$= %posB)
