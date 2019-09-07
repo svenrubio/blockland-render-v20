@@ -1154,7 +1154,6 @@ function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 // %slot: Item slot
 function GlitchEnergyGunEffect(%this,%obj,%slot)
 {
-	// Force the detector to do a loop, then check its value.
 	if(%obj.g) {
 		%obj.client.bottomPrint("<just:center><color:FFFFFF>%$^Y@&*#%$^Y@&*# NO ESCAPE ^$%@(^%$^$%@(^%$",2,1);
 		return;
@@ -1171,6 +1170,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		}
 	}
 
+  // Force the detector to do a loop, then check its value.
 	if(!%deletedCount) {
 		%obj.detectorLoop(1);
 		if(%obj.detector == 0) {
