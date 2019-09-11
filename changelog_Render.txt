@@ -1,3 +1,8 @@
+<version:2.3>
+<ul>
+	<li>Fixed the scene for Render deaths being visible below the map when the ground is set to transparent.</li>
+</ul>
+</version>
 <version:2.2>
 	<ul>
 		<li>Added some holiday cheer. You may notice strange effects in snowy environments...</li>
