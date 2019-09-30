@@ -680,6 +680,13 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
+datablock fxLightData(renderLight : playerLight)
+{
+	uiName = "";
+	brightness = "-3";
+	flarebitmap = "";
+};
+
 ////// # Death Board # //////
 datablock staticShapeData(renderDeathBoardData)
 {

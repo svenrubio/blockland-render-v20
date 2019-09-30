@@ -188,11 +188,16 @@ function Render_CreateBot(%pos,%client)
 	%render.hMelee = 1;
 	%render.name = "Render";
 
+  if(Render_SunlightCheck())
+    %data = renderLight;
+  else
+    %data = playerLight;
+
 	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
 	{
 		%render.light = new fxlight() // Try $r_light[%render]; or something?
 		{
-			dataBlock = playerLight;
+			dataBlock = %data;
 			enable = 0;
 			iconsize = 1;
 			player = %render;
