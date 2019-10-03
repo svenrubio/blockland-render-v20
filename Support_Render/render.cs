@@ -193,9 +193,9 @@ function Render_CreateBot(%pos,%client)
   else
     %data = playerLight;
 
-	if(!$Pref::Server::RenderDisableLights) // Add a light (bugged)
+	if(!$Pref::Server::RenderDisableLights)
 	{
-		%render.light = new fxlight() // Try $r_light[%render]; or something?
+		%render.light = new fxlight()
 		{
 			dataBlock = %data;
 			enable = 0;
