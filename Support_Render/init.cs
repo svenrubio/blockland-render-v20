@@ -36,6 +36,8 @@ if(isFunction("RTB_registerPref"))
 	RTB_registerPref("Disable ambient sounds", "Render", "$Pref::Server::RenderDisableAmbientSounds", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Disable lights", "Render", "$Pref::Server::RenderDisableLights", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Invincible", "Render", "$Pref::Server::RenderIsInvincible", "bool", "Support_Render", 0, 0, 0);
+	RTB_registerPref("Nights (Day/night cycle must be on)", "Render", "$Pref::Server::RenderNights", "list Disabled_-_Normal 0 Very_Rare 1 Rare 2 Uncommon 3 Normal 4 Common 5", "Support_Render", 0, 0, 0);
+
 	// Blockland Glass/Support_Preferences hook
 	// Bit of a hack. This re-registers the category so we can use a custom icon.
 	if(isFunction("registerPreferenceAddon")) {
@@ -47,6 +49,7 @@ else
 	//$Pref::Server::RenderDifficulty = 100;
 	$Pref::Server::RenderDamageType = 0;
 	$Pref::Server::RenderSpawnRate = 7;
+	$Pref::Server::RenderNights = 0;
 	$Pref::Server::RenderShrineRange = 28;
 	$Pref::Server::RenderAllowBrickEffects = 1;
 }
