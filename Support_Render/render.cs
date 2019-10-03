@@ -1023,6 +1023,11 @@ function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosoun
 
 	%rPos = %render.getTransform();
 	%pPos = %p.getTransform();
+
+  // Default to a height of 0 in case the player and/or attacker are above ground level
+  %rPos = setWord(%rPos, 2, 0);
+  %pPos = setWord(%pPos, 2, 0);
+
 	%render.setTransform(getWord(%rPos,0)+%offset SPC getWords(%rPos,1,6));
 	%p.setTransform(getWord(%pPos,0)+%offset SPC getWords(%pPos,1,6));
 	%p.g = 1;
