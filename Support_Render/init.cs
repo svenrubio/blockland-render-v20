@@ -23,7 +23,6 @@ if(isFunction("RTB_registerPref"))
 	// Normally you wouldn't want to register prefs this way, please avoid using this as an example.
 	// See here for the proper way to do this: https://forum.blockland.us/index.php?topic=320521
 
-	//RTB_registerPref("Difficulty", "Render", "$Pref::Server::RenderDifficulty", "list Passive 0 Easy 25 Normal 100 Hard 400 Insane 1600", "Support_Render", $Pref::Server::RenderDifficulty, 0, 0);
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Damage 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	// For spawnrate values, see also: registerOutputEvent (below), compat/slayer.cs
 	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 5 Normal 7 Above_Normal 12 High 14", "Support_Render", 7, 0, 0);
@@ -46,7 +45,6 @@ if(isFunction("RTB_registerPref"))
 }
 else
 {
-	//$Pref::Server::RenderDifficulty = 100;
 	$Pref::Server::RenderDamageType = 0;
 	$Pref::Server::RenderSpawnRate = 7;
 	$Pref::Server::RenderNights = 0;
