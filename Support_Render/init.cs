@@ -423,6 +423,13 @@ datablock AudioProfile(rGlitch)
    preload = true;
 };
 
+datablock AudioProfile(rClear)
+{
+   filename    = "./sound/renderDeath.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 // ❄Д❄
 if($Render::C_HolidayCheer) {
 	datablock AudioProfile(rCheer)
