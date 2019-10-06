@@ -1332,3 +1332,9 @@ function Render_BrickEffect(%player, %override)
 	else
 		return %brick.schedule(120000,killBrick);
 }
+
+function Render_onChangeSpawnrate(%oldVal, %newVal) {
+  if(%oldVal != 0 && %newVal == 0) {
+    serverPlay2D("rClear");
+  }
+}

@@ -25,7 +25,7 @@ if(isFunction("RTB_registerPref"))
 
 	RTB_registerPref("Mode", "Render", "$Pref::Server::RenderDamageType", "list Normal 0 Damage 1 Tag 2 Haunt 3", "Support_Render", 0, 0, 0);
 	// For spawnrate values, see also: registerOutputEvent (below), compat/slayer.cs
-	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 5 Normal 7 Above_Normal 12 High 14", "Support_Render", 7, 0, 0);
+	RTB_registerPref("Spawn Rate", "Render", "$Pref::Server::RenderSpawnRate", "list Disabled 0 Low 1 Below_Normal 5 Normal 7 Above_Normal 12 High 14", "Support_Render", 7, 0, 0, "Render_onChangeSpawnrate");
 	RTB_registerPref("Shrine Range", "Render", "$Pref::Server::RenderShrineRange", "list 64x 28 48x 20 32x 12 16x 4 Disabled -1", "Support_Render", 28, 0, 0);
 	RTB_registerPref("Shrines admin only", "Render", "$Pref::Server::RenderAdminShrines", "bool", "Support_Render", 0, 0, 0);
 	RTB_registerPref("Minigame prefs admin only", "Render", "$Pref::Server::RenderAdminMinigamePrefs", "bool", "Support_Render", 0, 0, 0);
