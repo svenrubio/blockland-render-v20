@@ -28,6 +28,11 @@ if($Render::C_HolidayCheer) {
 if($Render::SunObj $= "")
 	$Render::SunObj = Sun;
 
+function Render_onApplyAppearance(%this)
+{
+  // Empty function for external mod hooks
+}
+
 ////// # Bot Appearance/Creation Functions
 function Render_ApplyAppearance(%this)
 {
@@ -49,6 +54,14 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("RArm");
 	%this.unhidenode("LHand");
 	%this.unhidenode("RHand");
+
+  // Custom appearance handling -- This lets other add-ons package and edit Render's appearance
+  %apply = Render_onApplyAppearance(%this);
+  if(%apply)
+  {
+    %this.type = "customized";
+    return;
+  }
 
 	if(%this.type $= "ts")
 	{
