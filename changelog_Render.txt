@@ -1,7 +1,19 @@
 <version:2.3>
-<ul>
-	<li>Fixed the scene for Render deaths being visible below the map when the ground is set to transparent.</li>
-</ul>
+	<b>Summary</b>
+	<ul>
+		<li>Render Nights - A new option for survival servers</li>
+		<li>Even more assorted features and fixes</li>
+	</ul>
+	<ul>
+		<li>Added a new preference named "Nights" - When enabled, Render will only appear on certain nights, with an adjustable random chance</li>
+		<li>Render's lights now adapt to the environment</li>
+		<li>Added some new sound effects</li>
+	</ul>
+	<br>
+	<ul>
+		<li>Fixed the scene for Render deaths being visible below the map when the ground is set to transparent.</li>
+		<li>Fixed certain special deaths by Render bugging out if the target is above ground level.</li>
+	</ul>
 </version>
 <version:2.2>
 	<ul>
