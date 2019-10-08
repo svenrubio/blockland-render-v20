@@ -667,9 +667,8 @@ function Render_Spawn_Loop()
 	// If we're only supposed to spawn at night, we'll need to do some extra checks.
 	%isDaytime = Render_SunlightCheck();
 
-	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime) {
-			%skipSpawn = 1;
-	}
+	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime)
+		%skipSpawn = 1;
 
 	if(!%skipSpawn)
 	{
