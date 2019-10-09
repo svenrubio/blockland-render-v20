@@ -12,15 +12,15 @@ $Render::C_FreezeCheckInterval = 400; // Time between player checks (in ms)
 $Render::C_TeleCooldown = 20000; // Time between allowed teleports (in ms)
 
 if($Render::C_HolidayCheer) {
-  datablock ShapeBaseImageData(RSantaHatImage)
-  {
-     shapeFile = "./models/santahat.dts";
-     mountPoint = 5;
-     offset = "0 0 0.15";
-     eyeOffset = "0 -10 0";
-     doColorShift = 1;
-     colorShiftColor = "1 0.1 0.1 1";
-  };
+	datablock ShapeBaseImageData(RSantaHatImage)
+	{
+		shapeFile = "./models/santahat.dts";
+		mountPoint = 5;
+		offset = "0 0 0.15";
+		eyeOffset = "0 -10 0";
+		doColorShift = 1;
+		colorShiftColor = "1 0.1 0.1 1";
+	};
 }
 
 // Create our own reference to the sun.
@@ -30,7 +30,7 @@ if($Render::SunObj $= "")
 
 function Render_onApplyAppearance(%this)
 {
-  // Empty function for external mod hooks
+	// Empty function for external mod hooks
 }
 
 ////// # Bot Appearance/Creation Functions
@@ -55,13 +55,13 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("LHand");
 	%this.unhidenode("RHand");
 
-  // Custom appearance handling -- This lets other add-ons package and edit Render's appearance
-  %apply = Render_onApplyAppearance(%this);
-  if(%apply)
-  {
-    %this.type = "customized";
-    return;
-  }
+	// Custom appearance handling -- This lets other add-ons package and edit Render's appearance
+	%apply = Render_onApplyAppearance(%this);
+	if(%apply)
+	{
+		%this.type = "customized";
+		return;
+	}
 
 	if(%this.type $= "ts")
 	{
@@ -79,30 +79,30 @@ function Render_ApplyAppearance(%this)
 		%this.setdecalname("Alyx");
 		%this.setfacename("asciiTerror");
 	}
-  else if(%this.type $= "santa") {
-    %this.hidenode("ALL");
-    %this.unhidenode("headSkin");
-    %this.setnodecolor("headSkin", "0.9 0.75 0.6 1");
-    %this.unhidenode("lhand");
-    %this.setnodecolor("lhand", "0.9 0.75 0.6 1");
-    %this.unhidenode("rhand");
-    %this.setnodecolor("rhand", "0.9 0.75 0.6 1");
-    %this.unhidenode("chest");
-    %this.setnodecolor("chest", "1 0.1 0.1 1");
-    %this.unhidenode("larm");
-    %this.setnodecolor("larm", "1 0.1 0.1 1");
-    %this.unhidenode("rarm");
-    %this.setnodecolor("rarm", "1 0.1 0.1 1");
-    %this.unhidenode("pants");
-    %this.setnodecolor("pants", "0.9 0.9 0.9 1");
-    %this.unhidenode("lshoe");
-    %this.setnodecolor("lshoe", "0.1 0.1 0.1 1");
-    %this.unhidenode("rshoe");
-    %this.setnodecolor("rshoe", "0.1 0.1 0.1 1");
-    %this.setfacename("smileyEvil1");
-    %this.setscale("1.2 1.1 1");
-    %this.mountimage(rSantaHatImage, 2);
-  }
+	else if(%this.type $= "santa") {
+		%this.hidenode("ALL");
+		%this.unhidenode("headSkin");
+		%this.setnodecolor("headSkin", "0.9 0.75 0.6 1");
+		%this.unhidenode("lhand");
+		%this.setnodecolor("lhand", "0.9 0.75 0.6 1");
+		%this.unhidenode("rhand");
+		%this.setnodecolor("rhand", "0.9 0.75 0.6 1");
+		%this.unhidenode("chest");
+		%this.setnodecolor("chest", "1 0.1 0.1 1");
+		%this.unhidenode("larm");
+		%this.setnodecolor("larm", "1 0.1 0.1 1");
+		%this.unhidenode("rarm");
+		%this.setnodecolor("rarm", "1 0.1 0.1 1");
+		%this.unhidenode("pants");
+		%this.setnodecolor("pants", "0.9 0.9 0.9 1");
+		%this.unhidenode("lshoe");
+		%this.setnodecolor("lshoe", "0.1 0.1 0.1 1");
+		%this.unhidenode("rshoe");
+		%this.setnodecolor("rshoe", "0.1 0.1 0.1 1");
+		%this.setfacename("smileyEvil1");
+		%this.setscale("1.2 1.1 1");
+		%this.mountimage(rSantaHatImage, 2);
+	}
 	else
 	{
 		%this.setnodecolor("chest",    %c);
@@ -180,7 +180,7 @@ function Render_CreateBot(%pos,%client)
 		if(getRandom(1,384) == 1) {
 			%render.type = "ts";
 		}
-    else if(getRandom(1, $Rain::DropTexture $= "base/data/specialfx/snow.png"?18:36) == 1 && $Render::C_HolidayCheer) {
+		else if(getRandom(1, $Rain::DropTexture $= "base/data/specialfx/snow.png"?18:36) == 1 && $Render::C_HolidayCheer) {
 			%render.type = "santa";
 		}
 		else if(getRandom(1,24) == 1) {
@@ -201,10 +201,10 @@ function Render_CreateBot(%pos,%client)
 	%render.hMelee = 1;
 	%render.name = "Render";
 
-  if(Render_SunlightCheck())
-    %data = renderLight;
-  else
-    %data = playerLight;
+	if(Render_SunlightCheck())
+		%data = renderLight;
+	else
+		%data = playerLight;
 
 	if(!$Pref::Server::RenderDisableLights)
 	{
@@ -441,9 +441,9 @@ function Render_Loop_Local(%render)
 				// Detectors
 				if(%render.isAttacking) {
 					// Distance-based values when attacking
-          if(%render.type $= "santa") {
-            %target.detectorFestive = 1;
-          }
+					if(%render.type $= "santa") {
+						%target.detectorFestive = 1;
+					}
 
 					// 5.15-(distance/20); we use the value 5.15 so distance <= 3 is considered off-scale.
 					%detectorVal = 5.15-(%distance/30);
@@ -484,9 +484,9 @@ function Render_Loop_Local(%render)
 							if(%target.dataBlock.maxDamage-%target.getDamageLevel()-%renderDamage < 1)
 							{
 								%target.client.playSound(rAttackC);
-                if(%render.type $= "santa") {
-                  %target.client.playSound(rCheer);
-                }
+								if(%render.type $= "santa") {
+									%target.client.playSound(rCheer);
+								}
 
 								%doRenderDeath = 1;
 								%render.targetKilled = 1;
@@ -771,16 +771,16 @@ function Render_DeleteR(%render)
 			ServerPlay3D(renderAmb4, %render.position);
 		}
 
-    if(%render.type $= "santa") {
-      ServerPlay3D(rCheer, %render.position);
-    }
+		if(%render.type $= "santa") {
+			ServerPlay3D(rCheer, %render.position);
+		}
 	}
-  else {
-    // ❄Д❄
-    if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,8) == 1) {
-      %render.spawnProjectile(150, blankaBallProjectile, -3, 1);
-    }
-  }
+	else {
+		// ❄Д❄
+		if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,8) == 1) {
+			%render.spawnProjectile(150, blankaBallProjectile, -3, 1);
+		}
+	}
 
 	if(%render.isRenderPlayer)
 	{
@@ -887,7 +887,7 @@ function Render_FreezePlayer(%p,%r)
 	// If attack mode is 2, rip
 	if(%r.mode == 2)
 	{
-    %p.client.doRenderDeath(%r);
+		%p.client.doRenderDeath(%r);
 		return;
 	}
 
@@ -911,7 +911,7 @@ function Render_FreezePlayer(%p,%r)
 
 		// We have to use a schedule so the player's view doesn't "flicker" while mounting. Item_Skis appears to use the same solution.
 		// If anyone knows of a better solution, please let me know.
-	 	%p.rDeathSchedule = schedule(100,0,Render_DoMount,%death,%p);
+		%p.rDeathSchedule = schedule(100,0,Render_DoMount,%death,%p);
 		%p.canDismount = 0;
 
 		%r.freezeTarget = %p;
@@ -1036,9 +1036,9 @@ function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosoun
 	%rPos = %render.getTransform();
 	%pPos = %p.getTransform();
 
-  // Default to a height of 0 in case the player and/or attacker are above ground level
-  %rPos = setWord(%rPos, 2, 0);
-  %pPos = setWord(%pPos, 2, 0);
+	// Default to a height of 0 in case the player and/or attacker are above ground level
+	%rPos = setWord(%rPos, 2, 0);
+	%pPos = setWord(%pPos, 2, 0);
 
 	%render.setTransform(getWord(%rPos,0)+%offset SPC getWords(%rPos,1,6));
 	%p.setTransform(getWord(%pPos,0)+%offset SPC getWords(%pPos,1,6));
@@ -1066,7 +1066,7 @@ function GameConnection::doRenderDeathSpecial(%client, %render, %offset, %nosoun
 // SEE ALSO: Render_InflictDamage
 function GameConnection::doRenderDeath(%client, %render)
 {
-  if(!isObject(%client.camera) || !isObject(%render))
+	if(!isObject(%client.camera) || !isObject(%render))
 		return;
 
 	if(!%render.rCustomDatablock && %render.type !$= "g")
@@ -1102,9 +1102,9 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(!%render.rCustomDatablock)
 	{
 		%client.playSound(rAttackC);
-    if(%render.type $= "santa") {
-      %client.playSound(rCheer);
-    }
+		if(%render.type $= "santa") {
+			%client.playSound(rCheer);
+		}
 		%client.doRenderDeathCamera();
 	}
 }
@@ -1192,7 +1192,7 @@ function GlitchEnergyGunEffect(%this,%obj,%slot)
 		}
 	}
 
-  // Force the detector to do a loop, then check its value.
+	// Force the detector to do a loop, then check its value.
 	if(!%deletedCount) {
 		%obj.detectorLoop(1);
 		if(%obj.detector == 0) {
@@ -1346,7 +1346,7 @@ function Render_BrickEffect(%player, %override)
 }
 
 function Render_onChangeSpawnrate(%oldVal, %newVal) {
-  if(%oldVal != 0 && %newVal == 0) {
-    serverPlay2D("rClear");
-  }
+	if(%oldVal != 0 && %newVal == 0) {
+		serverPlay2D("rClear");
+	}
 }
