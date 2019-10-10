@@ -430,6 +430,13 @@ datablock AudioProfile(rClear)
    preload = true;
 };
 
+datablock AudioProfile(rWind1)
+{
+   filename    = "./sound/wind1.wav";
+   description = AudioClose3d;
+   preload = true;
+};
+
 // ❄Д❄
 if($Render::C_HolidayCheer) {
 	datablock AudioProfile(rCheer)
