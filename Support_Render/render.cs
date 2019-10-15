@@ -649,6 +649,10 @@ function Render_SunlightCheck()
 	return 0;
 }
 
+function Render_Nights_Check(%isDaytime)
+{
+}
+
 ////// # Target picking function
 // This will determine the targets for the attacker and start the spawning code
 function Render_Spawn_Loop()
@@ -668,6 +672,9 @@ function Render_Spawn_Loop()
 	%isDaytime = Render_SunlightCheck();
 
 	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime)
+		%skipSpawn = 1;
+
+	if(Render_Nights_Check(%isDaytime))
 		%skipSpawn = 1;
 
 	if(!%skipSpawn)
