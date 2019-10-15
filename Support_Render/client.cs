@@ -2,5 +2,15 @@
 
 exec("./ui/shrineGui.cs");
 
-if(getRandom(1,6666) == 1)
+// 10/29 - 11/2
+if(getSubStr(%date, 0, 2) == 10 && getSubStr(%date, 3, 2) >= 29 || getSubStr(%date, 0, 2) == 11 && getSubStr(%date, 3, 2) <= 3) {
+  %title = MainMenuButtonsGui.getObject(0);
+
+  if(%title.bitmap $= "base/client/ui/title.png")
+    %title.bitmap = "Add-Ons/Support_Render/ui/title.png";
+
+  // °Д°
+}
+
+if(getRandom(1,1600) == 1)
   exec("./ui/ui.cs");
