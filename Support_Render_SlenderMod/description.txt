@@ -1,0 +1,3 @@
+Title: Render - Slenderman Mod
+Author: Lake (14128)
+Changes Render's appearance to look like Slenderman. Requires Support_Render.
