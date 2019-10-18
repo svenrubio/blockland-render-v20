@@ -1,3 +1,13 @@
+// First, the death screen.
+
+// Let's change the image to our own.
+// For best results with making an image, use the "render.png" image in Support_Render as a template.
+// Try to avoid resizing it (keep at 512x512) or things will get quite messy.
+// You can also remove this line if you want to keep it the default °Д° face.
+RenderBoardParticle.textureName = "./SlenderDeath.png"; // Default: "Add-Ons/Support_Render/render.png"
+
+// Now, for the actual bot's appearance.
+// We'll need a package for this so it de-activates properly.
 package Support_Render_Slender
 {
   function Render_onApplyAppearance(%obj)
