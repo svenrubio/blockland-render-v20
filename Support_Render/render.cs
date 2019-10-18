@@ -56,6 +56,7 @@ function Render_ApplyAppearance(%this)
 	%this.unhidenode("RHand");
 
 	// Custom appearance handling -- This lets other add-ons package and edit Render's appearance
+	// Note that this overrides Render's types entirely, effectively removing them from the game as long as the modifier is enabled.
 	%apply = Render_onApplyAppearance(%this);
 	if(%apply)
 	{
@@ -295,7 +296,7 @@ function Render_Loop()
 	{
 		%render = renderBotGroup.getObject(%i);
 
-		if((%render.fxScale) && !$Pref::Server::RenderDisableScaleEffect)
+		if((%render.fxScale) && !$Pref::Server::RenderDisableScaleEffect && %render.type !$= "customized")
 			%render.setPlayerScale(%scale); // Apply the scale effect
 
 		Render_Loop_Local(%render); // Run the local loop
