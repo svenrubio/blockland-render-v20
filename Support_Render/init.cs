@@ -425,7 +425,7 @@ datablock AudioProfile(rGlitch)
 
 datablock AudioProfile(rClear)
 {
-   filename    = "./sound/renderDeath.wav";
+   filename    = "./sound/entityMoveB.wav";
    description = AudioClose3d;
    preload = true;
 };
