@@ -581,7 +581,7 @@ datablock ItemData(GlitchEnergyGunItem)
 	emap = true;
 
 	uiName = "Glitch Gun";
-	iconName = " ";
+	iconName = "./models/icon_glitchgun";
 
 	// Dynamic properties defined by the scripts
 	image = GlitchEnergyGunImage;
@@ -667,7 +667,7 @@ datablock ItemData(GlitchDetector)
 	emap						= true;
 
 	uiName					= "Glitch Detector";
-	iconName				= "./models/Icon_detector";
+	iconName				= "./models/icon_glitchdetector";
 
 	image						= GlitchDetectorImage;
 	canDrop					= true;
