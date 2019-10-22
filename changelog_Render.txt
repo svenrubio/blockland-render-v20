@@ -2,6 +2,7 @@
 	<b>Summary</b>
 	<ul>
 		<li>Mysterious structures may appear if you have the "Affect bricks and lights" preference enabled</li>
+		<li>A new look for the Glitch Detector and, finally, a Glitch Gun model!</li>
 		<li>Render Nights - A new option for survival servers</li>
 		<li>Appearance modifiers - Custom mods to edit Render's appearance</li>
 		<li>Even more assorted features and fixes</li>
