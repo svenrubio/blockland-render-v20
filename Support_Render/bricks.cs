@@ -204,10 +204,6 @@ function Render_DoShrineEffect(%target, %br, %r, %first)
 
 		//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
 		Render_DeleteR(%target);
-
-		// Flicker to indicate that the shrine did something.
-		%br.setDatablock(brickPumpkinBaseData);
-		%br.schedule(128,setDatablock,brickGlitchShrineData);
 	}
 }
 
