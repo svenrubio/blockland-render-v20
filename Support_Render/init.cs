@@ -572,7 +572,7 @@ datablock ItemData(GlitchEnergyGunItem)
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "base/data/shapes/printGun.dts";
+	shapeFile	= "./models/glitchgun.dts";
 	rotate = false;
 	mass = 1;
 	density = 0.2;
@@ -582,8 +582,6 @@ datablock ItemData(GlitchEnergyGunItem)
 
 	uiName = "Glitch Gun";
 	iconName = " ";
-	doColorShift = true;
-	colorShiftColor = "0.0 1.0 1.0 1.0";
 
 	// Dynamic properties defined by the scripts
 	image = GlitchEnergyGunImage;
@@ -593,14 +591,15 @@ datablock ItemData(GlitchEnergyGunItem)
 datablock ShapeBaseImageData(GlitchEnergyGunImage)
 {
 	// Basic Item properties
-	shapeFile = "base/data/shapes/printGun.dts";
+	shapeFile	= "./models/glitchgun.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
 	// for first person rendering.
 	mountPoint = 0;
 	offset = "0 0 0";
-	eyeoffset = "0.7 1.2 -0.55";
+	eyeoffset = "0.8 1.1 -0.75";
+	eyeRotation = "1 0 -4.3 -5";
 	rotation = eulerToMatrix( "0 0 0" );
 
 	// When firing from a point offset from the eye, muzzle correction
@@ -626,9 +625,6 @@ datablock ShapeBaseImageData(GlitchEnergyGunImage)
 	//shellVelocity       = 0.0;
 
 	armReady = true;
-
-	doColorShift = true;
-	colorShiftColor = GlitchEnergyGunItem.colorShiftColor; //"0.400 0.196 0 1.000";
 
 	//casing = " ";
 
@@ -662,7 +658,7 @@ datablock ItemData(GlitchDetector)
 	category				= "Weapon";  // Mission editor category
 	className				= "Weapon"; // For inventory system
 
-	shapeFile				= "./models/detector.dts";
+	shapeFile				= "./models/glitchdetector.dts";
 	rotate					= false;
 	mass						= 1;
 	density					= 0.2;
@@ -672,8 +668,6 @@ datablock ItemData(GlitchDetector)
 
 	uiName					= "Glitch Detector";
 	iconName				= "./models/Icon_detector";
-	doColorShift		= false;
-	colorShiftColor	= "1.0 1.0 1.0 1.0";
 
 	image						= GlitchDetectorImage;
 	canDrop					= true;
@@ -681,12 +675,13 @@ datablock ItemData(GlitchDetector)
 
 datablock ShapeBaseImageData(GlitchDetectorImage)
 {
-   shapeFile = "./models/detector.dts";
+   shapeFile = "./models/glitchdetector.dts";
    emap = true;
 
    mountPoint = 0;
    offset = "0 0 0";
-   eyeoffset = "0.7 1.2 -0.75";
+   eyeoffset = "0.8 1.1 -0.75";
+	 eyeRotation = "1 0 -4.3 -5";
    rotation = eulerToMatrix( "0 0 0" );
 
    correctMuzzleVector = true;
@@ -695,9 +690,6 @@ datablock ShapeBaseImageData(GlitchDetectorImage)
    item = GlitchDetector;
 
    armReady = true;
-
-   doColorShift = false;
-   colorShiftColor = GlitchDetector.colorShiftColor;//"0.400 0.196 0 1.000";
 };
 
 datablock fxLightData(renderLight : playerLight)
