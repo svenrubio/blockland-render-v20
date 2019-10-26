@@ -51,6 +51,7 @@ function Render_DoRenderTransition(%rClient, %debug)
 
     // If there are no available players, cancel.
     if(!%groups || !%targets) {
+      warn("Support_Render - Cannot spawn player " @ %client.name @ " as Render because there are no available targets.");
       return;
     }
 
