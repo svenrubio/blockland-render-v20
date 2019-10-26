@@ -2,3 +2,4 @@ Title: Render
 Author: Lake (14128)
 A survival horror mod that introduces Render, a mysterious entity that haunts Blockland.
 Models by Conan (4928)
+Kill CI icon by .::Taboo::. (10482)
