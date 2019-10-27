@@ -39,7 +39,8 @@ if(isFunction("RTB_registerPref"))
 	if($Version >= 21)
 	{
 		// Prefs specific to v21 and up
-		RTB_registerPref("Nights (Day/night cycle must be on)", "Render", "$Pref::Server::RenderNights", "list Disabled_-_Normal 0 Very_Rare 1 Rare 2 Uncommon 3 Normal 4 Common 5", "Support_Render", 0, 0, 0);
+		RTB_registerPref("Nights (Day/night cycle must be on)", "Render", "$Pref::Server::RenderNights", "list Disabled 0 Very_Rare 1 Rare 2 Uncommon 3 Normal 4 Common 5", "Support_Render", 0, 0, 0);
+		RTB_registerPref("Nights message (Blank for none)", "Render", "$Pref::Server::RenderNightsMsg", "string 128", "Support_Render", "A dark wind blows...", 0, 0);
 	}
 
 	// Blockland Glass/Support_Preferences hook
@@ -55,6 +56,7 @@ else
 	$Pref::Server::RenderNights = 0;
 	$Pref::Server::RenderShrineRange = 28;
 	$Pref::Server::RenderAllowBrickEffects = 1;
+	$Pref::Server::RenderNightsMsg = "A dark wind blows...";
 }
 
 // Spawnrate pref reverse compatibility

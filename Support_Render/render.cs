@@ -652,6 +652,55 @@ function Render_SunlightCheck()
 
 function Render_Nights_Check(%isDaytime)
 {
+	// Render Nights pref handling
+	if($Pref::Server::RenderNights != 0 && $Pref::Server::RenderNights !$= "" && $Pref::Server::RenderSpawnRate != 0)
+	{
+		// No nights during the day...
+		if(%isDaytime)
+		{
+			$Render::NightsActive = false;
+		}
+
+		if(%isDaytime && $Render::LastSunlightSpawnCheck == false)
+		{
+			//talk("Night is over");
+		}
+		else if(!%isDaytime && $Render::LastSunlightSpawnCheck == true)
+		{
+			//talk("Day is over");
+
+			// If it's turned night since we last checked, it's showtime...
+			switch($Pref::Server::RenderNights)
+			{
+				case 1:
+					%nightChance = 100; // Very Rare: 1 in 100
+				case 2:
+					%nightChance = 32; // Rare: 1 in 32
+				case 3:
+					%nightChance = 16; // Uncommon: 1 in 16
+				case 4:
+					%nightChance = 6; // Normal: 1 in 6
+				case 5:
+					%nightChance = 2; // Common: 1 in 2
+			}
+
+			if(getRandom(1,%nightChance) == 1)
+			{
+				if($Pref::Server::RenderNightsMsg !$= "")
+					messageAll('', $Pref::Server::RenderNightsMsg);
+					
+				serverPlay2D("rWind1");
+
+				// We're going to set the flag to true, but return false for this first spawn.
+				// This keeps Render from getting too excited and spawning at the same time as the message.
+				$Render::NightsActive = true;
+				return false;
+			}
+		}
+
+		// Now that the status is caught up, return it.
+		return $Render::NightsActive;
+	}
 }
 
 ////// # Target picking function
@@ -675,8 +724,11 @@ function Render_Spawn_Loop()
 	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime)
 		%skipSpawn = 1;
 
-	if(Render_Nights_Check(%isDaytime))
+	if(!Render_Nights_Check(%isDaytime))
 		%skipSpawn = 1;
+
+	// Log the sunlight check for the Nights pref (After the check, of course)
+	$Render::LastSunlightSpawnCheck = %isDaytime;
 
 	if(!%skipSpawn)
 	{
@@ -1110,6 +1162,7 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(!%render.rCustomDatablock)
 	{
 		%client.playSound(rAttackC);
+
 		if(%render.type $= "santa") {
 			%client.playSound(rCheer);
 		}
