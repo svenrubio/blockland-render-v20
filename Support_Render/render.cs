@@ -1129,6 +1129,9 @@ function GameConnection::doRenderDeath(%client, %render)
 	if(!isObject(%client.camera) || !isObject(%render))
 		return;
 
+	// IMPORTANT: Dismount the player if they are in a vehicle, otherwise they won't die.
+	%client.player.dismount();
+
 	if(!%render.rCustomDatablock && %render.type !$= "g")
 		%client.player.setTransform(getWords(%client.player.position,0,1) SPC "-10000");
 
