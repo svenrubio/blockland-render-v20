@@ -8,10 +8,14 @@
 		<li>Even more assorted features and fixes</li>
 	</ul>
 	<ul>
-		<li>Added a new preference named "Nights" - When enabled, Render will only appear on certain nights, with an adjustable random chance</li>
+		<li>Added a new preference named "Nights" - When enabled, Render will only appear on certain nights, with an adjustable random chance.</li>
 		<li>The add-on now has compatibility features for "appearance modifiers" that can edit Render's appearance. See the forum thread for info: https://forum.blockland.us/index.php?topic=314260.0</li>
-		<li>Render's lights now adapt to the environment</li>
-		<li>Added some new sound effects</li>
+		<li>Render's lights now adapt to the environment.</li>
+		<li>Added structures that can appear if the "Affect bricks and lights" preference is enabled. Structures will never appear on top of existing builds.</li>
+		<li>Added some new sound effects.</li>
+		<li>Updated effects for Glitch Shrines.</li>
+		<li>A console warning now displays if "Transform chance at spawn" is set, but there are no available targets.</li>
+		<li>Updated the zone effects for the Render death screen.</li>
 	</ul>
 	<br>
 	<ul>
