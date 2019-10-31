@@ -1233,6 +1233,19 @@ function deathCameraLoop(%client)
 	schedule(64, 0, deathCameraLoop, %client);
 }
 
+// This one's for the extra curious players
+function GameConnection::doRenderDeathExtra(%client)
+{
+	%client.doRenderDeathCamera();
+	%client.playSound(rAttackC);
+	%client.playSound(rAttackG);
+	%client.playSound(deathCrySound);
+
+	%client.schedule(3000, centerPrint, "<bitmap:add-ons/support_render/do_not_open/i_warned_you.png>", 3);
+	%client.schedule(3000, playSound, rAttackC);
+	%client.schedule(6200, setControlObject, %client.player);
+}
+
 // # GLITCH GUN
 function GlitchEnergyGunImage::onInit(%this, %obj, %slot)
 {
