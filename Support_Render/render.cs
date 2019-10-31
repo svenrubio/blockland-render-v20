@@ -64,6 +64,23 @@ function Render_ApplyAppearance(%this)
 		return;
 	}
 
+	if(%this.type $= "b")
+	{
+		%this.hideNode("chest");
+		%this.hideNode("lhand");
+		%this.hideNode("rhand");
+		%this.hideNode("lshoe");
+		%this.hideNode("rshoe");
+
+		%this.unhidenode("femchest");
+		%this.unhidenode("lhook");
+		%this.unhidenode("rhook");
+		%this.unhidenode("lpeg");
+		%this.unhidenode("rpeg");
+
+		// Re-color the nodes so we don't accidentally create the fabled albino Render.
+		%this.setnodecolor("ALL", %c);
+	}
 	if(%this.type $= "ts")
 	{
 		%this.unhidenode("scoutHat");
@@ -178,25 +195,20 @@ function Render_CreateBot(%pos,%client)
 	%render.type = "a";
 
 	if(!%customDatablock) {
-		if(getRandom(1,384) == 1) {
+		if(getRandom(1, 4) == 1)
+			%render.type = "b";
+		else if(getRandom(1, 384) == 1)
 			%render.type = "ts";
-		}
-		else if(getRandom(1, $Rain::DropTexture $= "base/data/specialfx/snow.png"?18:36) == 1 && $Render::C_HolidayCheer) {
+		else if(getRandom(1, $Rain::DropTexture $= "base/data/specialfx/snow.png"?12:24) == 1 && $Render::C_HolidayCheer)
 			%render.type = "santa";
-		}
-		else if(getRandom(1,24) == 1) {
+		else if(getRandom(1, 16) == 1)
 			%render.type = "g";
-		}
-		else if(getRandom(1,10) == 1) {
+		else if(getRandom(1, 10) == 1)
 			%render.type = "a2";
-		}
 	}
 
 	Render_ApplyAppearance(%render); // Apply appearance and set it to the specified position
 	%render.setTransform(%pos);
-
-	// TEMPORARY: Should try to adjust this so Render is a *little* easier to escape. 0 makes the bot unrealistically accurate.
-	//%render.setMoveSlowdown(0);
 
 	// Bot hole stuff
 	%render.hMelee = 1;
