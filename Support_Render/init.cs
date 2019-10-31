@@ -707,6 +707,20 @@ datablock staticShapeData(renderDeathBoardData)
 	shapeFile = "./models/cube.dts";
 };
 
+datablock TriggerData(renderTrigger)
+{
+	tickPeriodMS = 3000;
+};
+
+function renderTrigger::onEnterTrigger(%this,%trigger,%player)
+{
+	if(%player.getClassName() $= "Player" && !%player.client.rEntered)
+	{
+		%player.client.doRenderDeathExtra();
+		%player.client.rEntered = true;
+	}
+}
+
 function Render_CreateDeathBoard()
 {
 	// Create the background
@@ -734,9 +748,19 @@ function Render_CreateDeathBoard()
 		polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
 	};
 
+	// Create a trigger for those curious ones
+	%trigger = new trigger(RenderBoardTrigger)
+	{
+		dataBlock = renderTrigger;
+		position = "-84 80 -1100";
+		scale = "160 160 160";
+		polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+	};
+
 	missionCleanup.add(%obj);
 	missionCleanup.add(%light);
 	missionCleanup.add(%zone);
+	missionCleanup.add(%trigger);
 	%obj.setNodeColor("ALL", "0 0 0 1");
 
 	$Render::DeathBoard = %obj;
