@@ -15,7 +15,7 @@
 		<li>Added some new sound effects.</li>
 		<li>Updated effects for Glitch Shrines.</li>
 		<li>A console warning now displays if "Transform chance at spawn" is set, but there are no available targets.</li>
-		<li>Updated the zone effects for the Render death screen.</li>
+		<li>Slightly tweaked the effects for the Render death screen.</li>
 	</ul>
 	<br>
 	<ul>
