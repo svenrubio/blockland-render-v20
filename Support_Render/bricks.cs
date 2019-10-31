@@ -203,6 +203,7 @@ function Render_DoShrineEffect(%target, %br, %r, %first)
 		}
 
 		//echo("RENDER (global): Force de-spawning " @ %target @ " due to shrine");
+		%br.spawnExplosion(RenderDmg6Projectile, 1);
 		Render_DeleteR(%target);
 	}
 }
