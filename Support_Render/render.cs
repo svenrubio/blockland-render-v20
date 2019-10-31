@@ -688,7 +688,7 @@ function Render_Nights_Check(%isDaytime)
 			{
 				if($Pref::Server::RenderNightsMsg !$= "")
 					messageAll('', $Pref::Server::RenderNightsMsg);
-					
+
 				serverPlay2D("rWind1");
 
 				// We're going to set the flag to true, but return false for this first spawn.
@@ -839,6 +839,10 @@ function Render_DeleteR(%render)
 		// ❄Д❄
 		if($Render::C_HolidayCheer && $Rain::DropTexture $= "base/data/specialfx/snow.png" && isObject(blankaBallProjectile) && !%render.aiSpotted && getRandom(1,8) == 1) {
 			%render.spawnProjectile(150, blankaBallProjectile, -3, 1);
+		}
+
+		if(getRandom(1,10) == 1) {
+			ServerPlay3D(PainCrySound, %render.position);
 		}
 	}
 
