@@ -24,7 +24,7 @@ if($Render::C_HolidayCheer) {
 }
 
 // Create our own reference to the sun.
-// This makes things a bit easier if the sun gets renamed for some reason.
+// This makes things a bit easier for the sake of compatibility.
 if($Render::SunObj $= "")
 	$Render::SunObj = Sun;
 
