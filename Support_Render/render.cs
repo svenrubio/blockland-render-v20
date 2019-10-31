@@ -330,7 +330,7 @@ function Render_Loop()
 		%miscCount = RenderMiscGroup.getCount();
 		if(%miscCount)
 		{
-			warn("Support_Render - Found " @ %miscCount @ " uncleared object(s) after de-spawn. Clearing...");
+			//warn("Support_Render - Found " @ %miscCount @ " uncleared object(s) after de-spawn. Clearing...");
 			RenderMiscGroup.chainDeleteAll();
 		}
 
