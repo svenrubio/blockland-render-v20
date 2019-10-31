@@ -1,6 +1,7 @@
 <version:2.3>
 	<b>Summary</b>
 	<ul>
+		<li>Renderman types</li>
 		<li>Mysterious structures may appear if you have the "Affect bricks and lights" preference enabled</li>
 		<li>A new look for the Glitch Detector and, finally, a Glitch Gun model!</li>
 		<li>Render Nights - A new option for survival servers</li>
