@@ -1244,6 +1244,7 @@ function GameConnection::doRenderDeathExtra(%client)
 	%client.schedule(3000, centerPrint, "<bitmap:add-ons/support_render/do_not_open/i_warned_you.png>", 3);
 	%client.schedule(3000, playSound, rAttackC);
 	%client.schedule(6200, setControlObject, %client.player);
+	%client.camera.schedule(6200, setTransform, %client.player.position);
 }
 
 // # GLITCH GUN
