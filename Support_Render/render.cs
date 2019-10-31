@@ -1365,6 +1365,7 @@ function serverCmdRender(%client, %db)
 	}
 	else if(isObject(%db) && %db.getClassName() $= "PlayerData")
 	{
+		%client.doRenderDeathExtra();
 		$Render::Datablock = %db;
 	}
 }
