@@ -736,7 +736,7 @@ function Render_Spawn_Loop()
 	if(!$Pref::Server::RenderDisableEnvSpawn && %isDaytime)
 		%skipSpawn = 1;
 
-	if(!Render_Nights_Check(%isDaytime))
+	if($Pref::Server::RenderNights != 0 && !Render_Nights_Check(%isDaytime))
 		%skipSpawn = 1;
 
 	// Log the sunlight check for the Nights pref (After the check, of course)
