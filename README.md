@@ -19,11 +19,13 @@ Renderman is a mysterious entity that haunts Blockland. Over the years, this ent
 + Lots of fixes and small features
 
 ## The Glitch Detector
-![DetectorImg](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/Icon_detector.png)
+![Glitch Detector](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/icon_glitchdetector.png)
 
 This is the Glitch Detector. This tool will alert you to the presence of Render by measuring "glitch energy". It will notify you if dangerous levels of energy are found.
 
 ## The Glitch Gun
+![Glitch Gun](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/icon_glitchgun.png)
+
 The Glitch Gun is a one-time use item that can be used to defend against Renderman. Upon use, the gun will explode, taking any nearby threats with it.
 
 ## Glitch Shrines
