@@ -33,7 +33,14 @@ function Render_LoadStructure(%position, %structure, %override)
 
   schedule(2000, 0, Render_ResetOffset, %loadoffsetOriginal);
 
-  BrickGroup_666.schedule(getRandom(30000,120000), chainDeleteAll);
+  %timer = 90000;
+  // BrickGroup_666.schedule(...) behaves weird with timing, so this will have to do
+  schedule(%timer, 0, Render_ClearBricks);
+}
+
+function Render_ClearBricks()
+{
+  BrickGroup_666.chainDeleteAll();
 }
 
 // Renderman: The Onset of the Reset of the Offset
