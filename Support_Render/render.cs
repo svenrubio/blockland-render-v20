@@ -868,7 +868,7 @@ function Render_DeleteR(%render)
 	}
 
 	// Mysterious structures
-	if($Pref::Server::RenderAllowBrickEffects && !%render.isAttacking && getRandom(1,12) == 1)
+	if($Pref::Server::RenderAllowBrickEffects && !%render.isAttacking && getRandom(1,16) == 1)
 	{
 		%obstructions = 0;
 		InitContainerRadiusSearch(%render.getPosition(), 14, $TypeMasks::FxBrickObjectType | $TypeMasks::PlayerObjectType);
