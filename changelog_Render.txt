@@ -23,6 +23,7 @@
 		<li>Fixed the scene for Render deaths being visible below the map when the ground is set to transparent.</li>
 		<li>Fixed certain special deaths by Render bugging out if the target is above ground level.</li>
 		<li>Fixed players not dying to Render while in a vehicle.</li>
+		<li>Fixed "Transform chance at spawn" players never being able to attack in certain cases.</li>
 	</ul>
 </version>
 <version:2.2>
