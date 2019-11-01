@@ -5,18 +5,18 @@ Renderman is a mysterious entity that haunts Blockland. Over the years, this ent
 [View on BL Glass](https://blocklandglass.com/addons/addon.php?id=592) | [Download](https://blocklandglass.com/addons/download.php?id=592) | [Join the Discord](https://discord.gg/s3vCQba)
 ------------ | ------------- | ------------- |
 
+## What's New in the Halloween 2019 Update
++ Renderman types
++ Mysterious structures may appear if you have the "Affect bricks and lights" preference enabled
++ A new look for the Glitch Detector and, finally, a Glitch Gun model!
++ Render Nights - A new option for survival servers
++ Appearance modifiers - Custom mods to edit Render's appearance
++ Even more assorted features and fixes
+
 ## Media
 ![](http://s3.amazonaws.com/cdn.blocklandglass.com/screenshots/591)
 ![](http://s3.amazonaws.com/cdn.blocklandglass.com/screenshots/592)
 ![](http://s3.amazonaws.com/cdn.blocklandglass.com/screenshots/594)
-
-## What's New in the Halloween 2018 Update
-+ Brand new Glitch Detector display
-+ Overhauled glitch gun
-+ New events for detector bricks
-+ Improved support for Blockland v20. (Check out B4v21!)
-+ Renderman now spawns in the farlands
-+ Lots of fixes and small features
 
 ## The Glitch Detector
 ![Glitch Detector](https://raw.githubusercontent.com/LakeYS/blockland-render/master/Support_Render/models/icon_glitchdetector.png)
