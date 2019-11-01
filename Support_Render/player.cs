@@ -61,6 +61,8 @@ function Render_DoRenderTransition(%rClient, %debug)
 
     %render = Render_CreateBot("0 0 -10000",%client);
 
+    $Render::Stat::SpawnCount++;
+
     %hallSpawn = Render_Spawn_FindNewPositions(%client.player.getEyePoint(), %render, %skipNorth, %skipSouth, %skipEast, %skipWest);
     %pos = Render_Spawn_GetNewDirection(%render, %client.player.getEyePoint(), 0, 0, 1);
   }
