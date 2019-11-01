@@ -1,6 +1,10 @@
 // This whole thing is super hacky... let's just roll with it.
-function Render_LoadStructure(%render, %structure)
+function Render_LoadStructure(%render, %structure, %override)
 {
+  // If something's loaded in the last 2 minutes, cancel to avoid issues.
+  if(getSimTime()+120000 >= $LoadingBricks_StartTime && !%override)
+    return;
+
   if(BrickGroup_666.getGroup() != MainBrickGroup.getId())
     MainBrickGroup.add(BrickGroup_666);
 
