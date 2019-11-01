@@ -29,7 +29,7 @@ function Render_LoadStructure(%render, %structure, %override)
   calcSaveOffset();
   RenderLoadSaveFile_Start("Add-Ons/Support_Render/structures/structure" @ %structure @ ".bls");
 
-  schedule(1000, 0, Render_ResetOffset, %loadoffsetOriginal);
+  schedule(2000, 0, Render_ResetOffset, %loadoffsetOriginal);
 }
 
 // Renderman: The Onset of the Reset of the Offset
