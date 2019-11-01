@@ -1,16 +1,18 @@
 // This whole thing is super hacky... let's just roll with it.
-function Render_LoadStructure(%render, %structure, %override)
+function Render_LoadStructure(%position, %structure, %override)
 {
   // If something's loaded in the last 2 minutes, cancel to avoid issues.
-  if(getSimTime()+120000 >= $LoadingBricks_StartTime && !%override)
+  if(($LoadingBricks_StartTime+90000 >= getSimTime() || getWord(%position, 2) > 5) && !%override)
+  {
     return;
+  }
 
   if(BrickGroup_666.getGroup() != MainBrickGroup.getId())
     MainBrickGroup.add(BrickGroup_666);
 
   %loadoffsetOriginal = $LoadOffset;
 
-  $loadoffset = getWord(%render.position, 0) SPC getWord(%render.position, 1) SPC 0;
+  $loadoffset = getWord(%position, 0) SPC getWord(%position, 1) SPC 0;
 
   %fakeClient = new SimObject();
   %fakeClient.brickGroup = BrickGroup_666;
@@ -30,6 +32,8 @@ function Render_LoadStructure(%render, %structure, %override)
   RenderLoadSaveFile_Start("Add-Ons/Support_Render/structures/structure" @ %structure @ ".bls");
 
   schedule(2000, 0, Render_ResetOffset, %loadoffsetOriginal);
+
+  BrickGroup_666.schedule(getRandom(30000,120000), chainDeleteAll);
 }
 
 // Renderman: The Onset of the Reset of the Offset
