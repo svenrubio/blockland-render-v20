@@ -151,6 +151,11 @@ package RenderCompat
       Render_BrickEffectFix(%player);
     }
   }
+
+  function Render_LoadStructure()
+  {
+    // Blank this out as it does not work in v20
+  }
 };
 
 deactivatePackage(RenderCompat);
