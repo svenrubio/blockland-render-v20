@@ -40,6 +40,8 @@ exec("./bricks.cs");
 
 exec("./events.cs");
 
+exec("./structures/loadStructure.cs");
+
 if(!$Render::Loaded)
 {
 	exec("./init.cs");
