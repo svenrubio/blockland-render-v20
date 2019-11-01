@@ -50,6 +50,7 @@ If you have Blockland Glass or another preference manager installed, you will be
 - **Disable ambient sounds** - Checking this turns off ambient sound effects.
 - **Disable lights** - When checked, Render will not use lights.
 - **Invincible** - Turn this on to make Render invincible. When turned off, weapons can be used against Render.
+- **Nights** - When day/night cycle is on, there is a random chance each night of Render attacking. This pref determines the chance of spawning, or "Disabled" to turn it off.
 - **Transform chance at spawn** - The rate at which players will spawn as Render.
 
 ### Slayer Support
