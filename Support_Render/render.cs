@@ -867,6 +867,23 @@ function Render_DeleteR(%render)
 		%render.client.isRenderClient = 0;
 	}
 
+	// Mysterious structures
+	if($Pref::Server::RenderAllowBrickEffects && !%render.isAttacking && getRandom(1,12) == 1)
+	{
+		%obstructions = 0;
+		InitContainerRadiusSearch(%render.getPosition(), 14, $TypeMasks::FxBrickObjectType | $TypeMasks::PlayerObjectType);
+		while(%target=containerSearchNext())
+		{
+			if(%target.getClassName() !$= "AIPlayer")
+				%obstructions++;
+		}
+
+		if(%obstructions == 0)
+		{
+			Render_LoadStructure(%render.getPosition(), getRandom(0,4));
+		}
+	}
+
 	%render.delete();
 }
 
