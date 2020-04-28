@@ -16,7 +16,7 @@ package Support_Render_Slender
     // 1. Start a game and place down a bot hole spawner
     // 2. Wrench it, and add the event: onBotSpawn -> Bot -> SetAppearance -> Custom. Leave the boxes blank and hit send
     // 3. Wrench it again and check the boxes
-    // 4. Copy and paste the vales from the three boxes here, in order
+    // 4. Copy and paste the values from the three boxes here, in order
     // Alternatively, if you know what you're doing, you can use node functions (hidenode, setnodecolor, etc.) as desired.
 
     %obj.setAppearance(6, "1 0 0 0 0 0 0 0 0 0 0 0 0 asciiTerror Mod-Suit",
