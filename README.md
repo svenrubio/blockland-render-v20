@@ -1,9 +1,10 @@
 # ![Render](./Render.png)
 
 Renderman is a mysterious entity that haunts Blockland. Over the years, this entity has become increasingly intelligent... and increasingly deadly.
-This fork was edited to make it fully compatible with v20 (as well as deleting v21 features, like day/night cycle detection).
 
-The idea here is that it can be implemented into B4v21's RTB repository, as well as hopefully add more features in the future.
+## Why v20? Why not continue for v21?
+I personally prefer playing in v20, and since this version of Render works fine for v21 (as well as having compatibility features for v20) I decided to fully port it over for v20. This includes removing many of the features that are v21 exclusives, like
+day/night cycle detection for spawning for example. I also want to kind of use this as a learning experience for myself, and be able to upload this to B4v21's RTB repository (if you haven't noticed, this fork prioritises B4v21.)
 
 ------------ | ------------- | ------------- |
 
@@ -86,6 +87,7 @@ You can change Render's behavior in a mini-game using events. The events only wo
 - Support_Prepper (Old): https://forum.blockland.us/index.php?topic=174563.0
 
 *By LakeYS - http://LakeYS.net*
+*Continued and ported fully for v20 by Sveny - https://sveny.tf*
 
 # Project Goal
 The goal of this project is to create a polished survival horror experience that conforms to Blockland's non-linear gameplay style.
